@@ -25,3 +25,4 @@ D:\WebThings\Scieence\client\client\ScieenceAPI\obj\Debug\net6.0\ScieenceAPI.dll
 D:\WebThings\Scieence\client\client\ScieenceAPI\obj\Debug\net6.0\ref\ScieenceAPI.dll
 D:\WebThings\Scieence\client\client\ScieenceAPI\obj\Debug\net6.0\ScieenceAPI.pdb
 D:\WebThings\Scieence\client\client\ScieenceAPI\obj\Debug\net6.0\ScieenceAPI.genruntimeconfig.cache
+D:\WebThings\Scieence\client\client\ScieenceAPI\bin\Debug\net6.0\Newtonsoft.Json.dll

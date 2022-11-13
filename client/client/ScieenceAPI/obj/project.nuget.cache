@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "dvUL3Ut7jWoOsBfnMKjA8hkLAEGj+N11T53PvqO6JzRRzV4XWboQHCHPOmaI6h//iXlUDQ86vftwSMlIV2b8KA==",
+  "dgSpecHash": "2ggJL+5penlXEfpVFIlvp8wAVkglxNFn4nZSkLiU9Lozdb9SOAFyYdV9SfvBHhmL5JAdgSzAcZizBbrAk+g5Tw==",
   "success": true,
   "projectFilePath": "D:\\WebThings\\Scieence\\client\\client\\ScieenceAPI\\ScieenceAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\white\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\white\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\white\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\white\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\white\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\white\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
