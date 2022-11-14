@@ -18,14 +18,14 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Publication> GetPublicationBySomething(string q)
+        public async Task<TempPublication> GetPublicationBySomething(string q)
         {
             try
             {
                 var response = await _client.GetAsync($"/metadata/json?q={q}&s=1&p=1&api_key={_apiKey}");
                 response.EnsureSuccessStatusCode();
                 var content = response.Content.ReadAsStringAsync().Result;
-                Publication result = JsonConvert.DeserializeObject<Publication>(content);
+                TempPublication result = JsonConvert.DeserializeObject<TempPublication>(content);
 
                 return result;
 

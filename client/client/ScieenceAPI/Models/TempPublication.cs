@@ -2,7 +2,7 @@
 
 namespace ScieenceAPI.Models
 {
-    public class Publication
+    public class TempPublication
     {
         public List<Results> result { get; set; }
         public List<Records> records { get; set; }

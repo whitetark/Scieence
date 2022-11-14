@@ -11,5 +11,7 @@
         public string PublicationType { get; set; }
         public string Genre { get; set; }
         public string Description { get; set; }
+        public List<string> Keywords { get; set; }
+        public List<string> Subjects { get; set; }
     }
 }

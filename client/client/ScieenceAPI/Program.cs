@@ -1,3 +1,4 @@
+using Database;
 using ScieenceAPI.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<PublicApiClient>();
+builder.Services.AddSingleton<DbClient>();
+builder.Services.AddTransient<PubServices>();
+builder.Services.Configure<DbConfig>(builder.Configuration);
 
 var app = builder.Build();
 
