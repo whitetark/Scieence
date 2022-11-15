@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace ScieenceAPI.Models
+namespace ScieenceAPI.Models.ForClients
 {
-    public class TempPublication
+    public class SpringerNaturePub
     {
         public List<Results> result { get; set; }
         public List<Records> records { get; set; }

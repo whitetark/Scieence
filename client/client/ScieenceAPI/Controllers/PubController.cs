@@ -9,19 +9,19 @@ namespace ScieenceAPI.Controllers
     [Route("[controller]")]
     public class PubController : ControllerBase
     {
-        private readonly PublicApiClient _publicApiClient;
+        private readonly SpringerNatureClient _springerNatureClient;
         private readonly PubServices _pubServices;
 
-        public PubController(PublicApiClient publicApiClient, PubServices pubServices)
+        public PubController(SpringerNatureClient springerNatureClient, PubServices pubServices)
         {
-            _publicApiClient = publicApiClient;
+            _springerNatureClient = springerNatureClient;
             _pubServices = pubServices;
         }
 
         [HttpGet(Name = "GetPubByQ/{q}")]
         public async Task<Publication> Get(string q)
         {
-            var publications = await _publicApiClient.GetPublicationBySomething(q);
+            var publications = await _springerNatureClient.GetPublicationBySomething(q);
             var result = new Publication
             {
                 Language = publications.records[0].language,
