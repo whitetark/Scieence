@@ -11,10 +11,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<SpringerNatureClient>();
-builder.Services.AddSingleton<SdSearchClient>();
-builder.Services.AddSingleton<CoreClient>();
-builder.Services.AddSingleton<DoajClient>();
-builder.Services.AddSingleton<EricClient>();
 builder.Services.AddSingleton<SemanticScholarClient>();
 
 builder.Services.AddSingleton<DbClient>();

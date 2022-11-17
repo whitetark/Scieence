@@ -10,48 +10,73 @@ namespace ScieenceAPI.Controllers
     public class PubController : ControllerBase
     {
         private readonly SpringerNatureClient _springerNatureClient;
+        private readonly SemanticScholarClient _semanticScholarClient;
         private readonly PubServices _pubServices;
 
-        public PubController(SpringerNatureClient springerNatureClient, PubServices pubServices)
+        public PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, PubServices pubServices)
         {
+            _semanticScholarClient = semanticScholarClient;
             _springerNatureClient = springerNatureClient;
             _pubServices = pubServices;
         }
 
         [HttpGet(Name = "GetPubByQ/{q}")]
-        public async Task<Publication> Get(string q)
+        public async Task<Response> GetPublicationsByQ(string q)
         {
-            var publications = await _springerNatureClient.GetPublicationBySomething(q);
-            var result = new Publication
-            {
-                Language = publications.records[0].language,
-                Url = publications.records[0].url[0].value,
-                Title = publications.records[0].title,
-                Creators = publications.records[0].creators.ConvertAll(x => x.creator),
-                PublicationName = publications.records[0].publicationName,
-                PublicationDate = publications.records[0].publicationDate,
-                PublicationType = publications.records[0].publicationType,
-                Genre = publications.records[0].genre,
-                Description = publications.records[0].Abstract
-            };
+            var snpublications = await _springerNatureClient.GetPublicationBySomething(q, 20);
+            var sspublications = await _semanticScholarClient.GetPublicationBySomething(q, 20);
+            var tempdbpublications = await GetPublications();
 
-            AddPub(result);
+            var result = new Response();
+
+            result.Records.AddRange(snpublications.Records);
+            result.Records.AddRange(sspublications.Records);
+
+            foreach (var pub in tempdbpublications.Records)
+            {
+                if (pub.Title.Contains(q) || pub.Description.Contains(q))
+                {
+                    result.Records.Add(pub);
+                }
+            }
 
             return result;
         }
         [HttpGet("getPubs")]
-        public async Task<List<Publication>> GetPublications()
+        public async Task<Response> GetPublications()
         {
-            return await _pubServices.GetPubs();
+            var dbpublications = await _pubServices.GetPubs();
+
+            var result = new Response();
+            foreach (var pub in dbpublications)
+            {
+                var newPub = new Record
+                {
+                    Language = pub.language[0],
+                    Url = pub.url,
+                    Title = pub.title,
+                    Authors = pub.creator,
+                    PublicationDate = pub.datePublished,
+                    PublicationType = pub.docType,
+                    PublicationYear = pub.publicationYear,
+                    Doi = (from source in pub.identifier
+                          where source.name == "local_doi"
+                          select source.value).FirstOrDefault(),
+                    Description = pub.description,
+                    Subjects = pub.sourceCategory
+                };
+                result.Records.Add(newPub);
+            }
+            return result;
         }
 
         [HttpGet("getPub/{id}")]
-        public async Task<Publication> GetPublication(string id)
+        public async Task<DbPub> GetPublication(string id)
         {
             return await _pubServices.GetPublication(id);
         }
         [HttpPost("createPub")]
-        public void AddPub(Publication publication)
+        public void AddPub(DbPub publication)
         {
             _ = _pubServices.AddPublication(publication);
         }
@@ -63,7 +88,7 @@ namespace ScieenceAPI.Controllers
         }
 
         [HttpPut("updatePub")]
-        public void UpdatePub(Publication publication)
+        public void UpdatePub(DbPub publication)
         {
             _ = _pubServices.UpdatePublication(publication);
         }

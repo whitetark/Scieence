@@ -4,35 +4,35 @@ namespace Database
 {
     public class PubServices
     {
-        private readonly IMongoCollection<Publication> _publications;
+        private readonly IMongoCollection<DbPub> _publications;
         
         public PubServices(DbClient dbClient)
         {
             _publications = dbClient.GetPubsCollection();
         }
-        public async Task<List<Publication>> GetPubs()
+        public async Task<List<DbPub>> GetPubs()
         {
             try
             {
-                return await _publications.Find(publication => true).ToListAsync();
+                 return await _publications.Find(publication => true).ToListAsync();
             } 
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public async Task<Publication> GetPublication(string id)
+        public async Task<DbPub> GetPublication(string id)
         {
             try
             {
-                return await _publications.Find(publication => publication.Id == id).FirstOrDefaultAsync();
+                return await _publications.Find(publication => publication._id == id).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public async Task AddPublication(Publication publication)
+        public async Task AddPublication(DbPub publication)
         {
             try
             {
@@ -47,19 +47,19 @@ namespace Database
         {
             try
             {
-               return await _publications.DeleteOneAsync(publication => publication.Id == id);
+               return await _publications.DeleteOneAsync(publication => publication._id == id);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public async Task<ReplaceOneResult> UpdatePublication(Publication newPublication)
+        public async Task<ReplaceOneResult> UpdatePublication(DbPub newPublication)
         {
             try
             {
-                await GetPublication(newPublication.Id);
-                return await _publications.ReplaceOneAsync(b => b.Id == newPublication.Id, newPublication);
+                await GetPublication(newPublication._id);
+                return await _publications.ReplaceOneAsync(b => b._id == newPublication._id, newPublication);
             }
             catch(Exception ex)
             {

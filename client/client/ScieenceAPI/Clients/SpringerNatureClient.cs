@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ScieenceAPI.Models;
 using ScieenceAPI.Models.ForClients;
 
 namespace ScieenceAPI.Clients
@@ -18,18 +19,36 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<SpringerNaturePub> GetPublicationBySomething(string q)
+        public async Task<Response> GetPublicationBySomething(string q, int numOf)
         {
             try
             {
-                var response = await _client.GetAsync($"/metadata/json?q={q}&s=1&p=1&api_key={_apiKey}");
+                var response = await _client.GetAsync($"/metadata/json?q={q}&s=1&p={numOf}&api_key={_apiKey}");
                 response.EnsureSuccessStatusCode();
                 var content = response.Content.ReadAsStringAsync().Result;
-                SpringerNaturePub result = JsonConvert.DeserializeObject<SpringerNaturePub>(content);
+                SpringerNaturePub resultOfDes = JsonConvert.DeserializeObject<SpringerNaturePub>(content);
 
+                var result = new Response();
+                foreach (var pub in resultOfDes.records)
+                {
+                    var newPub = new Record
+                    {
+                        Language = pub.language,
+                        Url = pub.url[0].value,
+                        Title = pub.title,
+                        Authors = pub.creators.ConvertAll(x => x.creator),
+                        PublicationDate = pub.publicationDate,
+                        PublicationType = pub.contentType,
+                        PublicationYear = Int32.Parse(pub.publicationDate.Remove(4)),
+                        Description = pub.Abstract,
+                        Doi = pub.identifier,
+                        Subjects = pub.subjects
+                    };
+                    result.Records.Add(newPub);
+                }
                 return result;
-
-            } catch
+            } 
+            catch
             {
                 throw new Exception();
             }

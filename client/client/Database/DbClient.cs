@@ -10,14 +10,14 @@ namespace Database
 {
     public class DbClient
     {
-        private readonly IMongoCollection<Publication> _publications;
+        private readonly IMongoCollection<DbPub> _publications;
         public DbClient(IOptions<DbConfig> publicationsDbConfig)
         {
             var client = new MongoClient(publicationsDbConfig.Value.Connection_String);
             var database = client.GetDatabase(publicationsDbConfig.Value.Database_Name);
-            _publications = database.GetCollection<Publication>(publicationsDbConfig.Value.Publications_Collection_Name);
+            _publications = database.GetCollection<DbPub>(publicationsDbConfig.Value.Publications_Collection_Name);
         }
-        public IMongoCollection<Publication> GetPubsCollection()
+        public IMongoCollection<DbPub> GetPubsCollection()
         {
             return _publications;
         }
