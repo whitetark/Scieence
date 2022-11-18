@@ -19,32 +19,47 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationBySomething(string q, int numOf)
+        public async Task<Response> GetPublicationBySomething(string q, double numOf)
         {
             try
             {
-                var response = await _client.GetAsync($"/metadata/json?q={q}&s=1&p={numOf}&api_key={_apiKey}");
-                response.EnsureSuccessStatusCode();
-                var content = response.Content.ReadAsStringAsync().Result;
-                SpringerNaturePub resultOfDes = JsonConvert.DeserializeObject<SpringerNaturePub>(content);
+                var s = 1;
+                string fullContent = "";
+                for (int i = 0; i < Math.Ceiling(numOf / 50); i++)
+                {
+                    var response = await _client.GetAsync($"/metadata/json?q={q}&s={s}&p=50&api_key={_apiKey}");
+                    response.EnsureSuccessStatusCode();
+                    var content = response.Content.ReadAsStringAsync().Result;
+
+                    fullContent = fullContent + "," + content;
+
+                    s += 50;
+                }
+
+                fullContent = "{\"totalContent\":[" + fullContent.Remove(0, 1) + "]}";
+
+                TotalSN resultOfDes = JsonConvert.DeserializeObject<TotalSN>(fullContent);
 
                 var result = new Response();
-                foreach (var pub in resultOfDes.records)
+                foreach (var response in resultOfDes.totalContent)
                 {
-                    var newPub = new Record
+                    foreach (var pub in response.records)
                     {
-                        Language = pub.language,
-                        Url = pub.url[0].value,
-                        Title = pub.title,
-                        Authors = pub.creators.ConvertAll(x => x.creator),
-                        PublicationDate = pub.publicationDate,
-                        PublicationType = pub.contentType,
-                        PublicationYear = Int32.Parse(pub.publicationDate.Remove(4)),
-                        Description = pub.Abstract,
-                        Doi = pub.identifier,
-                        Subjects = pub.subjects
-                    };
-                    result.Records.Add(newPub);
+                        var newPub = new Record
+                        {
+                            Language = pub.language,
+                            Url = pub.url[0].value,
+                            Title = pub.title,
+                            Authors = pub.creators.ConvertAll(x => x.creator),
+                            PublicationDate = pub.publicationDate,
+                            PublicationType = pub.contentType,
+                            PublicationYear = Int32.Parse(pub.publicationDate.Remove(4)),
+                            Description = pub.Abstract,
+                            Doi = pub.identifier.Remove(0, 4),
+                            Subjects = pub.subjects
+                        };
+                        result.Records.Add(newPub);
+                    }
                 }
                 return result;
             } 

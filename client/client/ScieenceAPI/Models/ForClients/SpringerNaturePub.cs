@@ -2,9 +2,17 @@
 
 namespace ScieenceAPI.Models.ForClients
 {
+    public class TotalSN
+    {
+        public List<SpringerNaturePub> totalContent { get; set; }
+    }
     public class SpringerNaturePub
     {
         public List<Records> records { get; set; }
+        public SpringerNaturePub()
+        {
+            records = new List<Records>();
+        }
     }
     public class Records
     {

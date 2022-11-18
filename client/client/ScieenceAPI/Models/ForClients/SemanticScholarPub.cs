@@ -2,9 +2,18 @@
 
 namespace ScieenceAPI.Models.ForClients
 {
+    public class TotalSS
+    {
+        public List<SemanticScholarPub> totalContent { get; set; }
+    }
+    
     public class SemanticScholarPub
     {
         public List<Data> data { get; set; }
+        public SemanticScholarPub()
+        {
+            data = new List<Data>();
+        }
     }
     public class Data
     {

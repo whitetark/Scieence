@@ -17,37 +17,51 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationBySomething(string q, int numOf)
+        public async Task<Response> GetPublicationBySomething(string q, double numOf)
         {
             try
             {
-                //q = q.Replace(" ", "+");
-                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset=100&limit={numOf}&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
-                response.EnsureSuccessStatusCode();
-                var content = response.Content.ReadAsStringAsync().Result;
-                SemanticScholarPub resultOfDes = JsonConvert.DeserializeObject<SemanticScholarPub>(content);
+                var s = 1;
+                string fullContent = "";
+                for (int i = 0; i < Math.Ceiling(numOf / 100); i++)
+                {
+                    var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset={s}&limit=100&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
+                    response.EnsureSuccessStatusCode();
+                    var content = response.Content.ReadAsStringAsync().Result;
+
+                    fullContent = fullContent + "," + content.Remove(content.Length - 1);
+
+                    s += 100;
+                }
+
+                fullContent = "{\"totalContent\":[" + fullContent.Remove(0,1) + "]}\n";
+
+                TotalSS resultOfDes = JsonConvert.DeserializeObject<TotalSS>(fullContent);
 
                 var result = new Response();
-                foreach (var pub in resultOfDes.data)
+                foreach (SemanticScholarPub response in resultOfDes.totalContent)
                 {
-                    var newPub = new Record
+                    foreach (var pub in response.data)
                     {
-                        Language = "en",
-                        Url = pub.url,
-                        Title = pub.title,
-                        Authors = pub.authors.ConvertAll(x => x.name),
-                        PublicationDate = pub.publicationDate,
-                        PublicationYear = pub.year,
-                        Description = pub.Abstract,
-                        Doi = pub.externalIds.DOI,
-                        Subjects = pub.fieldsOfStudy
-                    };
-                    if (pub.publicationTypes == null)
-                    {
-                        pub.publicationTypes = new List<string>() {"Article"};
+                        var newPub = new Record
+                        {
+                            Language = "en",
+                            Url = pub.url,
+                            Title = pub.title,
+                            Authors = pub.authors.ConvertAll(x => x.name),
+                            PublicationDate = pub.publicationDate,
+                            PublicationYear = pub.year,
+                            Description = pub.Abstract,
+                            Doi = pub.externalIds.DOI,
+                            Subjects = pub.fieldsOfStudy
+                        };
+                        if (pub.publicationTypes == null)
+                        {
+                            pub.publicationTypes = new List<string>() { "Article" };
+                        }
+                        newPub.PublicationType = pub.publicationTypes[0];
+                        result.Records.Add(newPub);
                     }
-                    newPub.PublicationType = pub.publicationTypes[0];
-                    result.Records.Add(newPub);
                 }
                 return result;
             }

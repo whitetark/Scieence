@@ -2,6 +2,7 @@
 {
     public class Response
     {
+        public int total { get; set; }
         public List<Record> Records { get; set; }
         public Response()
         {

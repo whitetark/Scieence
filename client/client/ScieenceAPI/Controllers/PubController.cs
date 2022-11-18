@@ -20,11 +20,11 @@ namespace ScieenceAPI.Controllers
             _pubServices = pubServices;
         }
 
-        [HttpGet(Name = "GetPubByQ/{q}")]
-        public async Task<Response> GetPublicationsByQ(string q)
+        [HttpGet("getPubByKeyword/{q}")]
+        public async Task<Response> GetPublicationsByKeyword(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationBySomething(q, 20);
-            var sspublications = await _semanticScholarClient.GetPublicationBySomething(q, 20);
+            var snpublications = await _springerNatureClient.GetPublicationBySomething(q, 1000);
+            var sspublications = await _semanticScholarClient.GetPublicationBySomething(q, 1000);
             var tempdbpublications = await GetPublications();
 
             var result = new Response();
@@ -34,11 +34,13 @@ namespace ScieenceAPI.Controllers
 
             foreach (var pub in tempdbpublications.Records)
             {
-                if (pub.Title.Contains(q) || pub.Description.Contains(q))
+                if (pub.Title.Contains(q, StringComparison.OrdinalIgnoreCase) || pub.Description.Contains(q, StringComparison.OrdinalIgnoreCase))
                 {
                     result.Records.Add(pub);
                 }
             }
+
+            result.total = result.Records.Count;
 
             return result;
         }
