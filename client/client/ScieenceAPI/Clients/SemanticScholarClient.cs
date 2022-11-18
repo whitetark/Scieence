@@ -21,8 +21,8 @@ namespace ScieenceAPI.Clients
         {
             try
             {
-                q = q.Replace(" ", "+");
-                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset=100&limit={numOf}&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds");
+                //q = q.Replace(" ", "+");
+                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset=100&limit={numOf}&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
                 response.EnsureSuccessStatusCode();
                 var content = response.Content.ReadAsStringAsync().Result;
                 SemanticScholarPub resultOfDes = JsonConvert.DeserializeObject<SemanticScholarPub>(content);
@@ -37,12 +37,16 @@ namespace ScieenceAPI.Clients
                         Title = pub.title,
                         Authors = pub.authors.ConvertAll(x => x.name),
                         PublicationDate = pub.publicationDate,
-                        PublicationType = pub.publicationTypes[0],
                         PublicationYear = pub.year,
                         Description = pub.Abstract,
-                        Doi = pub.externalIds[0].DOI,
+                        Doi = pub.externalIds.DOI,
                         Subjects = pub.fieldsOfStudy
                     };
+                    if (pub.publicationTypes == null)
+                    {
+                        pub.publicationTypes = new List<string>() {"Article"};
+                    }
+                    newPub.PublicationType = pub.publicationTypes[0];
                     result.Records.Add(newPub);
                 }
                 return result;

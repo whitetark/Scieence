@@ -8,7 +8,7 @@ namespace ScieenceAPI.Models.ForClients
     }
     public class Data
     {
-        public List<ExternalIds> externalIds { get; set; }
+        public ExternalIds externalIds { get; set; }
         public string url { get; set; }
         public string title { get; set; }
         [JsonProperty("abstract")]
