@@ -18,7 +18,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_NAME": "ScieenceDB",
-        "PUBLICATIONS_COLLECTION_NAME": "Publications"
+        "PUBLICATIONS_COLLECTION_NAME": "Publications",
+        "ACCOUNTS_COLLECTION_NAME": "Accounts"
       }
     },
     "IIS Express": {
@@ -28,7 +29,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_NAME": "ScieenceDB",
-        "PUB_COLLECTION_NAME": "Publications"
+        "PUB_COLLECTION_NAME": "Publications",
+        "ACCOUNTS_COLLECTION_NAME": "Accounts"
       }
     }
   }

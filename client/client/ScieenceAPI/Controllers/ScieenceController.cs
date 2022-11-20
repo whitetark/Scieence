@@ -1,4 +1,6 @@
 using Database;
+using Database.Models;
+using Database.Services;
 using Microsoft.AspNetCore.Mvc;
 using ScieenceAPI.Clients;
 using ScieenceAPI.Models;
@@ -7,17 +9,19 @@ namespace ScieenceAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PubController : ControllerBase
+    public class ScieenceController : ControllerBase
     {
         private readonly SpringerNatureClient _springerNatureClient;
         private readonly SemanticScholarClient _semanticScholarClient;
         private readonly PubServices _pubServices;
+        private readonly AccountServices _accountServices;
 
-        public PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, PubServices pubServices)
+        public ScieenceController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, PubServices pubServices, AccountServices accountServices)
         {
             _semanticScholarClient = semanticScholarClient;
             _springerNatureClient = springerNatureClient;
             _pubServices = pubServices;
+            _accountServices = accountServices;
         }
 
         [HttpGet("getPubByKeyword/{q}")]
@@ -40,7 +44,7 @@ namespace ScieenceAPI.Controllers
                 }
             }
 
-            result.total = result.Records.Count;
+            result.Total = result.Records.Count;
 
             return result;
         }
@@ -73,12 +77,12 @@ namespace ScieenceAPI.Controllers
         }
 
         [HttpGet("getPub/{id}")]
-        public async Task<DbPub> GetPublication(string id)
+        public async Task<Publication> GetPublication(string id)
         {
             return await _pubServices.GetPublication(id);
         }
         [HttpPost("createPub")]
-        public void AddPub(DbPub publication)
+        public void AddPub(Publication publication)
         {
             _ = _pubServices.AddPublication(publication);
         }
@@ -90,9 +94,32 @@ namespace ScieenceAPI.Controllers
         }
 
         [HttpPut("updatePub")]
-        public void UpdatePub(DbPub publication)
+        public void UpdatePub(Publication publication)
         {
             _ = _pubServices.UpdatePublication(publication);
+        }
+
+        [HttpGet("getAcc/{id}")]
+        public async Task<Account> GetAccount(string id)
+        {
+            return await _accountServices.GetAccount(id);
+        }
+        [HttpPost("createAcc")]
+        public void AddAccount(Account account)
+        {
+            _ = _accountServices.AddAccount(account);
+        }
+
+        [HttpDelete("deleteAcc/{id}")]
+        public void DeleteAccount(string id)
+        {
+            _ = _accountServices.DeleteAccount(id);
+        }
+
+        [HttpPut("updateAcc")]
+        public void UpdateAccount(Account account)
+        {
+            _ = _accountServices.UpdateAccount(account);
         }
 
     }

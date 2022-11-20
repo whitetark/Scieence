@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Database.Models;
+using Newtonsoft.Json;
 using ScieenceAPI.Models;
 using ScieenceAPI.Models.ForClients;
 

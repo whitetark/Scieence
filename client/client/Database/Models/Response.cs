@@ -1,8 +1,14 @@
-﻿namespace ScieenceAPI.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Database.Models
 {
     public class Response
     {
-        public int total { get; set; }
+        public int Total { get; set; }
         public List<Record> Records { get; set; }
         public Response()
         {

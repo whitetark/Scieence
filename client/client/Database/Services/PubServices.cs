@@ -1,16 +1,17 @@
-﻿using MongoDB.Driver;
+﻿using Database.Models;
+using MongoDB.Driver;
 
-namespace Database
+namespace Database.Services
 {
     public class PubServices
     {
-        private readonly IMongoCollection<DbPub> _publications;
+        private readonly IMongoCollection<Publication> _publications;
         
         public PubServices(DbClient dbClient)
         {
             _publications = dbClient.GetPubsCollection();
         }
-        public async Task<List<DbPub>> GetPubs()
+        public async Task<List<Publication>> GetPubs()
         {
             try
             {
@@ -21,7 +22,7 @@ namespace Database
                 throw ex;
             }
         }
-        public async Task<DbPub> GetPublication(string id)
+        public async Task<Publication> GetPublication(string id)
         {
             try
             {
@@ -32,7 +33,7 @@ namespace Database
                 throw ex;
             }
         }
-        public async Task AddPublication(DbPub publication)
+        public async Task AddPublication(Publication publication)
         {
             try
             {
@@ -54,7 +55,7 @@ namespace Database
                 throw ex;
             }
         }
-        public async Task<ReplaceOneResult> UpdatePublication(DbPub newPublication)
+        public async Task<ReplaceOneResult> UpdatePublication(Publication newPublication)
         {
             try
             {

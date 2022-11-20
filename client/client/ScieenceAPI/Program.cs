@@ -1,4 +1,5 @@
 using Database;
+using Database.Services;
 using ScieenceAPI.Clients;
 
 var builder = WebApplication.CreateBuilder(args);

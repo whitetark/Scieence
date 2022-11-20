@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Database.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,22 @@ namespace Database
 {
     public class DbClient
     {
-        private readonly IMongoCollection<DbPub> _publications;
+        private readonly IMongoCollection<Publication> _publications;
+        private readonly IMongoCollection<Account> _accounts;
         public DbClient(IOptions<DbConfig> publicationsDbConfig)
         {
             var client = new MongoClient(publicationsDbConfig.Value.Connection_String);
             var database = client.GetDatabase(publicationsDbConfig.Value.Database_Name);
-            _publications = database.GetCollection<DbPub>(publicationsDbConfig.Value.Publications_Collection_Name);
+            _publications = database.GetCollection<Publication>(publicationsDbConfig.Value.Publications_Collection_Name);
+            _accounts = database.GetCollection<Account>(publicationsDbConfig.Value.Accounts_Collection_Name);
         }
-        public IMongoCollection<DbPub> GetPubsCollection()
+        public IMongoCollection<Publication> GetPubsCollection()
         {
             return _publications;
+        }
+        public IMongoCollection<Account> GetAccountCollection()
+        {
+            return _accounts;
         }
     }
 }
