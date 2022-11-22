@@ -18,7 +18,7 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationBySomething(string q, double numOf)
+        public async Task<Response> GetPublicationByKeyword(string q, double numOf)
         {
             try
             {
@@ -34,13 +34,11 @@ namespace ScieenceAPI.Clients
 
                     s += 100;
                 }
-
                 fullContent = "{\"totalContent\":[" + fullContent.Remove(0,1) + "]}\n";
-
-                TotalSS resultOfDes = JsonConvert.DeserializeObject<TotalSS>(fullContent);
+                TotalSSK resultOfDes = JsonConvert.DeserializeObject<TotalSSK>(fullContent);
 
                 var result = new Response();
-                foreach (SemanticScholarPub response in resultOfDes.totalContent)
+                foreach (SemanticScholarByKeyword response in resultOfDes.totalContent)
                 {
                     foreach (var pub in response.data)
                     {
@@ -70,6 +68,42 @@ namespace ScieenceAPI.Clients
             {
                 throw new Exception();
             }
+        }
+
+        public async Task<Response> GetPublicationsByAuthor(string author, double numOf)
+        {
+            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate");
+            response.EnsureSuccessStatusCode();
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            SemanticScholarByAuthor resultOfDes = JsonConvert.DeserializeObject<SemanticScholarByAuthor>(content);
+
+            var result = new Response();
+            foreach (var data in resultOfDes.data)
+            {
+                foreach (var paper in data.papers)
+                {
+                    var newPub = new Record
+                    {
+                        Language = "en",
+                        Url = paper.url,
+                        Title = paper.title,
+                        Authors = paper.authors.ConvertAll(x => x.name),
+                        PublicationDate = paper.publicationDate,
+                        PublicationYear = paper.year,
+                        Description = paper.Abstract,
+                        Doi = paper.externalIds.DOI,
+                        Subjects = paper.fieldsOfStudy
+                    };
+                    if (paper.publicationTypes == null)
+                    {
+                        paper.publicationTypes = new List<string>() { "Article" };
+                    }
+                    newPub.PublicationType = paper.publicationTypes[0];
+                    result.Records.Add(newPub);
+                }
+            }
+            return result;
         }
         //https://api.semanticscholar.org/graph/v1/paper/search?query=covid+vaccination&offset=100&limit=3&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds
     }

@@ -24,11 +24,11 @@ namespace ScieenceAPI.Controllers
             _accountServices = accountServices;
         }
 
-        [HttpGet("getPubByKeyword/{q}")]
+        [HttpGet("pub/aggregation/getByKeyword/{q}")]
         public async Task<Response> GetPublicationsByKeyword(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationBySomething(q, 1000);
-            var sspublications = await _semanticScholarClient.GetPublicationBySomething(q, 1000);
+            var snpublications = await _springerNatureClient.GetPublicationByKeyword(q, 1000);
+            var sspublications = await _semanticScholarClient.GetPublicationByKeyword(q, 1000);
             var tempdbpublications = await GetPublications();
 
             var result = new Response();
@@ -48,7 +48,33 @@ namespace ScieenceAPI.Controllers
 
             return result;
         }
-        [HttpGet("getPubs")]
+
+        [HttpGet("pub/aggregation/getByAuthor/{q}")]
+        public async Task<Response> GetPublicationsByAuthor(string q)
+        {
+            var snpublications = await _springerNatureClient.GetPublicationByKeyword(q, 1000);
+            var sspublications = await _semanticScholarClient.GetPublicationByKeyword(q, 1000);
+            var tempdbpublications = await GetPublications();
+
+            var result = new Response();
+
+            result.Records.AddRange(snpublications.Records);
+            result.Records.AddRange(sspublications.Records);
+
+            foreach (var pub in tempdbpublications.Records)
+            {
+                if (pub.Title.Contains(q, StringComparison.OrdinalIgnoreCase) || pub.Description.Contains(q, StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Records.Add(pub);
+                }
+            }
+
+            result.Total = result.Records.Count;
+
+            return result;
+        }
+
+        [HttpGet("pub/database/getAll")]
         public async Task<Response> GetPublications()
         {
             var dbpublications = await _pubServices.GetPubs();
@@ -76,47 +102,47 @@ namespace ScieenceAPI.Controllers
             return result;
         }
 
-        [HttpGet("getPub/{id}")]
+        [HttpGet("pub/database/getById/{id}")]
         public async Task<Publication> GetPublication(string id)
         {
             return await _pubServices.GetPublication(id);
         }
-        [HttpPost("createPub")]
+        [HttpPost("pub/database/create")]
         public void AddPub(Publication publication)
         {
             _ = _pubServices.AddPublication(publication);
         }
 
-        [HttpDelete("deletePub/{id}")]
+        [HttpDelete("pub/database/deleteById/{id}")]
         public void DeletePub(string id)
         {
             _ = _pubServices.DeletePublication(id);
         }
 
-        [HttpPut("updatePub")]
+        [HttpPut("pub/database/update")]
         public void UpdatePub(Publication publication)
         {
             _ = _pubServices.UpdatePublication(publication);
         }
 
-        [HttpGet("getAcc/{id}")]
+        [HttpGet("acc/database/getById/{id}")]
         public async Task<Account> GetAccount(string id)
         {
             return await _accountServices.GetAccount(id);
         }
-        [HttpPost("createAcc")]
+        [HttpPost("acc/database/create")]
         public void AddAccount(Account account)
         {
             _ = _accountServices.AddAccount(account);
         }
 
-        [HttpDelete("deleteAcc/{id}")]
+        [HttpDelete("acc/database/deleteById/{id}")]
         public void DeleteAccount(string id)
         {
             _ = _accountServices.DeleteAccount(id);
         }
 
-        [HttpPut("updateAcc")]
+        [HttpPut("acc/database/update")]
         public void UpdateAccount(Account account)
         {
             _ = _accountServices.UpdateAccount(account);

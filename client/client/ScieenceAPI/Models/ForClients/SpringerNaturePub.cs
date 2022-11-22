@@ -2,10 +2,6 @@
 
 namespace ScieenceAPI.Models.ForClients
 {
-    public class TotalSN
-    {
-        public List<SpringerNaturePub> totalContent { get; set; }
-    }
     public class SpringerNaturePub
     {
         public List<Records> records { get; set; }
@@ -14,6 +10,10 @@ namespace ScieenceAPI.Models.ForClients
             records = new List<Records>();
         }
     }
+    public class TotalSN
+    {
+        public List<SpringerNaturePub> totalContent { get; set; }
+    }
     public class Records
     {
         public string contentType { get; set; }
@@ -21,7 +21,7 @@ namespace ScieenceAPI.Models.ForClients
         public string language { get; set; }
         public List<Url> url { get; set; }
         public string title { get; set; }
-        public List<Cretors> creators { get; set; }
+        public List<Creators> creators { get; set; }
         public string openaccess { get; set; }
         public string publicationDate { get; set; }
         public string publicationType { get; set; }
@@ -30,7 +30,7 @@ namespace ScieenceAPI.Models.ForClients
         public List<string> subjects { get; set; }
     }
 
-    public class Cretors
+    public class Creators
     {
         public string creator { get; set; }
     }
