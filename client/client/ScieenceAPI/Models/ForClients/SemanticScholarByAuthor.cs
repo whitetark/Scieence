@@ -17,7 +17,7 @@ namespace ScieenceAPI.Models.ForClients
         public string title { get; set; }
         [JsonProperty("abstract")]
         public string Abstract { get; set; }
-        public int year { get; set; }
+        public int? year { get; set; }
         public bool isOpenAccess { get; set; }
         public List<string> fieldsOfStudy { get; set; }
         public List<string> publicationTypes { get; set; }

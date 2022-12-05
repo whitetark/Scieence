@@ -20,7 +20,7 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationByKeyword(string keyword, double numOf)
+        public async Task<Response> GetPublicationsByKeyword(string keyword, double numOf)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace ScieenceAPI.Clients
                 throw new Exception();
             }
         }
-        public async Task<Response> GetPublicationByAuthor(string author, double numOf)
+        public async Task<Response> GetPublicationsByAuthor(string author, double numOf)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace ScieenceAPI.Clients
                 throw new Exception();
             }
         }
-        public async Task<Response> GetPublicationBySubject(string subject, double numOf)
+        public async Task<Response> GetPublicationsBySubject(string subject, double numOf)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace ScieenceAPI.Clients
                 throw new Exception();
             }
         }
-        public async Task<Response> GetPublicationByLanguage(string language, double numOf)
+        public async Task<Response> GetPublicationsByLanguage(string language, double numOf)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace ScieenceAPI.Clients
             {
                 foreach (var pub in response.records)
                 {
-                    var newPub = new Record
+                    var newPub = new Publication
                     {
                         Language = pub.language,
                         Url = pub.url[0].value,

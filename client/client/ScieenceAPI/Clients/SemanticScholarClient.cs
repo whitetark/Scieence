@@ -18,7 +18,7 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationByKeyword(string q, double numOf)
+        public async Task<Response> GetPublicationsByKeyword(string q, double numOf)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace ScieenceAPI.Clients
                 {
                     foreach (var pub in response.data)
                     {
-                        var newPub = new Record
+                        var newPub = new Publication
                         {
                             Language = "en",
                             Url = pub.url,
@@ -72,34 +72,41 @@ namespace ScieenceAPI.Clients
 
         public async Task<Response> GetPublicationsByAuthor(string author, double numOf)
         {
-            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate");
+            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit={numOf}");
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync().Result;
 
             SemanticScholarByAuthor resultOfDes = JsonConvert.DeserializeObject<SemanticScholarByAuthor>(content);
 
             var result = new Response();
+            int num = 0;
             foreach (var data in resultOfDes.data)
             {
-                foreach (var paper in data.papers)
+                foreach (var pub in data.papers)
                 {
-                    var newPub = new Record
+                    if (num > numOf)
+                    {
+                        return result;
+                    }
+                    num++;
+
+                    var newPub = new Publication
                     {
                         Language = "en",
-                        Url = paper.url,
-                        Title = paper.title,
-                        Authors = paper.authors.ConvertAll(x => x.name),
-                        PublicationDate = paper.publicationDate,
-                        PublicationYear = paper.year,
-                        Description = paper.Abstract,
-                        Doi = paper.externalIds.DOI,
-                        Subjects = paper.fieldsOfStudy
+                        Url = pub.url,
+                        Title = pub.title,
+                        Authors = pub.authors.ConvertAll(x => x.name),
+                        PublicationDate = pub.publicationDate,
+                        PublicationYear = pub.year,
+                        Description = pub.Abstract,
+                        Doi = pub.externalIds.DOI,
+                        Subjects = pub.fieldsOfStudy
                     };
-                    if (paper.publicationTypes == null)
+                    if (pub.publicationTypes == null)
                     {
-                        paper.publicationTypes = new List<string>() { "Article" };
+                        pub.publicationTypes = new List<string>() { "Article" };
                     }
-                    newPub.PublicationType = paper.publicationTypes[0];
+                    newPub.PublicationType = pub.publicationTypes[0];
                     result.Records.Add(newPub);
                 }
             }

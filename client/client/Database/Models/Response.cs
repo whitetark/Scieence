@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,20 +10,20 @@ namespace Database.Models
     public class Response
     {
         public int Total { get; set; }
-        public List<Record> Records { get; set; }
+        public List<Publication> Records { get; set; }
         public Response()
         {
-            Records = new List<Record>();
+            Records = new List<Publication>();
         }
     }
-    public class Record
+    public class Publication
     {
         public string Language { get; set; }
         public string Url { get; set; }
         public string Title { get; set; }
         public string Doi { get; set; }
         public List<string> Authors { get; set; }
-        public int PublicationYear { get; set; }
+        public int? PublicationYear { get; set; }
         public string PublicationDate { get; set; }
         public string PublicationType { get; set; }
         public string Description { get; set; }

@@ -24,25 +24,19 @@ namespace ScieenceAPI.Controllers
             _accountServices = accountServices;
         }
 
+        //ApiPub
         [HttpGet("pub/aggregation/getByKeyword/{q}")]
         public async Task<Response> GetPublicationsByKeyword(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationByKeyword(q, 1000);
-            var sspublications = await _semanticScholarClient.GetPublicationByKeyword(q, 1000);
-            var tempdbpublications = await GetPublications();
+            var snpublications = await _springerNatureClient.GetPublicationsByKeyword(q, 100);
+            var sspublications = await _semanticScholarClient.GetPublicationsByKeyword(q, 100);
+            var dbpublications = await _pubServices.GetPublicationsByKeyword(q);
 
             var result = new Response();
 
             result.Records.AddRange(snpublications.Records);
             result.Records.AddRange(sspublications.Records);
-
-            foreach (var pub in tempdbpublications.Records)
-            {
-                if (pub.Title.Contains(q, StringComparison.OrdinalIgnoreCase) || pub.Description.Contains(q, StringComparison.OrdinalIgnoreCase))
-                {
-                    result.Records.Add(pub);
-                }
-            }
+            result.Records.AddRange(dbpublications.Records);
 
             result.Total = result.Records.Count;
 
@@ -52,101 +46,107 @@ namespace ScieenceAPI.Controllers
         [HttpGet("pub/aggregation/getByAuthor/{q}")]
         public async Task<Response> GetPublicationsByAuthor(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationByKeyword(q, 1000);
-            var sspublications = await _semanticScholarClient.GetPublicationByKeyword(q, 1000);
-            var tempdbpublications = await GetPublications();
+            var snpublications = await _springerNatureClient.GetPublicationsByAuthor(q, 100);
+            var sspublications = await _semanticScholarClient.GetPublicationsByAuthor(q, 100);
+            var dbpublications = await _pubServices.GetPublicationsByAuthor(q);
 
             var result = new Response();
 
             result.Records.AddRange(snpublications.Records);
             result.Records.AddRange(sspublications.Records);
-
-            foreach (var pub in tempdbpublications.Records)
-            {
-                if (pub.Title.Contains(q, StringComparison.OrdinalIgnoreCase) || pub.Description.Contains(q, StringComparison.OrdinalIgnoreCase))
-                {
-                    result.Records.Add(pub);
-                }
-            }
+            result.Records.AddRange(dbpublications.Records);
 
             result.Total = result.Records.Count;
 
             return result;
         }
 
-        [HttpGet("pub/database/getAll")]
-        public async Task<Response> GetPublications()
+        [HttpGet("pub/aggregation/getBySubject{q}")]
+        public async Task<Response> GetPublicationsBySubject(string q)
         {
-            var dbpublications = await _pubServices.GetPubs();
+            var snpublications = await _springerNatureClient.GetPublicationsBySubject(q, 1000);
+            var sspublications = await _semanticScholarClient.GetPublicationsByKeyword(q, 1000);
+            var dbpublications = await _pubServices.GetPublicationsBySubject(q);
 
             var result = new Response();
-            foreach (var pub in dbpublications)
-            {
-                var newPub = new Record
-                {
-                    Language = pub.language[0],
-                    Url = pub.url,
-                    Title = pub.title,
-                    Authors = pub.creator,
-                    PublicationDate = pub.datePublished,
-                    PublicationType = pub.docType,
-                    PublicationYear = pub.publicationYear,
-                    Doi = (from source in pub.identifier
-                          where source.name == "local_doi"
-                          select source.value).FirstOrDefault(),
-                    Description = pub.description,
-                    Subjects = pub.sourceCategory
-                };
-                result.Records.Add(newPub);
-            }
+
+            result.Records.AddRange(snpublications.Records);
+            result.Records.AddRange(sspublications.Records);
+            result.Records.AddRange(dbpublications.Records);
+
+            result.Total = result.Records.Count;
+
+            return result;
+        }
+        [HttpGet("pub/aggregation/getByLanguage/{q}")]
+        public async Task<Response> GetPublicationsByLanguage(string q)
+        {
+            var snpublications = await _springerNatureClient.GetPublicationsByLanguage(q, 1000);
+            var sspublications = await _semanticScholarClient.GetPublicationsByKeyword(q, 1000);
+            var dbpublications = await _pubServices.GetPublicationsByLanguage(q);
+
+            var result = new Response();
+
+            result.Records.AddRange(snpublications.Records);
+            result.Records.AddRange(sspublications.Records);
+            result.Records.AddRange(dbpublications.Records);
+
+            result.Total = result.Records.Count;
+
             return result;
         }
 
+        // DatabasePub
+        [HttpGet("pub/database/getAll")]
+        public async Task<List<DbPublication>> GetPublications()
+        {
+            return await _pubServices.GetPubs();
+        }
         [HttpGet("pub/database/getById/{id}")]
-        public async Task<Publication> GetPublication(string id)
+        public async Task<DbPublication> GetPublication(string id)
         {
             return await _pubServices.GetPublication(id);
         }
         [HttpPost("pub/database/create")]
-        public void AddPub(Publication publication)
+        public async void AddPub(DbPublication publication)
         {
             _ = _pubServices.AddPublication(publication);
         }
-
         [HttpDelete("pub/database/deleteById/{id}")]
-        public void DeletePub(string id)
+        public async void DeletePub(string id)
         {
-            _ = _pubServices.DeletePublication(id);
+            _ = await _pubServices.DeletePublication(id);
         }
 
         [HttpPut("pub/database/update")]
-        public void UpdatePub(Publication publication)
+        public async void UpdatePub(DbPublication publication)
         {
-            _ = _pubServices.UpdatePublication(publication);
+            _ = await _pubServices.UpdatePublication(publication);
         }
 
+
+        // DatabaseAcc
         [HttpGet("acc/database/getById/{id}")]
         public async Task<Account> GetAccount(string id)
         {
             return await _accountServices.GetAccount(id);
         }
         [HttpPost("acc/database/create")]
-        public void AddAccount(Account account)
+        public async void AddAccount(Account account)
         {
             _ = _accountServices.AddAccount(account);
         }
 
         [HttpDelete("acc/database/deleteById/{id}")]
-        public void DeleteAccount(string id)
+        public async void DeleteAccount(string id)
         {
-            _ = _accountServices.DeleteAccount(id);
+            _ = await _accountServices.DeleteAccount(id);
         }
 
         [HttpPut("acc/database/update")]
-        public void UpdateAccount(Account account)
+        public async void UpdateAccount(Account account)
         {
-            _ = _accountServices.UpdateAccount(account);
+            _ = await _accountServices.UpdateAccount(account);
         }
-
     }
 }
