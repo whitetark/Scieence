@@ -70,6 +70,19 @@ namespace ScieenceAPI.Clients
             }
         }
 
+        public async Task<Response> GetPublicationsByLanguage(string language, double numOf)
+        {
+            var result = new Response();
+            if (language == "en")
+            {
+                Random rnd = new Random();
+                char randomChar = (char)rnd.Next('a', 'z');
+                var publications = await GetPublicationsByKeyword(randomChar.ToString(), numOf);
+                result.Records.AddRange(publications.Records);
+            }
+            return result;
+        }
+
         public async Task<Response> GetPublicationsByAuthor(string author, double numOf)
         {
             var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit={numOf}");
