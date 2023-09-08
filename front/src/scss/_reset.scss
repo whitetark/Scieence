@@ -1,0 +1,29 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+*{
+    margin: 0;
+    padding: 0;
+    font: inherit
+}
+img, picture, svg, video {
+    display: block;
+    max-width: 100%;
+}
+html{
+    font-size: 62.5%;
+}
+body{
+    font-size: 1.6rem;
+    min-height: 100vh;
+}
+ol, ul{
+    list-style: none
+}
+a{
+    text-decoration: none;
+}
+button{
+    all: unset;
+    cursor: pointer;
+}
