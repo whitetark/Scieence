@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Routes, Route, BrowserRouter, useLocation } from 'react-router-dom'
 import './App.css'
 import RootLayout from './pages/Root'
 import ErrorPage from './pages/Error'
@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
           <Route index element={<HomePage />} />
-          <Route path='login' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

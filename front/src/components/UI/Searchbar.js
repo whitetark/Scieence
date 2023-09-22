@@ -8,7 +8,7 @@ const Searchbar = () => {
       <button>
         <FontAwesomeIcon icon='fa-solid fa-magnifying-glass' fixedWidth />
       </button>
-      <input type='text' name='search' placeholder='What do you want to find?' />
+      <input type='text' name='search' placeholder='What do you want to find?' autoComplete='off' />
     </SearchbarStyle>
   )
 }
