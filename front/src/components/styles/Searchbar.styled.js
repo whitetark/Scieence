@@ -11,7 +11,7 @@ export const SearchbarStyle = styled.form`
   align-items: center;
   justify-content: center;
   color: ${variables.BLACK_COLOR};
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   width: 100%;
 
   input {

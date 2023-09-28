@@ -15,7 +15,7 @@ export const MainWrapper = styled(ContainerWrapper)`
   max-width: 60rem;
   z-index: 1;
   > div:not(:last-child) {
-    margin-bottom: 2rem;
+    margin-bottom: 3.5rem;
   }
 
   .advanced {
@@ -43,4 +43,18 @@ export const BackgroundItem = styled.div`
   background-position: center;
   background-size: cover;
   filter: blur(5px) brightness(51%);
+`
+
+export const HeroWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+
+  text-align: center;
+
+  h1 {
+    font-size: 3.2rem;
+    font-weight: 600;
+  }
 `
