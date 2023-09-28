@@ -1,1 +1,6 @@
 @import 'scss/_global.scss';
+
+.login-modal {
+  position: relative;
+  top: 7rem;
+}

@@ -4,9 +4,12 @@ import { Header, Logo, Nav, Actions } from '../styles/MainNavigation.styled'
 import { ContainerWrapper } from '../styles/UI.styled'
 import { NavLink, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Modal from '../UI/Modal'
+import Login from './Login'
+import useModal from '../../hooks/modal'
 
 const MainNavigation = () => {
-  const location = useLocation()
+  const { isShowing, toggle } = useModal()
   return (
     <Header>
       <ContainerWrapper>
@@ -21,13 +24,12 @@ const MainNavigation = () => {
             <NavLink to='fav' className={({ isActive }) => (isActive ? 'active' : undefined)}>
               <FontAwesomeIcon icon='fa-solid fa-heart' fixedWidth />
             </NavLink>
-            <NavLink
-              to='login'
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-              state={{ previousLocation: location }}
-            >
+            <button onClick={toggle} className={isShowing ? 'active' : undefined}>
               <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
-            </NavLink>
+            </button>
+            <Modal isShowing={isShowing} hide={toggle} className='login-modal'>
+              <Login />
+            </Modal>
           </Actions>
         </Nav>
       </ContainerWrapper>
