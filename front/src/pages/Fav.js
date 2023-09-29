@@ -1,7 +1,8 @@
 import React from 'react'
+import FavContent from '../components/Fav/FavContent'
 
 const FavPage = () => {
-  return <div>Content</div>
+  return <FavContent />
 }
 
 export default FavPage

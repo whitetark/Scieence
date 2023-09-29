@@ -5,7 +5,7 @@ import { SearchbarStyle } from '../styles/Searchbar.styled'
 const Searchbar = () => {
   return (
     <SearchbarStyle>
-      <button>
+      <button type='submit' onClick={(e) => e.preventDefault()}>
         <FontAwesomeIcon icon='fa-solid fa-magnifying-glass' fixedWidth />
       </button>
       <input type='text' name='search' placeholder='What do you want to find?' autoComplete='off' />

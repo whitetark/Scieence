@@ -13,6 +13,7 @@ export const LoginWrapper = styled.div`
   max-width: 29.2rem;
   width: 100%;
   align-self: flex-end;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `
 
 export const LoginHeader = styled.div`

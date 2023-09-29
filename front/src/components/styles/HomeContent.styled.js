@@ -2,12 +2,13 @@ import { styled } from 'styled-components'
 import * as variables from '../../scss/Variables.js'
 import { ContainerWrapper } from '../styles/UI.styled'
 
-export const Main = styled.main`
+export const Home = styled.main`
   display: flex;
+  position: relative;
   flex: 1;
   color: ${variables.WHITE_COLOR};
 `
-export const MainWrapper = styled(ContainerWrapper)`
+export const HomeWrapper = styled(ContainerWrapper)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,6 +34,7 @@ export const Background = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: -1;
 `
 export const BackgroundItem = styled.div`
   position: absolute;

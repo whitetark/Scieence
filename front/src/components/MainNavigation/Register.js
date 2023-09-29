@@ -1,24 +1,25 @@
 import React from 'react'
 import { LoginHeader, LoginWrapper, LoginMain } from '../styles/Login.styled'
 
-const Login = (props) => {
+const Register = (props) => {
   return (
     <LoginWrapper onClick={props.onClick}>
       <LoginHeader>
-        <h2>Login Form</h2>
+        <h2>Register Form</h2>
       </LoginHeader>
       <LoginMain>
         <form action=''>
           <input type='text' placeholder='Login' />
           <input type='password' placeholder='Password' />
-          <button type='submit'>Login</button>
+          <input type='password' placeholder='Repeat Password' />
+          <button type='submit'>Register</button>
         </form>
         <div className='login-info'>
-          Not a member? <button onClick={() => props.onToggle('reg')}>Signup now</button>
+          Already a member? <button onClick={() => props.onToggle('login')}>Login in</button>
         </div>
       </LoginMain>
     </LoginWrapper>
   )
 }
 
-export default Login
+export default Register

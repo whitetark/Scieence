@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../../assets/logo.png'
 import { Header, Logo, Nav, Actions } from '../styles/MainNavigation.styled'
 import { ContainerWrapper } from '../styles/UI.styled'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Modal from '../UI/Modal'
 import Login from './Login'
+import Register from './Register'
 import useModal from '../../hooks/modal'
 
 const MainNavigation = () => {
   const { isShowing, toggle } = useModal()
+  const [modalName, setModalName] = useState('login')
+
+  const toggleModalName = (name) => {
+    setModalName(name)
+  }
+
   return (
     <Header>
       <ContainerWrapper>
@@ -28,7 +35,11 @@ const MainNavigation = () => {
               <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
             </button>
             <Modal isShowing={isShowing} hide={toggle} className='login-modal'>
-              <Login />
+              {modalName === 'login' ? (
+                <Login onToggle={toggleModalName} />
+              ) : (
+                <Register onToggle={toggleModalName} />
+              )}
             </Modal>
           </Actions>
         </Nav>

@@ -8,11 +8,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #4155b7;
   line-height: 1.4;
-  overflow-x: hidden;
 }
 
 #root {
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.login-modal {
+  position: relative;
+  top: 7rem;
 }

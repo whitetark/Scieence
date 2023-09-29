@@ -15,7 +15,6 @@ export const SearchbarStyle = styled.form`
   width: 100%;
 
   input {
-    height: 100%;
     width: 100%;
     background-color: ${variables.WHITE_COLOR};
     border-radius: 0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0;
