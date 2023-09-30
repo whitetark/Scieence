@@ -1,5 +1,7 @@
 import { styled } from 'styled-components'
-import * as variables from '../../scss/Variables.js'
+import * as variables from './Variables.js'
+import { Container } from './UI.styled.js'
+import { NavLink } from 'react-router-dom'
 
 export const Header = styled.header`
   position: sticky;
@@ -8,7 +10,7 @@ export const Header = styled.header`
   background-color: ${variables.WHITE_COLOR};
 `
 
-export const Logo = styled.div`
+export const NavLogo = styled(NavLink)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -23,7 +25,7 @@ export const Logo = styled.div`
   }
 `
 
-export const Nav = styled.nav`
+export const Nav = styled(Container)`
   display: flex;
   flex-direction: row;
   align-items: center;

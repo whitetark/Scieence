@@ -1,19 +1,13 @@
 import { styled } from 'styled-components'
-import * as variables from '../../scss/Variables.js'
-import { ContainerWrapper } from '../styles/UI.styled'
-
-export const Fav = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
+import * as variables from './Variables.js'
+import { Container } from './UI.styled.js'
 
 export const MainWrapper = styled.div`
   height: 100%;
   background-color: ${variables.WHITE_COLOR};
 `
 
-export const MainContent = styled(ContainerWrapper)`
+export const MainContent = styled(Container)`
   padding: 1rem 0;
   h2 {
     padding: 1rem 0;

@@ -1,13 +1,13 @@
 import React from 'react'
-import { LoginHeader, LoginWrapper, LoginMain } from '../styles/Login.styled'
+import * as Styled from '../../styles/Login.styled'
 
 const Register = (props) => {
   return (
-    <LoginWrapper onClick={props.onClick}>
-      <LoginHeader>
+    <Styled.LoginWrapper onClick={props.onClick}>
+      <Styled.LoginHeader>
         <h2>Register Form</h2>
-      </LoginHeader>
-      <LoginMain>
+      </Styled.LoginHeader>
+      <Styled.LoginMain>
         <form action=''>
           <input type='text' placeholder='Login' />
           <input type='password' placeholder='Password' />
@@ -17,8 +17,8 @@ const Register = (props) => {
         <div className='login-info'>
           Already a member? <button onClick={() => props.onToggle('login')}>Login in</button>
         </div>
-      </LoginMain>
-    </LoginWrapper>
+      </Styled.LoginMain>
+    </Styled.LoginWrapper>
   )
 }
 

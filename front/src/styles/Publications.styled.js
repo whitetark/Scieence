@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import * as variables from '../../scss/Variables.js'
+import * as variables from './Variables.js'
 
 export const PubList = styled.div`
   display: grid;

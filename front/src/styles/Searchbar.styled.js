@@ -1,11 +1,11 @@
 import { styled } from 'styled-components'
-import * as variables from '../../scss/Variables.js'
+import * as variables from './Variables.js'
 
 const BORDER_RADIUS = '25px'
 const PADDING = '1rem 2rem'
 const BOX_SHADOW = '4px 4px 4px 0px rgba(0, 0, 0, 0.25)'
 
-export const SearchbarStyle = styled.form`
+export const Searchbar = styled.form`
   display: flex;
   flex-direction: row;
   align-items: center;

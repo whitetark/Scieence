@@ -1,8 +1,6 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ModalWrapper, ModalContent, Overlay } from '../styles/Modal.styled'
+import * as Styled from '../../styles/UI.styled'
 import { createPortal } from 'react-dom'
-import { ContainerWrapper } from '../styles/UI.styled'
 
 const Modal = ({ children, isShowing, hide, className }) => {
   const renderChildren = () => {
@@ -16,9 +14,9 @@ const Modal = ({ children, isShowing, hide, className }) => {
 
   return isShowing
     ? createPortal(
-        <Overlay onClick={hide}>
-          <ModalWrapper className={className}>{renderChildren()}</ModalWrapper>
-        </Overlay>,
+        <Styled.Overlay onClick={hide}>
+          <Styled.ModalWrapper className={className}>{renderChildren()}</Styled.ModalWrapper>
+        </Styled.Overlay>,
         document.getElementById('modal_root')
       )
     : null

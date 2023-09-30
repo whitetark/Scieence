@@ -1,15 +1,15 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { SearchbarStyle } from '../styles/Searchbar.styled'
+import * as Styled from '../../styles/Searchbar.styled'
 
 const Searchbar = () => {
   return (
-    <SearchbarStyle>
+    <Styled.Searchbar>
       <button type='submit' onClick={(e) => e.preventDefault()}>
         <FontAwesomeIcon icon='fa-solid fa-magnifying-glass' fixedWidth />
       </button>
       <input type='text' name='search' placeholder='What do you want to find?' autoComplete='off' />
-    </SearchbarStyle>
+    </Styled.Searchbar>
   )
 }
 
