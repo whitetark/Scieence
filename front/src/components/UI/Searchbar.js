@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Styled from '../../styles/Searchbar.styled'
 
-const Searchbar = () => {
+const Searchbar = (props) => {
   return (
     <Styled.Searchbar>
       <button type='submit' onClick={(e) => e.preventDefault()}>

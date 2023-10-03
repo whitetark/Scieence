@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Modal from '../UI/Modal'
 import Login from './Login'
 import Register from './Register'
-import useModal from '../../hooks/modal'
+import useModal from '../../hooks/use-modal'
 
 const MainNavigation = () => {
   const { isShowing, toggle } = useModal()

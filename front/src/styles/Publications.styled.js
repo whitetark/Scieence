@@ -2,9 +2,8 @@ import { styled } from 'styled-components'
 import * as variables from './Variables.js'
 
 export const PubList = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
 `
 
@@ -13,7 +12,7 @@ export const Pub = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   background-color: ${variables.PUBLICATION_COLOR};
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: ${variables.BOX_SHADOW};
   border-radius: 10px;
   padding: 1.3rem;
   font-weight: 500;

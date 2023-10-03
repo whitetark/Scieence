@@ -4,14 +4,22 @@ import { Main } from '../styles/UI.styled'
 import Hero from '../components/Home/Hero'
 import Searchbar from '../components/UI/Searchbar'
 import Background from '../components/UI/Background'
+import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
+  const navigate = useNavigate()
+  const onClickHandler = () => {
+    navigate('/search')
+  }
+
   return (
     <Main>
       <Background />
       <Styled.Home>
         <Hero />
-        <button className='advanced'>Advanced Search</button>
+        <button className='advanced' onClick={onClickHandler}>
+          Advanced Search
+        </button>
         <Searchbar />
       </Styled.Home>
     </Main>
