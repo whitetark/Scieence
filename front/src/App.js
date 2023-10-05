@@ -3,11 +3,12 @@ import RootLayout from './pages/Root'
 import ErrorPage from './pages/Error'
 import HomePage from './pages/Home'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faHeart, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import FavoritePage from './pages/Favorite'
 import SearchPage from './pages/Search'
 
-library.add(faUser, faHeart, faMagnifyingGlass)
+library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular)
 
 function App() {
   return (

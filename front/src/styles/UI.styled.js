@@ -36,10 +36,6 @@ export const Overlay = styled.div`
   height: 100vh;
   width: 100%;
   z-index: 2;
-`
-
-export const ModalWrapper = styled(Container)`
-  display: flex;
-  flex-direction: column;
-  padding: 0 1rem;
+  background-color: ${(props) => props.color};
+  opacity: 0.75;
 `

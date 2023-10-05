@@ -1,15 +1,15 @@
 import React from 'react'
-import Publication from './Publication'
 import * as Styled from '../../styles/Publications.styled'
+import PublicationButton from './PublicationButton'
 
 const PublicationList = () => {
   return (
-    <Styled.PubList>
-      <Publication />
-      <Publication />
-      <Publication />
-      <Publication />
-    </Styled.PubList>
+    <Styled.PublicationList>
+      <PublicationButton />
+      <PublicationButton />
+      <PublicationButton />
+      <PublicationButton />
+    </Styled.PublicationList>
   )
 }
 
