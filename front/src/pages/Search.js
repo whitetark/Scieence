@@ -1,4 +1,5 @@
 import React from 'react'
+
 import * as Styled from '../styles/Favorite.styled'
 import { Main } from '../styles/UI.styled'
 import Searchbar from '../components/UI/Searchbar'

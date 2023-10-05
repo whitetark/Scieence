@@ -1,10 +1,11 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import RootLayout from './pages/Root'
-import ErrorPage from './pages/Error'
-import HomePage from './pages/Home'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUser, faHeart, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
+
+import RootLayout from './pages/Root'
+import ErrorPage from './pages/Error'
+import HomePage from './pages/Home'
 import FavoritePage from './pages/Favorite'
 import SearchPage from './pages/Search'
 

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import * as Styled from '../../styles/UI.styled'
 import BackgroundImg from '../../assets/background.png'
 

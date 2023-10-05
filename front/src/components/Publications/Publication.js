@@ -1,7 +1,7 @@
 import React from 'react'
-import * as Styled from '../../styles/Publications.styled'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as variables from '../../styles/Variables'
+
+import * as Styled from '../../styles/Publications.styled'
 
 const Publication = (props) => {
   return (
@@ -16,21 +16,17 @@ const Publication = (props) => {
       </Styled.PublicationActions>
       <Styled.PublicationMain>
         <h1>Title Of Publication</h1>
-        <div style={{ color: `${variables.BLUE_COLOR}` }}>
-          <p>
-            Some author, some author, some author, some author, some author, some author, some
-            author, some author
-          </p>
-        </div>
-        <div style={{ color: `${variables.TEXT_COLOR}` }}>
-          <p>
-            Detailed description, Detailed description, Detailed description, Detailed description,
-            Detailed description, Detailed description, Detailed description, Detailed description,
-            Detailed description, Detailed description, Detailed description, Detailed description,
-            Detailed description, Detailed description, Detailed description, Detailed description,
-            Detailed description, Detailed description, Detailed description,
-          </p>
-        </div>
+        <p className='authors'>
+          Some author, some author, some author, some author, some author, some author, some author,
+          some author
+        </p>
+        <p className='details'>
+          Detailed description, Detailed description, Detailed description, Detailed description,
+          Detailed description, Detailed description, Detailed description, Detailed description,
+          Detailed description, Detailed description, Detailed description, Detailed description,
+          Detailed description, Detailed description, Detailed description, Detailed description,
+          Detailed description, Detailed description, Detailed description,
+        </p>
         <Styled.PublicationDetails>
           <Styled.PublicationInfo>
             <p>

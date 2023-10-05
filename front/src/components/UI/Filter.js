@@ -1,4 +1,5 @@
 import React from 'react'
+
 import * as Styled from '../../styles/Filter.styled'
 
 const Filter = () => {

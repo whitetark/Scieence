@@ -1,5 +1,4 @@
 import { styled } from 'styled-components'
-import * as variables from './Variables.js'
 import { Container } from './UI.styled.js'
 
 export const Overlay = styled.div`

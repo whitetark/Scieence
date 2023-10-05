@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import logo from '../../assets/logo.png'
-import * as Styled from '../../styles/Header.styled'
-import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { NavLink } from 'react-router-dom'
+
+import * as Styled from '../../styles/Header.styled'
+import logo from '../../assets/logo.png'
 import Modal from '../UI/Modal'
 import Login from './Login'
 import Register from './Register'

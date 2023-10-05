@@ -1,7 +1,7 @@
 import React from 'react'
-import * as Styled from '../../styles/Modal.styled'
 import { createPortal } from 'react-dom'
-import { Container } from '../../styles/UI.styled'
+
+import * as Styled from '../../styles/Modal.styled'
 
 const Modal = ({ children, isShowing, hide, className, hasOverlay }) => {
   const renderChildren = () => {

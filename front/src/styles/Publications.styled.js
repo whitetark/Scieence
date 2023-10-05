@@ -28,10 +28,14 @@ export const PublicationMain = styled.div`
     font-weight: 600;
     text-transform: uppercase;
   }
-`
 
-export const PublicationAuthors = styled.div`
-  color: ;
+  .authors {
+    color: ${variables.BLUE_COLOR};
+  }
+
+  .details {
+    color: ${variables.TEXT_COLOR};
+  }
 `
 
 export const PublicationDetails = styled.div`

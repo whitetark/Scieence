@@ -1,5 +1,4 @@
 import { styled } from 'styled-components'
-import * as variables from './Variables.js'
 
 export const Main = styled.main`
   display: flex;
