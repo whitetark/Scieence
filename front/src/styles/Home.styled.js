@@ -1,6 +1,6 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables.js'
-import { Container } from './UI.styled.js'
+import { styled } from 'styled-components';
+import * as variables from './Variables.js';
+import { Container } from './UI.styled.js';
 
 export const Home = styled(Container)`
   max-width: 60rem;
@@ -21,7 +21,7 @@ export const Home = styled(Container)`
       border-color: ${variables.GRAY_COLOR};
     }
   }
-`
+`;
 
 export const HeroWrapper = styled.div`
   display: flex;
@@ -35,4 +35,4 @@ export const HeroWrapper = styled.div`
     font-size: 3.2rem;
     font-weight: 600;
   }
-`
+`;

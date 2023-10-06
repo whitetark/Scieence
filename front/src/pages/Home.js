@@ -1,17 +1,17 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import * as Styled from '../styles/Home.styled'
-import { Main } from '../styles/UI.styled'
-import Hero from '../components/Home/Hero'
-import Searchbar from '../components/UI/Searchbar'
-import Background from '../components/UI/Background'
+import * as Styled from '../styles/Home.styled';
+import { Main } from '../styles/UI.styled';
+import Hero from '../components/Home/Hero';
+import Searchbar from '../components/UI/Searchbar';
+import Background from '../components/UI/Background';
 
 const HomePage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const onClickHandler = () => {
-    navigate('/search')
-  }
+    navigate('/search');
+  };
 
   return (
     <Main>
@@ -24,7 +24,7 @@ const HomePage = () => {
         <Searchbar />
       </Styled.Home>
     </Main>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

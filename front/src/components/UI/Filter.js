@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import * as Styled from '../../styles/Filter.styled'
+import * as Styled from '../../styles/Filter.styled';
 
 const Filter = () => {
   return (
@@ -10,7 +10,7 @@ const Filter = () => {
         <button>Apply</button>
       </Styled.Filter>
     </Styled.FilterDiv>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;

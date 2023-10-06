@@ -1,6 +1,6 @@
-import React from 'react'
-import * as Styled from '../../styles/UI.styled'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react';
+import * as Styled from '../../styles/UI.styled';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
   return (
@@ -8,24 +8,22 @@ const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
       <button
         disabled={currentPage === 1}
         onClick={() => {
-          setCurrentPage((prevState) => prevState - 1)
-        }}
-      >
+          setCurrentPage((prevState) => prevState - 1);
+        }}>
         <FontAwesomeIcon icon='fa-solid fa-arrow-left' fixedWidth />
       </button>
       <button
         disabled={currentPage === totalPages}
         onClick={() => {
-          setCurrentPage((prevState) => prevState + 1)
-        }}
-      >
+          setCurrentPage((prevState) => prevState + 1);
+        }}>
         <FontAwesomeIcon icon='fa-solid fa-arrow-right' fixedWidth />
       </button>
       <span>
         {currentPage}/{totalPages}
       </span>
     </Styled.Pagination>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

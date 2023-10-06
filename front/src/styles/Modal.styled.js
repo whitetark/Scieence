@@ -1,5 +1,5 @@
-import { styled } from 'styled-components'
-import { Container } from './UI.styled.js'
+import { styled } from 'styled-components';
+import { Container } from './UI.styled.js';
 
 export const Overlay = styled.div`
   content: '';
@@ -10,13 +10,13 @@ export const Overlay = styled.div`
   height: 100%;
   background-color: black;
   opacity: 0.5;
-`
+`;
 export const Children = styled(Container)`
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 102;
-`
+`;
 
 export const ModalWrapper = styled.div`
   position: absolute;
@@ -26,4 +26,4 @@ export const ModalWrapper = styled.div`
   height: 100vh;
   width: 100%;
   z-index: 101;
-`
+`;

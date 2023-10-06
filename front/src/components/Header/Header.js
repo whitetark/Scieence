@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { NavLink } from 'react-router-dom'
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink } from 'react-router-dom';
 
-import * as Styled from '../../styles/Header.styled'
-import logo from '../../assets/logo.png'
-import Modal from '../UI/Modal'
-import Login from './Login'
-import Register from './Register'
-import useModal from '../../hooks/use-modal'
+import * as Styled from '../../styles/Header.styled';
+import logo from '../../assets/logo.png';
+import Modal from '../UI/Modal';
+import Login from './Login';
+import Register from './Register';
+import useModal from '../../hooks/use-modal';
 
 const MainNavigation = () => {
-  const { isShowing, toggle } = useModal()
-  const [modalName, setModalName] = useState('login')
+  const { isShowing, toggle } = useModal();
+  const [modalName, setModalName] = useState('login');
 
   const toggleModalName = (name) => {
-    setModalName(name)
-  }
+    setModalName(name);
+  };
 
   return (
     <Styled.Header>
@@ -41,7 +41,7 @@ const MainNavigation = () => {
         </Styled.Actions>
       </Styled.Nav>
     </Styled.Header>
-  )
-}
+  );
+};
 
-export default MainNavigation
+export default MainNavigation;

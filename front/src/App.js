@@ -1,5 +1,5 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faUser,
   faHeart,
@@ -7,17 +7,17 @@ import {
   faXmark,
   faArrowRight,
   faArrowLeft,
-} from '@fortawesome/free-solid-svg-icons'
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
-import RootLayout from './pages/Root'
-import ErrorPage from './pages/Error'
-import HomePage from './pages/Home'
-import FavoritePage from './pages/Favorite'
-import SearchPage from './pages/Search'
-import NotFound from './pages/NotFound'
+import RootLayout from './pages/Root';
+import ErrorPage from './pages/Error';
+import HomePage from './pages/Home';
+import FavoritePage from './pages/Favorite';
+import SearchPage from './pages/Search';
+import NotFound from './pages/NotFound';
 
-library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight)
+library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight);
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

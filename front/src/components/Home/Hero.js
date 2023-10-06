@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import * as Styled from '../../styles/Home.styled'
+import * as Styled from '../../styles/Home.styled';
 
 const Hero = () => {
   return (
@@ -12,7 +12,7 @@ const Hero = () => {
         hello to a smarter, more efficient way to explore the realm of science.
       </p>
     </Styled.HeroWrapper>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

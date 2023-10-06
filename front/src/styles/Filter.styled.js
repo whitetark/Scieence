@@ -1,5 +1,5 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables.js'
+import { styled } from 'styled-components';
+import * as variables from './Variables.js';
 
 export const Filter = styled.div`
   display: flex;
@@ -28,6 +28,6 @@ export const Filter = styled.div`
       background-color: ${variables.BLUE_HOVER_COLOR};
     }
   }
-`
+`;
 
-export const FilterDiv = styled.div``
+export const FilterDiv = styled.div``;

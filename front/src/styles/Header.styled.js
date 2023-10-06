@@ -1,7 +1,7 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables.js'
-import { Container } from './UI.styled.js'
-import { NavLink } from 'react-router-dom'
+import { styled } from 'styled-components';
+import * as variables from './Variables.js';
+import { Container } from './UI.styled.js';
+import { NavLink } from 'react-router-dom';
 
 export const Header = styled.header`
   flex: 0 1 auto;
@@ -9,7 +9,7 @@ export const Header = styled.header`
   z-index: 1;
   top: 0;
   background-color: ${variables.WHITE_COLOR};
-`
+`;
 
 export const NavLogo = styled(NavLink)`
   display: flex;
@@ -24,7 +24,7 @@ export const NavLogo = styled(NavLink)`
     font-size: 3rem;
     font-weight: 600;
   }
-`
+`;
 
 export const Nav = styled(Container)`
   display: flex;
@@ -38,7 +38,7 @@ export const Nav = styled(Container)`
     text-decoration: none;
     color: ${variables.BLACK_COLOR};
   }
-`
+`;
 
 export const Actions = styled.div`
   display: flex;
@@ -61,4 +61,4 @@ export const Actions = styled.div`
       background-color: ${variables.GRAY_COLOR};
     }
   }
-`
+`;

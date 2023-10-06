@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import * as Styled from '../../styles/Login.styled'
+import * as Styled from '../../styles/Login.styled';
 
 const Register = (props) => {
   return (
@@ -20,7 +20,7 @@ const Register = (props) => {
         </div>
       </Styled.LoginMain>
     </Styled.LoginWrapper>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

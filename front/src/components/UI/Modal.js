@@ -1,17 +1,17 @@
-import React from 'react'
-import { createPortal } from 'react-dom'
+import React from 'react';
+import { createPortal } from 'react-dom';
 
-import * as Styled from '../../styles/Modal.styled'
+import * as Styled from '../../styles/Modal.styled';
 
 const Modal = ({ children, isShowing, hide, className, hasOverlay }) => {
   const renderChildren = () => {
     return React.cloneElement(children, {
       onClick: clickHandler,
-    })
-  }
+    });
+  };
   const clickHandler = (e) => {
-    e.stopPropagation()
-  }
+    e.stopPropagation();
+  };
 
   return isShowing
     ? createPortal(
@@ -19,9 +19,9 @@ const Modal = ({ children, isShowing, hide, className, hasOverlay }) => {
           {hasOverlay ? <Styled.Overlay color={'black'} onClick={hide} /> : undefined}
           <Styled.Children className={className || undefined}> {renderChildren()}</Styled.Children>
         </Styled.ModalWrapper>,
-        document.getElementById('modal_root')
+        document.getElementById('modal_root'),
       )
-    : null
-}
+    : null;
+};
 
-export default Modal
+export default Modal;

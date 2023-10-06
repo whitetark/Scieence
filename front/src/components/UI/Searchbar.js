@@ -1,7 +1,7 @@
-import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import * as Styled from '../../styles/Searchbar.styled'
+import * as Styled from '../../styles/Searchbar.styled';
 
 const Searchbar = (props) => {
   return (
@@ -11,7 +11,7 @@ const Searchbar = (props) => {
       </button>
       <input type='text' name='search' placeholder='What do you want to find?' autoComplete='off' />
     </Styled.Searchbar>
-  )
-}
+  );
+};
 
-export default Searchbar
+export default Searchbar;

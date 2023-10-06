@@ -1,7 +1,7 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables.js'
+import { styled } from 'styled-components';
+import * as variables from './Variables.js';
 
-const padding = '1rem'
+const padding = '1rem';
 
 export const LoginWrapper = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ export const LoginWrapper = styled.div`
   width: 100%;
   align-self: flex-end;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-`
+`;
 
 export const LoginHeader = styled.div`
   background-color: ${variables.BLUE_COLOR};
@@ -25,7 +25,7 @@ export const LoginHeader = styled.div`
   h2 {
     font-size: 2.4rem;
   }
-`
+`;
 export const LoginMain = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,4 +83,4 @@ export const LoginMain = styled.div`
       }
     }
   }
-`
+`;

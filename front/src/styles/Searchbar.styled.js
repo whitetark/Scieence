@@ -1,9 +1,9 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables.js'
+import { styled } from 'styled-components';
+import * as variables from './Variables.js';
 
-const BORDER_RADIUS = '25px'
-const PADDING = '1rem 2rem'
-const BOX_SHADOW = '4px 4px 4px 0px rgba(0, 0, 0, 0.25)'
+const BORDER_RADIUS = '25px';
+const PADDING = '1rem 2rem';
+const BOX_SHADOW = '4px 4px 4px 0px rgba(0, 0, 0, 0.25)';
 
 export const Searchbar = styled.form`
   display: flex;
@@ -35,4 +35,4 @@ export const Searchbar = styled.form`
       background-color: ${variables.GRAY_COLOR};
     }
   }
-`
+`;

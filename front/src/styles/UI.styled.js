@@ -1,5 +1,5 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables'
+import { styled } from 'styled-components';
+import * as variables from './Variables';
 
 export const Main = styled.main`
   flex: 1 1 auto;
@@ -7,17 +7,17 @@ export const Main = styled.main`
   flex-direction: column;
   position: relative;
   justify-content: center;
-`
+`;
 export const Container = styled.div`
   max-width: 120rem;
   margin: 0 auto;
-`
+`;
 export const BackgroundWrapper = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: -1;
-`
+`;
 export const BackgroundItem = styled.div`
   position: absolute;
   width: 100%;
@@ -27,7 +27,7 @@ export const BackgroundItem = styled.div`
   background-position: center;
   background-size: cover;
   filter: blur(5px) brightness(51%);
-`
+`;
 export const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -38,7 +38,7 @@ export const Overlay = styled.div`
   z-index: 2;
   background-color: ${(props) => props.color};
   opacity: 0.75;
-`
+`;
 export const Pagination = styled.div`
   margin-left: auto;
   display: flex;
@@ -56,4 +56,4 @@ export const Pagination = styled.div`
       cursor: default;
     }
   }
-`
+`;

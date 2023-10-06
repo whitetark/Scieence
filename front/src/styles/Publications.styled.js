@@ -1,7 +1,7 @@
-import { styled } from 'styled-components'
-import * as variables from './Variables.js'
+import { styled } from 'styled-components';
+import * as variables from './Variables.js';
 
-const MAIN_MARGIN = '4rem'
+const MAIN_MARGIN = '4rem';
 
 export const Publication = styled.div`
   display: flex;
@@ -11,12 +11,12 @@ export const Publication = styled.div`
   border-radius: 10px;
   max-width: 76.2rem;
   width: 100%;
-`
+`;
 export const PublicationActions = styled.div`
   align-self: flex-end;
   margin: 1rem 1rem 0 0;
   font-size: 2.4rem;
-`
+`;
 export const PublicationMain = styled.div`
   margin-right: ${MAIN_MARGIN};
   display: flex;
@@ -36,14 +36,14 @@ export const PublicationMain = styled.div`
   .details {
     color: ${variables.TEXT_COLOR};
   }
-`
+`;
 
 export const PublicationDetails = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 50%);
   gap: 2rem;
   font-size: 1.4rem;
-`
+`;
 
 export const PublicationInfo = styled.div`
   display: flex;
@@ -54,7 +54,7 @@ export const PublicationInfo = styled.div`
   box-shadow: ${variables.BOX_SHADOW};
   border-radius: 10px;
   padding: 1rem;
-`
+`;
 
 export const PublicationLinks = styled.div`
   display: flex;
@@ -64,7 +64,7 @@ export const PublicationLinks = styled.div`
   a {
     color: ${variables.BLUE_COLOR};
   }
-`
+`;
 
 export const PublicationKeywords = styled.div`
   display: grid;
@@ -77,13 +77,13 @@ export const PublicationKeywords = styled.div`
     border-radius: 10px;
     text-align: center;
   }
-`
+`;
 
 export const PublicationList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-`
+`;
 
 export const PublicationButton = styled.button`
   display: flex;
@@ -124,4 +124,4 @@ export const PublicationButton = styled.button`
       color: ${variables.BLUE_HOVER_COLOR};
     }
   }
-`
+`;
