@@ -5,27 +5,22 @@ import useModal from '../../hooks/use-modal'
 import Modal from '../UI/Modal'
 import Publication from './Publication'
 
-const PublicationButton = () => {
+const PublicationButton = (props) => {
   const { isShowing, toggle } = useModal()
+
+  const data = props.data
 
   return (
     <>
       {isShowing && (
         <Modal isShowing={isShowing} hide={toggle} className={'pub-modal'} hasOverlay>
-          <Publication hide={toggle} />
+          <Publication hide={toggle} data={data} />
         </Modal>
       )}
       <Styled.PublicationButton onClick={toggle}>
-        <h4 id='title'>Title Of Publication</h4>
-        <p id='detailed'>
-          Detailed descriptionDetailed descriptionDetailed descriptionDetailed descriptionDetailed
-          descriptionDetailed description Detailed description Detailed description Detailed
-          descriptionDetailed descriptionDetailed descriptionDetailed descriptionDetailed
-          descriptionDetailed description Detailed description Detailed description Detailed
-          descriptionDetailed descriptionDetailed descriptionDetailed descriptionDetailed
-          descriptionDetailed description Detailed description Detailed descriptions
-        </p>
-        <p id='authors'>Some author, Some author, Some author</p>
+        <h4 id='title'>{data.title}</h4>
+        <p id='detailed'>{data.description}</p>
+        <p id='authors'>{data.authors.join(', ')}</p>
       </Styled.PublicationButton>
     </>
   )

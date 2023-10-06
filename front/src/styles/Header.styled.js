@@ -4,6 +4,7 @@ import { Container } from './UI.styled.js'
 import { NavLink } from 'react-router-dom'
 
 export const Header = styled.header`
+  flex: 0 1 auto;
   position: sticky;
   z-index: 1;
   top: 0;

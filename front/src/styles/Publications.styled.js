@@ -46,6 +46,9 @@ export const PublicationDetails = styled.div`
 `
 
 export const PublicationInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   color: ${variables.TEXT_COLOR};
   background-color: ${variables.PUBLICATION_COLOR};
   box-shadow: ${variables.BOX_SHADOW};

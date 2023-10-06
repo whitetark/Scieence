@@ -1,12 +1,13 @@
 import React from 'react'
 
-import * as Styled from '../styles/Favorite.styled'
+import * as Styled from '../styles/Results.styled'
 import { Main } from '../styles/UI.styled'
 import Searchbar from '../components/UI/Searchbar'
 import Background from '../components/UI/Background'
 import PublicationList from '../components/Publications/PublicationList'
 
 const FavoritePage = () => {
+  const isShown = false
   return (
     <Main>
       <Styled.MainSearchbar>
@@ -16,7 +17,7 @@ const FavoritePage = () => {
       <Styled.MainWrapper>
         <Styled.MainContent>
           <h2>Favourite Publications</h2>
-          <PublicationList />
+          {isShown && <PublicationList />}
         </Styled.MainContent>
       </Styled.MainWrapper>
     </Main>

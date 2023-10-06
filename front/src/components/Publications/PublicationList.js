@@ -3,13 +3,13 @@ import React from 'react'
 import * as Styled from '../../styles/Publications.styled'
 import PublicationButton from './PublicationButton'
 
-const PublicationList = () => {
+const PublicationList = (props) => {
+  const publications = props.data
   return (
     <Styled.PublicationList>
-      <PublicationButton />
-      <PublicationButton />
-      <PublicationButton />
-      <PublicationButton />
+      {publications.map((publication, index) => {
+        return <PublicationButton data={publication} key={index} />
+      })}
     </Styled.PublicationList>
   )
 }

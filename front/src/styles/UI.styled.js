@@ -1,11 +1,12 @@
 import { styled } from 'styled-components'
+import * as variables from './Variables'
 
 export const Main = styled.main`
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   position: relative;
   justify-content: center;
-  height: 100%;
 `
 export const Container = styled.div`
   max-width: 120rem;
@@ -37,4 +38,22 @@ export const Overlay = styled.div`
   z-index: 2;
   background-color: ${(props) => props.color};
   opacity: 0.75;
+`
+export const Pagination = styled.div`
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  font-size: 2rem;
+  font-weight: 600;
+  span {
+    width: 5rem;
+  }
+
+  button {
+    &:disabled {
+      color: ${variables.TEXT_COLOR};
+      cursor: default;
+    }
+  }
 `
