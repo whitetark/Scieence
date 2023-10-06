@@ -15,6 +15,7 @@ import ErrorPage from './pages/Error'
 import HomePage from './pages/Home'
 import FavoritePage from './pages/Favorite'
 import SearchPage from './pages/Search'
+import NotFound from './pages/NotFound'
 
 library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight)
 
@@ -26,6 +27,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path='/favorite' element={<FavoritePage />} />
           <Route path='/search' element={<SearchPage />} />
+          <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

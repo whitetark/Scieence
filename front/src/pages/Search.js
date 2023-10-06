@@ -8,20 +8,32 @@ import Filter from '../components/UI/Filter'
 import Pagination from '../components/UI/Pagination'
 import PublicationList from '../components/Publications/PublicationList'
 import data from '../store/data.json'
+import { useSearchParams } from 'react-router-dom'
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(4)
+  const [currentPage, setCurrentPage] = useState('')
   const [totalPages, setTotalPages] = useState(2)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const postsPerPage = 4
 
   useEffect(() => {
     setJsonData(data.data)
+    const pageValue = parseInt(searchParams.get('page'))
+    if (pageValue) {
+      setCurrentPage(pageValue)
+    } else {
+      setCurrentPage(1)
+    }
   }, [])
 
   useEffect(() => {
     setTotalPages(Math.ceil(jsonData.length / postsPerPage))
   }, [jsonData])
+
+  useEffect(() => {
+    setSearchParams({ page: currentPage })
+  }, [currentPage])
 
   const lastPostIndex = currentPage * postsPerPage
   const firstPostIndex = lastPostIndex - postsPerPage
