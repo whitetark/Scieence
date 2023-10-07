@@ -4,15 +4,15 @@ import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
 import Searchbar from '../components/UI/Searchbar';
 import Background from '../components/UI/Background';
-import Filter from '../components/UI/Filter';
 import Pagination from '../components/UI/Pagination';
+import Filter from '../components/Home/Filter';
 import PublicationList from '../components/Publications/PublicationList';
 import data from '../store/data.json';
 import { useSearchParams } from 'react-router-dom';
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);
-  const [currentPage, setCurrentPage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
   const [searchParams, setSearchParams] = useSearchParams();
   const postsPerPage = 4;
@@ -22,8 +22,6 @@ const SearchPage = () => {
     const pageValue = parseInt(searchParams.get('page'));
     if (pageValue) {
       setCurrentPage(pageValue);
-    } else {
-      setCurrentPage(1);
     }
   }, []);
 
@@ -63,7 +61,6 @@ const SearchPage = () => {
               <PublicationList data={currentPosts} />
             )}
           </Styled.FoundContent>
-          0.
         </Styled.MainContent>
       </Styled.MainWrapper>
     </Main>

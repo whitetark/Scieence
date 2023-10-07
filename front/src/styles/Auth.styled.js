@@ -3,7 +3,7 @@ import * as variables from './Variables.js';
 
 const padding = '1rem';
 
-export const LoginWrapper = styled.div`
+export const AuthWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -16,7 +16,7 @@ export const LoginWrapper = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
-export const LoginHeader = styled.div`
+export const AuthHeader = styled.div`
   background-color: ${variables.BLUE_COLOR};
   color: ${variables.WHITE_COLOR};
   padding: ${padding};
@@ -26,7 +26,7 @@ export const LoginHeader = styled.div`
     font-size: 2.4rem;
   }
 `;
-export const LoginMain = styled.div`
+export const AuthMain = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0rem ${padding} ${padding};
@@ -50,37 +50,20 @@ export const LoginMain = styled.div`
         width: 100%;
       }
     }
-
-    button {
-      background-color: ${variables.BLUE_COLOR};
-      color: ${variables.WHITE_COLOR};
-      text-align: center;
-      font-size: 1.6rem;
-      padding: 1rem 0;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 27.1rem;
-      margin-top: 1rem;
-      transition: background-color 0.2s ease-out;
-
-      &:hover {
-        background-color: ${variables.BLUE_HOVER_COLOR};
-      }
-    }
   }
+`;
 
-  .login-info {
-    text-align: center;
-    color: ${variables.BLACK_COLOR};
-    font-weight: 500;
-    font-size: 1.4rem;
+export const AuthInfo = styled.div`
+  text-align: center;
+  color: ${variables.BLACK_COLOR};
+  font-weight: 500;
+  font-size: 1.4rem;
 
-    button {
-      color: ${variables.BLUE_COLOR};
-      transition: color 0.2s ease-out;
-      &:hover {
-        color: ${variables.BLUE_HOVER_COLOR};
-      }
+  button {
+    color: ${variables.BLUE_COLOR};
+    transition: color 0.2s ease-out;
+    &:hover {
+      color: ${variables.BLUE_HOVER_COLOR};
     }
   }
 `;

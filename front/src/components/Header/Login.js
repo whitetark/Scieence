@@ -1,24 +1,17 @@
 import React from 'react';
 
-import * as Styled from '../../styles/Login.styled';
+import Button from '../UI/Button';
+import AuthWrapper from './AuthWrapper';
 
 const Login = (props) => {
   return (
-    <Styled.LoginWrapper onClick={props.onClick}>
-      <Styled.LoginHeader>
-        <h2>Login Form</h2>
-      </Styled.LoginHeader>
-      <Styled.LoginMain>
-        <form action=''>
-          <input type='text' placeholder='Login' />
-          <input type='password' placeholder='Password' />
-          <button type='submit'>Login</button>
-        </form>
-        <div className='login-info'>
-          Not a member? <button onClick={() => props.onToggle('reg')}>Signup now</button>
-        </div>
-      </Styled.LoginMain>
-    </Styled.LoginWrapper>
+    <AuthWrapper onClick={props.onClick} onToggle={props.onToggle} type='Login'>
+      <form action=''>
+        <input type='text' placeholder='Login' />
+        <input type='password' placeholder='Password' />
+        <Button type='submit'>Login</Button>
+      </form>
+    </AuthWrapper>
   );
 };
 

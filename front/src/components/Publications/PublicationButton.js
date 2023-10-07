@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 
-import * as Styled from '../../styles/Publications.styled'
-import useModal from '../../hooks/use-modal'
-import Modal from '../UI/Modal'
-import Publication from './Publication'
+import * as Styled from '../../styles/Publications.styled';
+import useModal from '../../hooks/use-modal';
+import Modal from '../UI/Modal';
+import Publication from './Publication';
 
 const PublicationButton = (props) => {
-  const { isShowing, toggle } = useModal()
+  const { isShowing, toggle } = useModal();
 
-  const data = props.data
+  const data = props.data;
 
   return (
     <>
@@ -18,12 +18,12 @@ const PublicationButton = (props) => {
         </Modal>
       )}
       <Styled.PublicationButton onClick={toggle}>
-        <h4 id='title'>{data.title}</h4>
-        <p id='detailed'>{data.description}</p>
-        <p id='authors'>{data.authors.join(', ')}</p>
+        <h4 className='title'>{data.title}</h4>
+        <p className='details'>{data.description}</p>
+        <p className='authors'>{data.authors.join(', ')}</p>
       </Styled.PublicationButton>
     </>
-  )
-}
+  );
+};
 
-export default PublicationButton
+export default PublicationButton;

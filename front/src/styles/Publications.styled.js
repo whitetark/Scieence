@@ -3,7 +3,7 @@ import * as variables from './Variables.js';
 
 const MAIN_MARGIN = '4rem';
 
-export const Publication = styled.div`
+export const Publication = styled.article`
   display: flex;
   flex-direction: column;
   background-color: ${variables.WHITE_COLOR};
@@ -12,18 +12,21 @@ export const Publication = styled.div`
   max-width: 76.2rem;
   width: 100%;
 `;
+
 export const PublicationActions = styled.div`
   align-self: flex-end;
   margin: 1rem 1rem 0 0;
   font-size: 2.4rem;
 `;
+
 export const PublicationMain = styled.div`
   margin-right: ${MAIN_MARGIN};
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   font-weight: 500;
-  h1 {
+
+  .title {
     font-size: 3.6rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -35,6 +38,8 @@ export const PublicationMain = styled.div`
 
   .details {
     color: ${variables.TEXT_COLOR};
+    overflow-y: auto;
+    max-height: 24ch;
   }
 `;
 
@@ -85,7 +90,7 @@ export const PublicationList = styled.div`
   gap: 2rem;
 `;
 
-export const PublicationButton = styled.button`
+export const PublicationButton = styled.article`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -97,13 +102,13 @@ export const PublicationButton = styled.button`
   overflow: hidden;
   transition: all 0.3s ease-out;
 
-  #title {
+  .title {
     text-transform: uppercase;
     font-weight: 600;
     font-size: 1.8rem;
   }
 
-  #detailed {
+  .details {
     color: ${variables.DETAILED_COLOR};
     font-size: 1.4rem;
     overflow: hidden;
@@ -111,7 +116,7 @@ export const PublicationButton = styled.button`
     max-height: 4ch;
   }
 
-  #authors {
+  .authors {
     color: ${variables.BLUE_COLOR};
     font-size: 1.4rem;
     transition: all 0.3s ease-out;
@@ -119,8 +124,8 @@ export const PublicationButton = styled.button`
 
   &:hover {
     background-color: ${variables.GRAY_COLOR};
-
-    #authors {
+    cursor: pointer;
+    .authors {
       color: ${variables.BLUE_HOVER_COLOR};
     }
   }

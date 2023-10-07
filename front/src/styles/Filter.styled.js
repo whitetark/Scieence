@@ -9,25 +9,11 @@ export const Filter = styled.div`
   border-radius: 10px;
   justify-content: center;
   align-items: center;
+  align-self: flex-start;
 
   span {
     padding: 4rem;
     font-size: 44px;
     color: gray;
   }
-  button {
-    background-color: ${variables.BLUE_COLOR};
-    color: ${variables.WHITE_COLOR};
-    padding: 0.5rem 5.5rem;
-    margin: 2rem 3rem;
-    border-radius: 10px;
-    justify-self: flex-end;
-
-    transition: background-color 0.2s ease-out;
-    &:hover {
-      background-color: ${variables.BLUE_HOVER_COLOR};
-    }
-  }
 `;
-
-export const FilterDiv = styled.div``;

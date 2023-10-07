@@ -1,7 +1,7 @@
-import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import * as Styled from '../../styles/Publications.styled'
+import * as Styled from '../../styles/Publications.styled';
 
 const Publication = ({ data, onClick, hide }) => {
   return (
@@ -15,7 +15,7 @@ const Publication = ({ data, onClick, hide }) => {
         </button>
       </Styled.PublicationActions>
       <Styled.PublicationMain>
-        <h1>{data.title}</h1>
+        <h1 className='title'>{data.title}</h1>
         <p className='authors'>{data.authors.join(', ')}</p>
         <p className='details'>{data.description}</p>
         <Styled.PublicationDetails>
@@ -43,14 +43,14 @@ const Publication = ({ data, onClick, hide }) => {
             <span>Keywords:</span>
             <Styled.PublicationKeywords>
               {data.keywords.map((keyword, index) => {
-                return <span key={index}>{keyword}</span>
+                return <span key={index}>{keyword}</span>;
               })}
             </Styled.PublicationKeywords>
           </Styled.PublicationLinks>
         </Styled.PublicationDetails>
       </Styled.PublicationMain>
     </Styled.Publication>
-  )
-}
+  );
+};
 
-export default Publication
+export default Publication;

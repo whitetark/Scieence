@@ -14,8 +14,20 @@ export const Overlay = styled.div`
 export const Children = styled(Container)`
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: fixed;
   z-index: 102;
+
+  &.login-modal {
+    padding: 0 1rem;
+    top: 7rem;
+    width: 100%;
+  }
+
+  &.pub-modal {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const ModalWrapper = styled.div`
@@ -26,4 +38,8 @@ export const ModalWrapper = styled.div`
   height: 100vh;
   width: 100%;
   z-index: 101;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

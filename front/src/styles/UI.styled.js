@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 import * as variables from './Variables';
+import { AuthMain } from './Auth.styled';
+import { Filter } from './Filter.styled';
 
 export const Main = styled.main`
   flex: 1 1 auto;
@@ -8,16 +10,44 @@ export const Main = styled.main`
   position: relative;
   justify-content: center;
 `;
+
+export const Button = styled.button`
+  background-color: ${variables.BLUE_COLOR};
+  color: ${variables.WHITE_COLOR};
+  border-radius: 10px;
+  text-align: center;
+
+  transition: background-color 0.2s ease-out;
+  &:hover {
+    background-color: ${variables.BLUE_HOVER_COLOR};
+  }
+
+  ${Filter} & {
+    padding: 0.5rem 5.5rem;
+    margin: 2rem 3rem;
+    justify-self: flex-end;
+  }
+
+  ${AuthMain} & {
+    padding: 1rem 0;
+    width: 100%;
+    max-width: 27.1rem;
+    margin-top: 1rem;
+  }
+`;
+
 export const Container = styled.div`
   max-width: 120rem;
   margin: 0 auto;
 `;
+
 export const BackgroundWrapper = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: -1;
 `;
+
 export const BackgroundItem = styled.div`
   position: absolute;
   width: 100%;

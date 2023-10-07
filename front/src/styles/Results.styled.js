@@ -9,7 +9,6 @@ export const MainWrapper = styled.div`
 
 export const MainContent = styled(Container)`
   padding: 1rem;
-  height: 100%;
   h2 {
     padding: 1rem 0;
     font-size: 24px;
