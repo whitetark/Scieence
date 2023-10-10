@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as Styled from '../../styles/Searchbar.styled';
 
-const Searchbar = (props) => {
+const Searchbar = () => {
   return (
     <Styled.Searchbar>
       <button type='submit' onClick={(e) => e.preventDefault()}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
@@ -8,7 +9,6 @@ import Pagination from '../components/UI/Pagination';
 import Filter from '../components/Home/Filter';
 import PublicationList from '../components/Publications/PublicationList';
 import data from '../store/data.json';
-import { useSearchParams } from 'react-router-dom';
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);

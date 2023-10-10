@@ -1,6 +1,7 @@
 import React from 'react';
-import * as Styled from '../../styles/UI.styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import * as Styled from '../../styles/UI.styled';
 
 const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
   return (
