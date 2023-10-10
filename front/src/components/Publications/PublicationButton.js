@@ -1,0 +1,29 @@
+import React from 'react';
+
+import * as Styled from '../../styles/Publications.styled';
+import useModal from '../../hooks/use-modal';
+import Modal from '../UI/Modal';
+import Publication from './Publication';
+
+const PublicationButton = (props) => {
+  const { isShowing, toggle } = useModal();
+
+  const data = props.data;
+
+  return (
+    <>
+      {isShowing && (
+        <Modal isShowing={isShowing} hide={toggle} className={'pub-modal'} hasOverlay>
+          <Publication hide={toggle} data={data} />
+        </Modal>
+      )}
+      <Styled.PublicationButton onClick={toggle}>
+        <h4 className='title'>{data.title}</h4>
+        <p className='details'>{data.description}</p>
+        <p className='authors'>{data.authors.join(', ')}</p>
+      </Styled.PublicationButton>
+    </>
+  );
+};
+
+export default PublicationButton;
