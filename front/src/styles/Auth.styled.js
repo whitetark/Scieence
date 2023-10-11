@@ -49,6 +49,10 @@ export const AuthMain = styled.div`
         font-weight: 500;
         width: 100%;
       }
+
+      &.input-error {
+        border-color: red;
+      }
     }
   }
 `;

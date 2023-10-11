@@ -110,18 +110,18 @@ namespace ScieenceAPI.Controllers
         [HttpPost("database/create")]
         public async void AddPub(DbPublication publication)
         {
-            _ = _pubServices.AddPublication(publication);
+            await _pubServices.AddPublication(publication);
         }
         [HttpDelete("database/deleteById/{id}")]
         public async void DeletePub(string id)
         {
-            _ = await _pubServices.DeletePublication(id);
+            await _pubServices.DeletePublication(id);
         }
 
         [HttpPut("database/update")]
         public async void UpdatePub(DbPublication publication)
         {
-            _ = await _pubServices.UpdatePublication(publication);
+            await _pubServices.UpdatePublication(publication);
         }
     }
 }

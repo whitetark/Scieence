@@ -8,7 +8,7 @@ import Background from '../components/UI/Background';
 import Pagination from '../components/UI/Pagination';
 import Filter from '../components/Home/Filter';
 import PublicationList from '../components/Publications/PublicationList';
-import data from '../store/data.json';
+import data from '../app/store/data.json';
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);

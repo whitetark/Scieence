@@ -16,27 +16,28 @@ namespace ScieenceAPI.Controllers
         {
             _accountServices = accountServices;
         }
-        [HttpGet("database/getById/{id}")]
+        [HttpGet("getById/{id}")]
         public async Task<Account> GetAccount(string id)
         {
             return await _accountServices.GetAccount(id);
         }
-        [HttpPost("database/create")]
+        [AllowAnonymous]
+        [HttpPost("create")]
         public async void AddAccount(Account account)
         {
-            _ = _accountServices.AddAccount(account);
+            await _accountServices.AddAccount(account);
         }
 
-        [HttpDelete("database/deleteById/{id}")]
+        [HttpDelete("deleteById/{id}")]
         public async void DeleteAccount(string id)
         {
-            _ = await _accountServices.DeleteAccount(id);
+            await _accountServices.DeleteAccount(id);
         }
 
-        [HttpPut("database/update")]
+        [HttpPut("update")]
         public async void UpdateAccount(Account account)
         {
-            _ = await _accountServices.UpdateAccount(account);
+            await _accountServices.UpdateAccount(account);
         }
 
         [AllowAnonymous]

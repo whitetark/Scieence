@@ -33,6 +33,11 @@ export const Button = styled.button`
     width: 100%;
     max-width: 27.1rem;
     margin-top: 1rem;
+
+    &:disabled {
+      background-color: ${variables.GRAY_COLOR};
+      cursor: default;
+    }
   }
 `;
 
