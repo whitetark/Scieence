@@ -21,8 +21,8 @@ export const authSlice = createSlice({
       state.loading = true;
     },
     [login.fulfilled]: (state, action) => {
-      const { accessToken, user } = action.payload;
-      state.token = accessToken;
+      const { token, user } = action.payload;
+      state.token = token;
       state.userData = user;
       state.loading = false;
     },
@@ -33,8 +33,8 @@ export const authSlice = createSlice({
       state.loading = true;
     },
     [fetchUserData.fulfilled]: (state, action) => {
-      const { accessToken, user } = action.payload;
-      state.token = accessToken;
+      const { token, user } = action.payload;
+      state.token = token;
       state.userData = user;
       state.loading = false;
     },

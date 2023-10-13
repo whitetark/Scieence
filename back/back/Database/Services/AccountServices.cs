@@ -68,7 +68,7 @@ namespace Database.Services
         {
             try
             {
-                await GetAccount(newAccount.Id);
+                //await GetAccount(newAccount.Id);
                 return await _accounts.ReplaceOneAsync(b => b.Id == newAccount.Id, newAccount);
             }
             catch (Exception ex)
@@ -77,12 +77,12 @@ namespace Database.Services
             }
         }
 
-        public string? Authenticate(string username, string password)
+        public async Task<(string? token, Account? user)> Authenticate(string username, string password)
         {
-            var user = _accounts.Find(x => x.Username == username && x.Password == password).FirstOrDefaultAsync();
+            var user = await _accounts.Find(x => x.Username == username && x.Password == password).FirstOrDefaultAsync();
 
             if (user == null)
-                return null;
+                return (null, null);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(key);
@@ -100,7 +100,7 @@ namespace Database.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token);
+            return (tokenHandler.WriteToken(token), user);
         }
     }
 }

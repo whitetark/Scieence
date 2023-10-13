@@ -43,15 +43,15 @@ namespace ScieenceAPI.Controllers
         [AllowAnonymous]
         [Route("auth")]
         [HttpPost]
-        public ActionResult Login([FromBody] Auth auth)
+        public async Task<ActionResult> Login([FromBody] Auth auth)
         {
-            var token = _accountServices.Authenticate(auth.username, auth.password);
+            var result = await _accountServices.Authenticate(auth.username, auth.password);
 
-            if(token == null)
+            if(result.token == null)
             {
                 return Unauthorized();
             }
-            return Ok(new { token, auth });
+            return Ok(new { result.token, result.user });
         }
     }
 }

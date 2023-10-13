@@ -1,16 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getToken, removeToken, setToken } from '../../utils/HelperFunctions';
+import { getToken, removeToken, setToken } from '../../utils/helper';
 import api from '../../services/api';
-import history from '../utils/history';
+import history from '../../utils/history';
 
 export const fetchUserData = createAsyncThunk(
   'auth/fetchUserData',
   async (_, { rejectWithValue }) => {
     try {
-      const accessToken = getToken();
-      api.defaults.headers.Authorization = `Bearer ${accessToken}`;
-      const response = await api.get('/getById');
-      return { ...response.data, accessToken };
+      const token = getToken();
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      const response = await api.get('Acc/getById');
+      return { ...response.data, token };
     } catch (e) {
       removeToken();
       return rejectWithValue('');
@@ -19,10 +19,15 @@ export const fetchUserData = createAsyncThunk(
 );
 
 export const login = createAsyncThunk('auth/login', async (payload) => {
-  const response = await api.post('/auth', payload);
-  setToken(response.data.accessToken);
-  history.push('/');
-  return response.data;
+  try {
+    const response = await api.post('Acc/auth', payload);
+    console.log(response);
+    setToken(response.data.token);
+    //history.push('/');
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 export const signOut = createAsyncThunk('auth/signOut', async () => {
