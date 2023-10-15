@@ -1,9 +1,11 @@
 using Database;
 using Database.Models;
 using Database.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScieenceAPI.Clients;
 using ScieenceAPI.Models;
+using System.Data;
 
 namespace ScieenceAPI.Controllers
 {
@@ -107,17 +109,19 @@ namespace ScieenceAPI.Controllers
         {
             return await _pubServices.GetPublication(id);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost("database/create")]
         public async void AddPub(DbPublication publication)
         {
             await _pubServices.AddPublication(publication);
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("database/deleteById/{id}")]
         public async void DeletePub(string id)
         {
             await _pubServices.DeletePublication(id);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("database/update")]
         public async void UpdatePub(DbPublication publication)
         {

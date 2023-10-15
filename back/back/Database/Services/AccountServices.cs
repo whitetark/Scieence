@@ -31,7 +31,7 @@ namespace Database.Services
                 throw ex;
             }
         }
-        public async Task<Account> GetAccount(string id)
+        public async Task<Account> GetAccountById(string id)
         {
             try
             {
@@ -42,6 +42,18 @@ namespace Database.Services
                 throw ex;
             }
         }
+        public async Task<Account> GetAccountByUsername(string username)
+        {
+            try
+            {
+                return await _accounts.Find(x => x.Username == username).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task AddAccount(Account account)
         {
             try
@@ -75,32 +87,6 @@ namespace Database.Services
             {
                 throw ex;
             }
-        }
-
-        public async Task<(string? token, Account? user)> Authenticate(string username, string password)
-        {
-            var user = await _accounts.Find(x => x.Username == username && x.Password == password).FirstOrDefaultAsync();
-
-            if (user == null)
-                return (null, null);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes(key);
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, username),
-                }),
-
-                Expires = DateTime.UtcNow.AddHours(1),
-
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return (tokenHandler.WriteToken(token), user);
         }
     }
 }
