@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
 
@@ -8,8 +8,10 @@ import Modal from '../UI/Modal';
 import Login from './Login';
 import Register from './Register';
 import useModal from '../../hooks/use-modal';
+import AuthContext from '../../app/store/auth-context';
 
 const MainNavigation = () => {
+  const { userToken } = useContext(AuthContext);
   const { isShowing, toggle } = useModal();
   const [modalName, setModalName] = useState('login');
 
@@ -25,12 +27,16 @@ const MainNavigation = () => {
           <h1>Scieence</h1>
         </Styled.NavLogo>
         <Styled.Actions>
-          <NavLink to='/favorite' className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            <FontAwesomeIcon icon='fa-solid fa-heart' fixedWidth />
-          </NavLink>
-          <button onClick={toggle} className={isShowing ? 'active' : undefined}>
-            <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
-          </button>
+          {userToken ? (
+            <NavLink to='/favorite' className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              <FontAwesomeIcon icon='fa-solid fa-heart' fixedWidth />
+            </NavLink>
+          ) : undefined}
+          {!userToken ? (
+            <button onClick={toggle} className={isShowing ? 'active' : undefined}>
+              <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
+            </button>
+          ) : undefined}
           <Modal isShowing={isShowing} hide={toggle} className='login-modal'>
             {modalName === 'login' ? (
               <Login onToggle={toggleModalName} />

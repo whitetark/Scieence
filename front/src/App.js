@@ -16,21 +16,24 @@ import HomePage from './pages/Home';
 import FavoritePage from './pages/Favorite';
 import SearchPage from './pages/Search';
 import NotFound from './pages/NotFound';
+import { AuthContextProvider } from './app/store/auth-context';
 
 library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight);
 
 function App() {
   return (
-    <BrowserRouter basename='/'>
-      <Routes>
-        <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
-          <Route index element={<HomePage />} />
-          <Route path='/favorite' element={<FavoritePage />} />
-          <Route path='/search' element={<SearchPage />} />
-          <Route path='*' element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <AuthContextProvider>
+      <BrowserRouter basename='/'>
+        <Routes>
+          <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
+            <Route index element={<HomePage />} />
+            <Route path='/favorite' element={<FavoritePage />} />
+            <Route path='/search' element={<SearchPage />} />
+            <Route path='*' element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthContextProvider>
   );
 }
 

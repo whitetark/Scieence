@@ -1,23 +1,15 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useContext } from 'react';
 
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
 import useInput from '../../hooks/use-input';
-import { getToken } from '../../app/utils/helper';
-import { default as history } from '../../app/utils/history';
-import { login } from '../../app/store/slices/authThunk';
 import Loading from '../UI/Loading';
+import AuthContext from '../../app/store/auth-context';
 
 const isNotEmpty = (value) => value.trim() !== '';
 
 const Login = (props) => {
-  const dispatch = useDispatch();
-  const { token, loading } = useSelector((state) => state.auth);
-
-  // if (token || getToken()) {
-  //   history.push('/');
-  // }
+  const { login } = useContext(AuthContext);
 
   const {
     value: loginValue,
@@ -39,7 +31,7 @@ const Login = (props) => {
 
   let formIsValid = loginIsValid && passwordIsValid;
 
-  const formSubmitHandler = (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
 
     if (!formIsValid) {
@@ -51,7 +43,7 @@ const Login = (props) => {
       password: passwordValue,
     };
 
-    dispatch(login(user));
+    await login(user);
 
     loginReset();
     passwordReset();
@@ -76,7 +68,7 @@ const Login = (props) => {
           onBlur={passwordBlurHandler}
           name='password'
         />
-        {loading ? (
+        {false ? (
           <Loading />
         ) : (
           <Button type='submit' disabled={!formIsValid}>
