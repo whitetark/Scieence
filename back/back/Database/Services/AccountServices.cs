@@ -53,7 +53,17 @@ namespace Database.Services
                 throw ex;
             }
         }
-
+        public async Task<Account> GetAccountByRefreshToken(string refreshToken)
+        {
+            try
+            {
+                return await _accounts.Find(x => x.RefreshToken == refreshToken).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task AddAccount(Account account)
         {
             try

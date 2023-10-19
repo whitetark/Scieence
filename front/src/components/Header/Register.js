@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
 import useInput from '../../hooks/use-input';

@@ -6,6 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.CookiePolicy;
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +55,16 @@ builder.Services.AddSingleton<DbClient>();
 builder.Services.AddTransient<PubServices>();
 builder.Services.AddTransient<AccountServices>();
 builder.Services.Configure<DbConfig>(builder.Configuration);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost:3000");
+                          builder.AllowCredentials();
+                          builder.AllowAnyHeader();
+                      });
+});
 
 var app = builder.Build();
 
@@ -61,7 +74,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

@@ -25,29 +25,51 @@ namespace ScieenceAPI.Controllers
         }
         [Route("getById/{id}")]
         [HttpGet]
-        public async Task<Account> GetAccount(string id)
+        public async Task<ActionResult<Account>> GetAccount(string id)
         {
-            return await _accountServices.GetAccountById(id);
+            return Ok(await _accountServices.GetAccountById(id));
         }
+
+        [Route("getByUsername")]
+        [HttpGet]
+        public async Task<ActionResult<Account>> GetAccount()
+        {
+            var username = Request.Cookies["username"];
+            if(username == null)
+            {
+                return BadRequest("No username cookie");
+            }
+
+            var user = await _accountServices.GetAccountByUsername(username);
+            if(user == null)
+            {
+                return BadRequest("User not found");
+            }
+            return Ok(user);
+        }
+
         [Route("create")]
         [HttpPost]
-        public async void AddAccount(Account account)
+        public async Task<ActionResult> AddAccount(Account account)
         {
             await _accountServices.AddAccount(account);
+            return Ok();
         }
 
         [Route("deleteById/{id}")]
         [HttpDelete]
-        public async void DeleteAccount(string id)
+        public async Task<ActionResult> DeleteAccount(string id)
         {
             await _accountServices.DeleteAccount(id);
+            return Ok();
         }
 
         [Route("update")]
         [HttpPut]
-        public async void UpdateAccount(Account account)
+        public async Task<ActionResult> UpdateAccount(Account account)
         {
             await _accountServices.UpdateAccount(account);
+            return Ok();
         }
 
         [AllowAnonymous]
@@ -69,7 +91,7 @@ namespace ScieenceAPI.Controllers
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]
-        public async Task<ActionResult> Login([FromBody] UserDto request)
+        public async Task<ActionResult<object>> Login([FromBody] UserDto request)
         {
             var user = await _accountServices.GetAccountByUsername(request.username);
 
@@ -83,38 +105,58 @@ namespace ScieenceAPI.Controllers
                 return BadRequest("Wrong password.");
             }
 
-            string token = CreateToken(user);
+            string token = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
-            SetRefreshToken(refreshToken, user);
+            SetResponseCookies(refreshToken, user);
 
-            return Ok(token);
+            return Ok(new { token, user });
         }
-
+        [AllowAnonymous]
         [Route("refresh-token")]
         [HttpPost]
-        public async Task<ActionResult<string>> RefreshToken(UserDto request)
+        public async Task<ActionResult<object>> RefreshToken()
         {
-            var user = await _accountServices.GetAccountByUsername(request.username);
+            var refreshToken = Request.Cookies["refresh_token"];
+            if (refreshToken == null)
+            {
+                return BadRequest("Refresh Token not found");
+            }
+
+            var user = await _accountServices.GetAccountByRefreshToken(refreshToken);
 
             if (user == null)
             {
                 return BadRequest("User not found");
             }
 
-            var refreshToken = Request.Cookies["refreshToken"];
-
-            if (!user.RefreshToken.Equals(refreshToken))
-            {
-                return Unauthorized("Invalid Refresh Token");
-            } else if(user.TokenExpires < DateTime.Now){
-                return Unauthorized("Token expired");
+            if(user.TokenExpires < DateTime.Now){
+                return BadRequest("Token expired");
             }
 
-            string token = CreateToken(user);
+            string token = GenerateAccessToken(user);
             var newRefreshToken = GenerateRefreshToken();
-            SetRefreshToken(newRefreshToken, user);
-            return Ok(token);
+            SetResponseCookies(newRefreshToken, user);
+            return Ok(new { token, user });
         }
+
+        private void SetResponseCookies(RefreshToken newRefreshToken, Account account)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                Expires = newRefreshToken.Expires,
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+            };
+
+            Response.Cookies.Append("refresh_token", newRefreshToken.Token, cookieOptions);
+            Response.Cookies.Append("username", account.Username, cookieOptions);
+            account.RefreshToken = newRefreshToken.Token;
+            account.TokenCreated = newRefreshToken.Created;
+            account.TokenExpires = newRefreshToken.Expires;
+            //_ = _accountServices.UpdateAccount(account);
+        }
+
         private RefreshToken GenerateRefreshToken()
         {
             var refreshToken = new RefreshToken
@@ -126,22 +168,7 @@ namespace ScieenceAPI.Controllers
             return refreshToken;
         }
 
-        private void SetRefreshToken(RefreshToken newRefreshToken, Account account)
-        {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = newRefreshToken.Expires,
-            };
-
-            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
-            account.RefreshToken = newRefreshToken.Token;
-            account.TokenCreated = newRefreshToken.Created;
-            account.TokenExpires = newRefreshToken.Expires;
-            _ = _accountServices.UpdateAccount(account);
-        }
-
-        private string CreateToken(Account account)
+        private string GenerateAccessToken(Account account)
         {
             List<Claim> claims = new List<Claim>
             {

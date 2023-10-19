@@ -22,18 +22,16 @@ library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrow
 
 function App() {
   return (
-    <AuthContextProvider>
-      <BrowserRouter basename='/'>
-        <Routes>
-          <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
-            <Route index element={<HomePage />} />
-            <Route path='/favorite' element={<FavoritePage />} />
-            <Route path='/search' element={<SearchPage />} />
-            <Route path='*' element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthContextProvider>
+    <BrowserRouter basename='/'>
+      <Routes>
+        <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
+          <Route index element={<HomePage />} />
+          <Route path='/favorite' element={<FavoritePage />} />
+          <Route path='/search' element={<SearchPage />} />
+          <Route path='*' element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

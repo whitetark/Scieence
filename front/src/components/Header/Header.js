@@ -11,7 +11,7 @@ import useModal from '../../hooks/use-modal';
 import AuthContext from '../../app/store/auth-context';
 
 const MainNavigation = () => {
-  const { userToken } = useContext(AuthContext);
+  const { userToken, logout } = useContext(AuthContext);
   const { isShowing, toggle } = useModal();
   const [modalName, setModalName] = useState('login');
 
@@ -36,7 +36,9 @@ const MainNavigation = () => {
             <button onClick={toggle} className={isShowing ? 'active' : undefined}>
               <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
             </button>
-          ) : undefined}
+          ) : (
+            <button onClick={logout}>Logout</button>
+          )}
           <Modal isShowing={isShowing} hide={toggle} className='login-modal'>
             {modalName === 'login' ? (
               <Login onToggle={toggleModalName} />
