@@ -45,6 +45,7 @@ const Login = (props) => {
 
     await login(user);
 
+    props.onHide();
     loginReset();
     passwordReset();
   };

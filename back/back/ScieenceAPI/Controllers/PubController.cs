@@ -40,8 +40,6 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
 
-            result.Total = result.Records.Count;
-
             return result;
         }
 
@@ -57,8 +55,6 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(snpublications.Records);
             result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
-
-            result.Total = result.Records.Count;
 
             return result;
         }
@@ -76,8 +72,6 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
 
-            result.Total = result.Records.Count;
-
             return result;
         }
         [HttpGet("aggregation/getByLanguage/{q}")]
@@ -92,9 +86,6 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(snpublications.Records);
             result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
-
-            result.Total = result.Records.Count;
-
             return result;
         }
 

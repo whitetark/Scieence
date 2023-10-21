@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+
+import AuthContext from '../../app/store/auth-context';
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
 import useInput from '../../hooks/use-input';
@@ -5,6 +8,7 @@ import useInput from '../../hooks/use-input';
 const isNotEmpty = (value) => value.trim() !== '';
 
 const Register = (props) => {
+  const { register } = useContext(AuthContext);
   const {
     value: loginValue,
     isValid: loginIsValid,
@@ -38,7 +42,7 @@ const Register = (props) => {
 
   let formIsValid = loginIsValid && passwordIsValid && repeatPasswordIsValid;
 
-  const formSubmitHandler = (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
 
     if (!formIsValid) {
@@ -50,7 +54,9 @@ const Register = (props) => {
       password: passwordValue,
     };
 
-    console.log(user);
+    await register(user);
+
+    props.onHide();
 
     loginReset();
     passwordReset();

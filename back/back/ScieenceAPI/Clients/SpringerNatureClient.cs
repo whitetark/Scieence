@@ -25,7 +25,7 @@ namespace ScieenceAPI.Clients
             try
             {
                 var response = await ApiDeserialzer(keyword, numOf);
-                return await ResponseBeautifier(response);
+                return ResponseBeautifier(response);
             } 
             catch
             {
@@ -37,7 +37,7 @@ namespace ScieenceAPI.Clients
             try
             {
                 var response = await ApiDeserialzer("name:" + author, numOf);
-                return await ResponseBeautifier(response);
+                return ResponseBeautifier(response);
             }
             catch
             {
@@ -49,7 +49,7 @@ namespace ScieenceAPI.Clients
             try
             {
                 var response = await ApiDeserialzer("subject:" + subject, numOf);
-                return await ResponseBeautifier(response);
+                return ResponseBeautifier(response);
             }
             catch
             {
@@ -61,7 +61,7 @@ namespace ScieenceAPI.Clients
             try
             {
                 var response = await ApiDeserialzer("language:"+language, numOf);
-                return await ResponseBeautifier(response);
+                return ResponseBeautifier(response);
             }
             catch
             {
@@ -86,7 +86,7 @@ namespace ScieenceAPI.Clients
             fullContent = "{\"totalContent\":[" + fullContent.Remove(0, 1) + "]}";
             return JsonConvert.DeserializeObject<TotalSN>(fullContent);
         }
-        public async Task<Response> ResponseBeautifier(TotalSN total)
+        public Response ResponseBeautifier(TotalSN total)
         {
             var result = new Response();
             foreach (var response in total.totalContent)

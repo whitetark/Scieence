@@ -9,7 +9,6 @@ namespace Database.Models
 {
     public class Response
     {
-        public int Total { get; set; }
         public List<Publication> Records { get; set; }
         public Response()
         {

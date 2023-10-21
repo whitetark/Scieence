@@ -78,14 +78,19 @@ namespace ScieenceAPI.Controllers
         public async Task<ActionResult<Account>> Register([FromBody] UserDto request)
         {
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
-            var account = new Account
+            var user = new Account
             {
                 Username = request.username,
                 PasswordHash = passwordHash,
                 Favourites = new Response(),
             };
-            await _accountServices.AddAccount(account);
-            return Ok(account);
+            await _accountServices.AddAccount(user);
+
+            string token = GenerateAccessToken(user);
+            var refreshToken = GenerateRefreshToken();
+            SetResponseCookies(refreshToken, user);
+
+            return Ok(new { token, user });
         }
 
         [AllowAnonymous]
@@ -111,22 +116,52 @@ namespace ScieenceAPI.Controllers
 
             return Ok(new { token, user });
         }
+
+        [AllowAnonymous]
+        [Route("logout")]
+        [HttpPost]
+        public async Task<ActionResult> Logout()
+        {
+            var username = Request.Cookies["username"];
+            if (username == null)
+            {
+                return BadRequest("User not found");
+            }
+            var user = await _accountServices.GetAccountByUsername(username);
+
+            user.RefreshToken = "";
+            user.TokenExpires = DateTime.UtcNow;
+            user.TokenCreated = DateTime.UtcNow;
+            _ = _accountServices.UpdateAccount(user);
+
+            Response.Cookies.Delete("username"); 
+            Response.Cookies.Delete("refresh_token");
+
+            return Ok();
+        }
+
         [AllowAnonymous]
         [Route("refresh-token")]
         [HttpPost]
         public async Task<ActionResult<object>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refresh_token"];
+            var username = Request.Cookies["username"];
             if (refreshToken == null)
             {
                 return BadRequest("Refresh Token not found");
             }
 
-            var user = await _accountServices.GetAccountByRefreshToken(refreshToken);
+            var user = await _accountServices.GetAccountByUsername(username);
 
             if (user == null)
             {
                 return BadRequest("User not found");
+            }
+
+            if (!user.RefreshToken.Equals(refreshToken))
+            {
+                return BadRequest("Wrong refresh token");
             }
 
             if(user.TokenExpires < DateTime.Now){
@@ -154,7 +189,7 @@ namespace ScieenceAPI.Controllers
             account.RefreshToken = newRefreshToken.Token;
             account.TokenCreated = newRefreshToken.Created;
             account.TokenExpires = newRefreshToken.Expires;
-            //_ = _accountServices.UpdateAccount(account);
+            _ = _accountServices.UpdateAccount(account);
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -181,7 +216,7 @@ namespace ScieenceAPI.Controllers
 
             var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: DateTime.Now.AddDays(1),
+                    expires: DateTime.Now.AddHours(1),
                     signingCredentials: cred
                 );
 

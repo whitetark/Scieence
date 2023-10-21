@@ -16,7 +16,6 @@ import HomePage from './pages/Home';
 import FavoritePage from './pages/Favorite';
 import SearchPage from './pages/Search';
 import NotFound from './pages/NotFound';
-import { AuthContextProvider } from './app/store/auth-context';
 
 library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight);
 

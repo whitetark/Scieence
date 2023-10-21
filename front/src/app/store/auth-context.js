@@ -12,46 +12,72 @@ export const AuthContextProvider = ({ children }) => {
     }
     return null;
   });
-  const [userData, setUserData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await api.get('/Acc/getByUsername').catch((error) => {
-        console.log(error);
-        console.log('There has been a problem with your fetch operation: ' + error.message);
+  const [userData, setUserData] = useState(() => {
+    api
+      .get('/Acc/getByUsername')
+      .then((response) => {
+        return response.data.user;
+      })
+      .catch((error) => {
+        console.log('Fetching Data error ', error.message);
+        return null;
       });
-    };
-    fetchData();
-  }, []);
-  //const navigate = useNavigate();
+  });
+
+  // useEffect(() => {
+  //   const updateData = async (payload) => {
+  //     await api
+  //       .put('/Acc/update', payload, {
+  //         withCredentials: true,
+  //       })
+  //       .catch((error) => {
+  //         console.log('Update User Data error', error.message);
+  //       });
+  //   };
+  //   updateData(userData);
+  // }, [userData]);
 
   const login = async (payload) => {
-    const response = await api.post('/Acc/login', payload).catch((error) => {
-      console.log('There has been a problem with your fetch operation: ' + error.message);
-    });
-    localStorage.setItem('token', JSON.stringify(response.data.token));
-    setUserToken(response.data.token);
-    setUserData(response.data.user);
-    //navigate('/');
+    await api
+      .post('/Acc/login', payload)
+      .then((response) => {
+        localStorage.setItem('token', JSON.stringify(response.data.token));
+        setUserToken(response.data.token);
+        setUserData(response.data.user);
+      })
+      .catch((error) => {
+        console.log('Login error: ' + error);
+      });
   };
 
   const logout = async () => {
-    localStorage.removeItem('token');
-    setUserToken(null);
-    //navigate('/');
+    await api
+      .post('/Acc/logout')
+      .then(() => {
+        localStorage.removeItem('token');
+        setUserToken(null);
+      })
+      .catch((error) => {
+        console.log('Logout error: ' + error.message);
+      });
   };
 
-  const updateUserData = async (payload) => {
-    setUserData(payload);
-    const response = await api.put('/Acc/update', payload, {
-      withCredentials: true,
-    });
-    console.log(response);
+  const register = async (payload) => {
+    await api
+      .post('/Acc/register', payload, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        setUserData(response.data.user);
+        setUserToken(response.data.token);
+      })
+      .catch((error) => {
+        console.log('Register error', error.message);
+      });
   };
 
   return (
-    <AuthContext.Provider
-      value={{ userToken, userData, login, logout, updateUserData, setUserData }}>
+    <AuthContext.Provider value={{ userToken, userData, login, logout, register, setUserData }}>
       {children}
     </AuthContext.Provider>
   );

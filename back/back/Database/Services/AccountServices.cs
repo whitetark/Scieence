@@ -46,18 +46,7 @@ namespace Database.Services
         {
             try
             {
-                return await _accounts.Find(x => x.Username == username).FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public async Task<Account> GetAccountByRefreshToken(string refreshToken)
-        {
-            try
-            {
-                return await _accounts.Find(x => x.RefreshToken == refreshToken).FirstOrDefaultAsync();
+                return await _accounts.Find(account => account.Username == username).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

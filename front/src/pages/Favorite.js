@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
 import Searchbar from '../components/UI/Searchbar';
 import Background from '../components/UI/Background';
 import PublicationList from '../components/Publications/PublicationList';
+import AuthContext from '../app/store/auth-context';
 
 const FavoritePage = () => {
+  const { userData } = useContext(AuthContext);
   const isShown = false;
   return (
     <Main>
@@ -17,7 +19,7 @@ const FavoritePage = () => {
       <Styled.MainWrapper>
         <Styled.MainContent>
           <h2>Favourite Publications</h2>
-          {isShown && <PublicationList />}
+          {isShown && <PublicationList data={userData.Favourites} />}
         </Styled.MainContent>
       </Styled.MainWrapper>
     </Main>
