@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { Container } from './UI.styled.js';
+import { Container } from './UI.styled.jsx';
 
 export const Overlay = styled.div`
   content: '';

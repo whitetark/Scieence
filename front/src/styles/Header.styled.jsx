@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import * as variables from './Variables.js';
-import { Container } from './UI.styled.js';
+import { Container } from './UI.styled.jsx';
 import { NavLink } from 'react-router-dom';
 
 export const Header = styled.header`
