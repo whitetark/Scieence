@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
 import useInput from '../../hooks/use-input';
 import Loading from '../UI/Loading';
-import AuthContext from '../../app/store/auth-context';
+import { useLogin } from '../../hooks/use-auth';
 
 const isNotEmpty = (value) => value.trim() !== '';
 
 const Login = (props) => {
-  const { login } = useContext(AuthContext);
+  const { mutateAsync: login, isLoading, error } = useLogin();
 
   const {
     value: loginValue,
@@ -69,7 +69,7 @@ const Login = (props) => {
           onBlur={passwordBlurHandler}
           name='password'
         />
-        {false ? (
+        {isLoading ? (
           <Loading />
         ) : (
           <Button type='submit' disabled={!formIsValid}>

@@ -1,6 +1,7 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-import api from '../services/api';
+import api, { UserService } from '../services/api';
+import { useQuery } from 'react-query';
 
 const AuthContext = createContext();
 
@@ -12,17 +13,7 @@ export const AuthContextProvider = ({ children }) => {
     }
     return null;
   });
-  const [userData, setUserData] = useState(() => {
-    api
-      .get('/Acc/getByUsername')
-      .then((response) => {
-        return response.data.user;
-      })
-      .catch((error) => {
-        console.log('Fetching Data error ', error.message);
-        return null;
-      });
-  });
+  const [userData, setUserData] = useState([]);
 
   // useEffect(() => {
   //   const updateData = async (payload) => {
@@ -37,50 +28,18 @@ export const AuthContextProvider = ({ children }) => {
   //   updateData(userData);
   // }, [userData]);
 
-  const login = async (payload) => {
-    await api
-      .post('/Acc/login', payload)
-      .then((response) => {
-        localStorage.setItem('token', JSON.stringify(response.data.token));
-        setUserToken(response.data.token);
-        setUserData(response.data.user);
-      })
-      .catch((error) => {
-        console.log('Login error: ' + error);
-      });
-  };
-
-  const logout = async () => {
-    await api
-      .post('/Acc/logout')
-      .then(() => {
-        localStorage.removeItem('token');
-        setUserToken(null);
-      })
-      .catch((error) => {
-        console.log('Logout error: ' + error.message);
-      });
-  };
-
-  const register = async (payload) => {
-    await api
-      .post('/Acc/register', payload, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setUserData(response.data.user);
-        setUserToken(response.data.token);
-      })
-      .catch((error) => {
-        console.log('Register error', error.message);
-      });
-  };
-
   return (
-    <AuthContext.Provider value={{ userToken, userData, login, logout, register, setUserData }}>
+    <AuthContext.Provider value={{ userToken, userData, setUserData, setUserToken }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuthContext must be used within a ThemeContextProvider');
+  }
+  return context;
+};
 export default AuthContext;

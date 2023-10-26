@@ -9,10 +9,10 @@ Plan:
 Auth-Context Arc
 
 1. Create a modal where user can change his password and log out
-2. Create a log out system where refreshtoken is removing itself on back & front
-3. Favorite user articles are showed in Favorites pages
-4. Set a correct error flow. Initial load errors are not showed, Error which was created by user are shown on error page or in login-register modals.
-5. Initial update user request needs fixes
+2. Favorite user articles are showed in Favorites pages
+3. Set a correct error flow. Initial load errors are not showed, Error which was created by user are shown on error page or in login-register modals.
+4. Initial update user request needs fixes
+5. React Queries instead of useeffects
 
 Search Articles Arc
 inc

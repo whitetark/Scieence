@@ -10,6 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
+import { loader as rootLoader } from './pages/Root';
+
 import RootLayout from './pages/Root';
 import ErrorPage from './pages/Error';
 import HomePage from './pages/Home';
@@ -23,7 +25,7 @@ function App() {
   return (
     <BrowserRouter basename='/'>
       <Routes>
-        <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
+        <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />} loader={rootLoader}>
           <Route index element={<HomePage />} />
           <Route path='/favorite' element={<FavoritePage />} />
           <Route path='/search' element={<SearchPage />} />

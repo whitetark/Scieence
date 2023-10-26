@@ -1,14 +1,13 @@
-import { useContext } from 'react';
-
-import AuthContext from '../../app/store/auth-context';
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
 import useInput from '../../hooks/use-input';
+import { useRegister } from '../../hooks/use-auth';
+import Loading from '../UI/Loading';
 
 const isNotEmpty = (value) => value.trim() !== '';
 
 const Register = (props) => {
-  const { register } = useContext(AuthContext);
+  const { mutateAsync: register, isLoading, error } = useRegister();
   const {
     value: loginValue,
     isValid: loginIsValid,
@@ -93,9 +92,13 @@ const Register = (props) => {
           onBlur={repeatPasswordBlurHandler}
           name='repeatPassword'
         />
-        <Button disabled={!formIsValid} type='submit'>
-          Register
-        </Button>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Button disabled={!formIsValid} type='submit'>
+            Register
+          </Button>
+        )}
       </form>
     </AuthWrapper>
   );

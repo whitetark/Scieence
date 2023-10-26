@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://localhost:7253';
+const baseURL = 'http://localhost:7253';
 
 const api = axios.create({
   baseURL,
@@ -9,6 +9,21 @@ const api = axios.create({
   },
   withCredentials: true,
 });
+
+export const UserService = {
+  async login(payload) {
+    return api.post('/Acc/login', payload);
+  },
+  async register(payload) {
+    return api.post('/Acc/register', payload);
+  },
+  async logout() {
+    return api.post('/Acc/logout');
+  },
+  async fetchUserData() {
+    return api.get('/Acc/getByUsername');
+  },
+};
 
 api.interceptors.request.use((config) => {
   let token = JSON.parse(localStorage.getItem('token'));
