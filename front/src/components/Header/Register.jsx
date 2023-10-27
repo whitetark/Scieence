@@ -1,105 +1,76 @@
+import React from 'react';
+import { Formik, Field, Form } from 'formik';
+import * as Yup from 'yup';
+
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
-import useInput from '../../hooks/use-input';
 import { useRegister } from '../../hooks/use-auth';
 import Loading from '../UI/Loading';
 
-const isNotEmpty = (value) => value.trim() !== '';
+const DisplayingErrorMessagesSchema = Yup.object().shape({
+  login: Yup.string().min(3, 'Too Short!').max(12, 'Too Long!').required('Required'),
+  password: Yup.string()
+    .min(3, 'Too Short!')
+    .max(12, 'Must be 12 characters or less')
+    .required('Required'),
+  repeatPassword: Yup.string()
+    .min(3, 'Too Short!')
+    .max(12, 'Must be 12 characters or less')
+    .required('Required'),
+});
+
+const repeatPasswordValidation = (value, passwordValue) => {
+  return value === passwordValue;
+};
 
 const Register = (props) => {
-  const { mutateAsync: register, isLoading, error } = useRegister();
-  const {
-    value: loginValue,
-    isValid: loginIsValid,
-    hasError: loginHasError,
-    valueBlurHandler: loginBlurHandler,
-    valueChangeHandler: loginChangeHandler,
-    reset: loginReset,
-  } = useInput(isNotEmpty);
+  const { mutateAsync: register } = useRegister();
 
-  const {
-    value: passwordValue,
-    isValid: passwordIsValid,
-    hasError: passwordHasError,
-    valueBlurHandler: passwordBlurHandler,
-    valueChangeHandler: passwordChangeHandler,
-    reset: passwordReset,
-  } = useInput(isNotEmpty);
-
-  const repeatPasswordValidation = (value, passwordValue) => {
-    return value === passwordValue;
-  };
-
-  const {
-    value: repeatPasswordValue,
-    isValid: repeatPasswordIsValid,
-    hasError: repeatPasswordHasError,
-    valueBlurHandler: repeatPasswordBlurHandler,
-    valueChangeHandler: repeatPasswordChangeHandler,
-    reset: repeatPasswordReset,
-  } = useInput(repeatPasswordValidation.bind(null, passwordValue));
-
-  let formIsValid = loginIsValid && passwordIsValid && repeatPasswordIsValid;
-
-  const formSubmitHandler = async (event) => {
-    event.preventDefault();
-
-    if (!formIsValid) {
-      return;
-    }
-
-    const user = {
-      login: loginValue,
-      password: passwordValue,
-    };
-
-    await register(user);
-
-    props.onHide();
-
-    loginReset();
-    passwordReset();
-    repeatPasswordReset();
-  };
   return (
     <AuthWrapper onClick={props.onClick} onToggle={props.onToggle} type='Register'>
-      <form onSubmit={formSubmitHandler}>
-        <input
-          type='text'
-          className={loginHasError ? 'input-error' : undefined}
-          placeholder='Login'
-          value={loginValue}
-          onChange={loginChangeHandler}
-          onBlur={loginBlurHandler}
-          name='login'
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          className={passwordHasError ? 'input-error' : undefined}
-          value={passwordValue}
-          onChange={passwordChangeHandler}
-          onBlur={passwordBlurHandler}
-          name='password'
-        />
-        <input
-          disabled={!passwordIsValid}
-          className={repeatPasswordHasError ? 'input-error' : undefined}
-          type='password'
-          placeholder='Repeat Password'
-          value={repeatPasswordValue}
-          onChange={repeatPasswordChangeHandler}
-          onBlur={repeatPasswordBlurHandler}
-          name='repeatPassword'
-        />
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <Button disabled={!formIsValid} type='submit'>
-            Register
-          </Button>
+      <Formik
+        initialValues={{
+          login: '',
+          password: '',
+          repeatPassword: '',
+        }}
+        validationSchema={DisplayingErrorMessagesSchema}
+        onSubmit={async (values, actions) => {
+          const user = {
+            username: values.login,
+            password: values.password,
+          };
+
+          await register(user);
+          props.onHide();
+          actions.setSubmitting(false);
+          actions.resetForm();
+        }}>
+        {({ values, errors, touched, isValid, isSubmitting }) => (
+          <Form>
+            <Field type='text' name='login' placeholder='Login' />
+            {errors.login && touched.login ? <div>{errors.login}</div> : null}
+            <Field type='password' placeholder='Password' name='password' />
+            {errors.password && touched.password ? <div>{errors.password}</div> : null}
+            <Field
+              type='password'
+              placeholder='Password'
+              name='repeatPassword'
+              validate={() => repeatPasswordValidation(values.repeatPassword, values.password)}
+            />
+            {errors.repeatPassword && touched.repeatPassword ? (
+              <div>{errors.repeatPassword}</div>
+            ) : null}
+            {isSubmitting ? (
+              <Loading />
+            ) : (
+              <Button type='submit' disabled={!isValid}>
+                Login
+              </Button>
+            )}
+          </Form>
         )}
-      </form>
+      </Formik>
     </AuthWrapper>
   );
 };

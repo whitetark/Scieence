@@ -1,82 +1,57 @@
 import React from 'react';
+import { Formik, Field, Form } from 'formik';
+import * as Yup from 'yup';
 
 import Button from '../UI/Button';
 import AuthWrapper from './AuthWrapper';
-import useInput from '../../hooks/use-input';
 import Loading from '../UI/Loading';
 import { useLogin } from '../../hooks/use-auth';
 
-const isNotEmpty = (value) => value.trim() !== '';
+const DisplayingErrorMessagesSchema = Yup.object().shape({
+  login: Yup.string().min(3, 'Too Short!').max(12, 'Too Long!').required('Required'),
+  password: Yup.string()
+    .min(3, 'Too Short!')
+    .max(12, 'Must be 12 characters or less')
+    .required('Required'),
+});
 
 const Login = (props) => {
-  const { mutateAsync: login, isLoading, error } = useLogin();
-
-  const {
-    value: loginValue,
-    isValid: loginIsValid,
-    hasError: loginHasError,
-    valueBlurHandler: loginBlurHandler,
-    valueChangeHandler: loginChangeHandler,
-    reset: loginReset,
-  } = useInput(isNotEmpty);
-
-  const {
-    value: passwordValue,
-    isValid: passwordIsValid,
-    hasError: passwordHasError,
-    valueBlurHandler: passwordBlurHandler,
-    valueChangeHandler: passwordChangeHandler,
-    reset: passwordReset,
-  } = useInput(isNotEmpty);
-
-  let formIsValid = loginIsValid && passwordIsValid;
-
-  const formSubmitHandler = async (event) => {
-    event.preventDefault();
-
-    if (!formIsValid) {
-      return;
-    }
-
-    const user = {
-      username: loginValue,
-      password: passwordValue,
-    };
-
-    await login(user);
-
-    props.onHide();
-    loginReset();
-    passwordReset();
-  };
-
+  const { mutateAsync: login } = useLogin();
   return (
     <AuthWrapper onClick={props.onClick} onToggle={props.onToggle} type='Login'>
-      <form onSubmit={formSubmitHandler}>
-        <input
-          type='text'
-          placeholder='Login'
-          value={loginValue}
-          onChange={loginChangeHandler}
-          onBlur={loginBlurHandler}
-          name='login'
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          value={passwordValue}
-          onChange={passwordChangeHandler}
-          onBlur={passwordBlurHandler}
-          name='password'
-        />
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <Button type='submit' disabled={!formIsValid}>
-            Login
-          </Button>
+      <Formik
+        initialValues={{
+          login: '',
+          password: '',
+        }}
+        validationSchema={DisplayingErrorMessagesSchema}
+        onSubmit={async (values, actions) => {
+          const user = {
+            username: values.login,
+            password: values.password,
+          };
+
+          await login(user);
+          props.onHide();
+          actions.setSubmitting(false);
+          actions.resetForm();
+        }}>
+        {({ errors, touched, isValid, isSubmitting }) => (
+          <Form>
+            <Field type='text' name='login' placeholder='Login' />
+            {errors.login && touched.login ? <div>{errors.login}</div> : null}
+            <Field type='password' placeholder='Password' name='password' />
+            {errors.password && touched.password ? <div>{errors.password}</div> : null}
+            {isSubmitting ? (
+              <Loading />
+            ) : (
+              <Button type='submit' disabled={!isValid}>
+                Login
+              </Button>
+            )}
+          </Form>
         )}
-      </form>
+      </Formik>
     </AuthWrapper>
   );
 };

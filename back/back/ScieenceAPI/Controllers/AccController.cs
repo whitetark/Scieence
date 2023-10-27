@@ -116,7 +116,6 @@ namespace ScieenceAPI.Controllers
 
             return Ok(new { token, user });
         }
-
         [AllowAnonymous]
         [Route("logout")]
         [HttpPost]

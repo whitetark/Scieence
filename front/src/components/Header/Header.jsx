@@ -9,11 +9,13 @@ import Login from './Login';
 import Register from './Register';
 import useModal from '../../hooks/use-modal';
 import AuthContext from '../../app/store/auth-context';
+import { useLogout } from '../../hooks/use-auth';
 
 const MainNavigation = () => {
-  const { userToken, logout } = useContext(AuthContext);
+  const { userToken } = useContext(AuthContext);
   const { isShowing, toggle: toggleModal } = useModal();
   const [modalName, setModalName] = useState('login');
+  const { mutateAsync: logout } = useLogout();
 
   const toggleModalName = (name) => {
     setModalName(name);
@@ -37,7 +39,7 @@ const MainNavigation = () => {
               <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
             </button>
           ) : (
-            <button onClick={logout}>Logout</button>
+            <button onClick={async () => await logout()}>Logout</button>
           )}
           <Modal isShowing={isShowing} hide={toggleModal} className='login-modal'>
             {modalName === 'login' ? (

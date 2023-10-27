@@ -10,22 +10,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
-import { loader as rootLoader } from './pages/Root';
-
 import RootLayout from './pages/Root';
 import ErrorPage from './pages/Error';
 import HomePage from './pages/Home';
 import FavoritePage from './pages/Favorite';
 import SearchPage from './pages/Search';
 import NotFound from './pages/NotFound';
-
 library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight);
 
 function App() {
   return (
     <BrowserRouter basename='/'>
       <Routes>
-        <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />} loader={rootLoader}>
+        <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
           <Route index element={<HomePage />} />
           <Route path='/favorite' element={<FavoritePage />} />
           <Route path='/search' element={<SearchPage />} />

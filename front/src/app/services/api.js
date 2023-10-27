@@ -10,21 +10,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const UserService = {
-  async login(payload) {
-    return api.post('/Acc/login', payload);
-  },
-  async register(payload) {
-    return api.post('/Acc/register', payload);
-  },
-  async logout() {
-    return api.post('/Acc/logout');
-  },
-  async fetchUserData() {
-    return api.get('/Acc/getByUsername');
-  },
-};
-
 api.interceptors.request.use((config) => {
   let token = JSON.parse(localStorage.getItem('token'));
   config.headers['Authorization'] = `Bearer ${token}`;
@@ -48,4 +33,20 @@ api.interceptors.response.use(
     }
   },
 );
+
+export const UserService = {
+  async login(payload) {
+    return api.post('/Acc/login', payload);
+  },
+  async register(payload) {
+    return api.post('/Acc/register', payload);
+  },
+  async logout() {
+    return api.post('/Acc/logout');
+  },
+  async fetchUserData() {
+    return api.get('/Acc/getByUsername');
+  },
+};
+
 export default api;

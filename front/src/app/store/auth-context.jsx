@@ -1,7 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-
-import api, { UserService } from '../services/api';
+import { createContext, useContext, useState } from 'react';
 import { useQuery } from 'react-query';
+import { UserService } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -14,6 +13,16 @@ export const AuthContextProvider = ({ children }) => {
     return null;
   });
   const [userData, setUserData] = useState([]);
+
+  useQuery('user data', () => UserService.fetchUserData(), {
+    onSuccess: ({ data }) => {
+      setUserData(data.user);
+    },
+    onError: (error) => {
+      console.log('Fetching Data error', error.message);
+      setUserData(null);
+    },
+  });
 
   // useEffect(() => {
   //   const updateData = async (payload) => {

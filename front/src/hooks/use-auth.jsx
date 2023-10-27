@@ -1,19 +1,6 @@
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { UserService } from '../app/services/api';
 import { useAuthContext } from '../app/store/auth-context';
-
-export const useFetchData = () => {
-  const { setUserData } = useAuthContext();
-  return useQuery('user data', () => UserService.fetchUserData(), {
-    onSuccess: ({ data }) => {
-      setUserData(data.user);
-    },
-    onError: (error) => {
-      console.log('Fetching Data error', error.message);
-      setUserData(null);
-    },
-  });
-};
 
 export const useLogin = () => {
   const { setUserData, setUserToken } = useAuthContext();
