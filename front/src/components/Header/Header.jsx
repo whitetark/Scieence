@@ -9,17 +9,28 @@ import Login from './Login';
 import Register from './Register';
 import useModal from '../../hooks/use-modal';
 import AuthContext from '../../app/store/auth-context';
-import { useLogout } from '../../hooks/use-auth';
+import Settings from './Settings';
+import ChangePassword from './ChangePassword';
 
 const MainNavigation = () => {
   const { userToken } = useContext(AuthContext);
-  const { isShowing, toggle: toggleModal } = useModal();
-  const [modalName, setModalName] = useState('login');
-  const { mutateAsync: logout } = useLogout();
+  const { isShowing: modalIsShowing, toggle: toggleModal } = useModal();
+  const [authModalName, setAuthModalName] = useState('login');
+  const [userModalName, setUserModalName] = useState('settings');
 
-  const toggleModalName = (name) => {
-    setModalName(name);
-  };
+  let nonTokenModalContent =
+    authModalName === 'login' ? (
+      <Login onToggle={setAuthModalName} onHide={toggleModal} />
+    ) : (
+      <Register onToggle={setAuthModalName} onHide={toggleModal} />
+    );
+
+  let tokenModalContent =
+    userModalName === 'settings' ? (
+      <Settings onToggle={setUserModalName} onHide={toggleModal} />
+    ) : (
+      <ChangePassword onToggle={setUserModalName} onHide={toggleModal} />
+    );
 
   return (
     <Styled.Header>
@@ -34,19 +45,11 @@ const MainNavigation = () => {
               <FontAwesomeIcon icon='fa-solid fa-heart' fixedWidth />
             </NavLink>
           ) : undefined}
-          {!userToken ? (
-            <button onClick={toggleModal} className={isShowing ? 'active' : undefined}>
-              <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
-            </button>
-          ) : (
-            <button onClick={async () => await logout()}>Logout</button>
-          )}
-          <Modal isShowing={isShowing} hide={toggleModal} className='login-modal'>
-            {modalName === 'login' ? (
-              <Login onToggle={toggleModalName} onHide={toggleModal} />
-            ) : (
-              <Register onToggle={toggleModalName} onHide={toggleModal} />
-            )}
+          <button onClick={toggleModal} className={modalIsShowing ? 'active' : undefined}>
+            <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
+          </button>
+          <Modal isShowing={modalIsShowing} hide={toggleModal} className='login-modal'>
+            {userToken ? tokenModalContent : nonTokenModalContent}
           </Modal>
         </Styled.Actions>
       </Styled.Nav>

@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import * as variables from './Variables';
-import { AuthMain } from './Auth.styled';
+import { ModalMain } from './Modal.styled';
 import { Filter } from './Filter.styled';
 
 export const Main = styled.main`
@@ -28,7 +28,7 @@ export const Button = styled.button`
     justify-self: flex-end;
   }
 
-  ${AuthMain} & {
+  ${ModalMain} & {
     padding: 1rem 0;
     width: 100%;
     max-width: 27.1rem;

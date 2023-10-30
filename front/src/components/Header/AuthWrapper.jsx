@@ -1,15 +1,15 @@
 import React from 'react';
-import * as Styled from '../../styles/Auth.styled';
+import * as Styled from '../../styles/Modal.styled';
 
 const AuthWrapper = ({ children, onClick, onToggle, type }) => {
   return (
-    <Styled.AuthWrapper onClick={onClick}>
-      <Styled.AuthHeader>
+    <Styled.ModalWrapper onClick={onClick}>
+      <Styled.ModalHeader>
         <h2>{type} Form</h2>
-      </Styled.AuthHeader>
-      <Styled.AuthMain>
+      </Styled.ModalHeader>
+      <Styled.ModalMain>
         {children}
-        <Styled.AuthInfo>
+        <Styled.ModalInfo>
           {type === 'Login' ? (
             <>
               <span>Not a member? </span>
@@ -21,9 +21,9 @@ const AuthWrapper = ({ children, onClick, onToggle, type }) => {
               <button onClick={() => onToggle('login')}>Login in</button>
             </>
           )}
-        </Styled.AuthInfo>
-      </Styled.AuthMain>
-    </Styled.AuthWrapper>
+        </Styled.ModalInfo>
+      </Styled.ModalMain>
+    </Styled.ModalWrapper>
   );
 };
 

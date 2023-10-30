@@ -15,10 +15,10 @@ const Modal = ({ children, isShowing, hide, className, hasOverlay }) => {
 
   return isShowing
     ? createPortal(
-        <Styled.ModalWrapper onClick={hide}>
+        <Styled.Modal onClick={hide}>
           {hasOverlay ? <Styled.Overlay color={'black'} onClick={hide} /> : undefined}
           <Styled.Children className={className || undefined}> {renderChildren()}</Styled.Children>
-        </Styled.ModalWrapper>,
+        </Styled.Modal>,
         document.getElementById('modal_root'),
       )
     : null;

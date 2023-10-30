@@ -72,6 +72,26 @@ namespace ScieenceAPI.Controllers
             return Ok();
         }
 
+        [Route("checkCredentials")]
+        [HttpGet]
+        public async Task<ActionResult> CheckCredentials([FromBody] UserDto request)
+        {
+            var user = await _accountServices.GetAccountByUsername(request.username);
+
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(request.password, user.PasswordHash))
+            {
+                return BadRequest("Wrong password.");
+            }
+
+            return Ok();
+        }
+
+
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]

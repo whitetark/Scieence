@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { Container } from './UI.styled.jsx';
+import * as variables from './Variables.js';
 
 export const Overlay = styled.div`
   content: '';
@@ -11,7 +11,9 @@ export const Overlay = styled.div`
   background-color: black;
   opacity: 0.5;
 `;
-export const Children = styled(Container)`
+export const Children = styled.div`
+  max-width: 120rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -30,7 +32,7 @@ export const Children = styled(Container)`
   }
 `;
 
-export const ModalWrapper = styled.div`
+export const Modal = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -42,4 +44,73 @@ export const ModalWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const padding = '1rem';
+
+export const ModalWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${variables.WHITE_COLOR};
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 29.2rem;
+  width: 100%;
+  align-self: flex-end;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+`;
+
+export const ModalHeader = styled.div`
+  background-color: ${variables.BLUE_COLOR};
+  color: ${variables.WHITE_COLOR};
+  padding: ${padding};
+  text-align: center;
+  font-weight: 500;
+  h2 {
+    font-size: 2.4rem;
+  }
+`;
+export const ModalMain = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem ${padding} ${padding};
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    input {
+      border: 1px solid ${variables.GRAY_COLOR};
+      border-radius: 10px;
+      padding: 1rem;
+      font-size: 1.4rem;
+      width: 100%;
+      max-width: 27.1rem;
+      outline: none;
+      &::placeholder {
+        color: ${variables.GRAY_COLOR};
+        font-weight: 500;
+        width: 100%;
+      }
+
+      &.input-error {
+        border-color: red;
+      }
+    }
+  }
+`;
+
+export const ModalInfo = styled.div`
+  text-align: center;
+  color: ${variables.BLACK_COLOR};
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  button {
+    color: ${variables.BLUE_COLOR};
+    transition: color 0.2s ease-out;
+    &:hover {
+      color: ${variables.BLUE_HOVER_COLOR};
+    }
+  }
 `;
