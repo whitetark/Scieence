@@ -47,6 +47,12 @@ export const UserService = {
   async fetchUserData() {
     return api.get('/Acc/getByUsername');
   },
+  async checkCredentials(payload) {
+    return api.post('/Acc/checkCredentials', payload);
+  },
+  async changePassword(payload) {
+    return api.patch('/Acc/changePassword', payload);
+  },
 };
 
 export default api;

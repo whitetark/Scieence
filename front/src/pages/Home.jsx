@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Hero from '../components/Home/Hero';
+import Background from '../components/UI/Background';
+import Searchbar from '../components/UI/Searchbar';
 import * as Styled from '../styles/Home.styled';
 import { Main } from '../styles/UI.styled';
-import Hero from '../components/Home/Hero';
-import Searchbar from '../components/UI/Searchbar';
-import Background from '../components/UI/Background';
 
 const HomePage = () => {
   const navigate = useNavigate();

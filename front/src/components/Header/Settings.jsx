@@ -1,8 +1,8 @@
 import React from 'react';
-import * as Styled from '../../styles/Modal.styled';
 import { useAuthContext } from '../../app/store/auth-context';
-import Button from '../UI/Button';
 import { useLogout } from '../../hooks/use-auth';
+import * as Styled from '../../styles/Modal.styled';
+import Button from '../UI/Button';
 
 const Settings = ({ onClick, onToggle }) => {
   const { userData } = useAuthContext();

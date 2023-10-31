@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 
+import AuthContext from '../app/store/auth-context';
+import PublicationList from '../components/Publications/PublicationList';
+import Background from '../components/UI/Background';
+import Searchbar from '../components/UI/Searchbar';
 import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
-import Searchbar from '../components/UI/Searchbar';
-import Background from '../components/UI/Background';
-import PublicationList from '../components/Publications/PublicationList';
-import AuthContext from '../app/store/auth-context';
 
 const FavoritePage = () => {
   const { userData } = useContext(AuthContext);

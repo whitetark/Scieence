@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
-import * as variables from './Variables.js';
 import { Container } from './UI.styled.jsx';
+import * as variables from './Variables.js';
 
 export const Home = styled(Container)`
   max-width: 60rem;

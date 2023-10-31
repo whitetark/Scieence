@@ -42,3 +42,17 @@ export const useLogout = () => {
     },
   });
 };
+
+export const useConfirmationData = () => {
+  return useMutation('confirm creds', (payload) => UserService.checkCredentials(payload), {
+    enabled: false,
+  });
+};
+
+export const useChangePassword = () => {
+  return useMutation('change password', (payload) => UserService.changePassword(payload), {
+    onError: (error) => {
+      console.log('Changing Password error: ' + error.message);
+    },
+  });
+};

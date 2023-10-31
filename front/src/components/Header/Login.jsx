@@ -1,11 +1,11 @@
+import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 
-import Button from '../UI/Button';
-import AuthWrapper from './AuthWrapper';
-import Loading from '../UI/Loading';
 import { useLogin } from '../../hooks/use-auth';
+import Button from '../UI/Button';
+import Loading from '../UI/Loading';
+import AuthWrapper from './AuthWrapper';
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
   login: Yup.string().min(3, 'Too Short!').max(12, 'Too Long!').required('Required'),
@@ -16,7 +16,7 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
 });
 
 const Login = (props) => {
-  const { mutateAsync: login } = useLogin();
+  const { mutateAsync: login, error: loginError } = useLogin();
   return (
     <AuthWrapper onClick={props.onClick} onToggle={props.onToggle} type='Login'>
       <Formik
@@ -31,10 +31,11 @@ const Login = (props) => {
             password: values.password,
           };
 
-          await login(user);
-          props.onHide();
+          await login(user).then(() => {
+            props.onHide();
+            actions.resetForm();
+          });
           actions.setSubmitting(false);
-          actions.resetForm();
         }}>
         {({ errors, touched, isValid, isSubmitting }) => (
           <Form>
@@ -42,6 +43,7 @@ const Login = (props) => {
             {errors.login && touched.login ? <div>{errors.login}</div> : null}
             <Field type='password' placeholder='Password' name='password' />
             {errors.password && touched.password ? <div>{errors.password}</div> : null}
+            {loginError ? <div>{loginError.response.data}</div> : null}
             {isSubmitting ? (
               <Loading />
             ) : (

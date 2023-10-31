@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
-import * as variables from './Variables.js';
 import { Container } from './UI.styled.jsx';
+import * as variables from './Variables.js';
 
 export const MainWrapper = styled.div`
   background-color: ${variables.WHITE_COLOR};

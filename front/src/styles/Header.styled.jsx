@@ -1,7 +1,7 @@
-import { styled } from 'styled-components';
-import * as variables from './Variables.js';
-import { Container } from './UI.styled.jsx';
 import { NavLink } from 'react-router-dom';
+import { styled } from 'styled-components';
+import { Container } from './UI.styled.jsx';
+import * as variables from './Variables.js';
 
 export const Header = styled.header`
   flex: 0 1 auto;

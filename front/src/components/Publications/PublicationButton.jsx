@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as Styled from '../../styles/Publications.styled';
 import useModal from '../../hooks/use-modal';
+import * as Styled from '../../styles/Publications.styled';
 import Modal from '../UI/Modal';
 import Publication from './Publication';
 

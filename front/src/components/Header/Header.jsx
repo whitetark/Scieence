@@ -1,16 +1,16 @@
-import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import * as Styled from '../../styles/Header.styled';
+import AuthContext from '../../app/store/auth-context';
 import logo from '../../assets/logo.png';
+import useModal from '../../hooks/use-modal';
+import * as Styled from '../../styles/Header.styled';
 import Modal from '../UI/Modal';
+import ChangePasswordPreview from './ChangePasswordPreview';
 import Login from './Login';
 import Register from './Register';
-import useModal from '../../hooks/use-modal';
-import AuthContext from '../../app/store/auth-context';
 import Settings from './Settings';
-import ChangePassword from './ChangePassword';
 
 const MainNavigation = () => {
   const { userToken } = useContext(AuthContext);
@@ -29,7 +29,7 @@ const MainNavigation = () => {
     userModalName === 'settings' ? (
       <Settings onToggle={setUserModalName} onHide={toggleModal} />
     ) : (
-      <ChangePassword onToggle={setUserModalName} onHide={toggleModal} />
+      <ChangePasswordPreview onToggle={setUserModalName} onHide={toggleModal} />
     );
 
   return (

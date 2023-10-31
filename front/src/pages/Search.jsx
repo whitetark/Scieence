@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import * as Styled from '../styles/Results.styled';
-import { Main } from '../styles/UI.styled';
-import Searchbar from '../components/UI/Searchbar';
-import Background from '../components/UI/Background';
-import Pagination from '../components/UI/Pagination';
+import data from '../app/store/data.json';
 import Filter from '../components/Home/Filter';
 import PublicationList from '../components/Publications/PublicationList';
-import data from '../app/store/data.json';
+import Background from '../components/UI/Background';
+import Pagination from '../components/UI/Pagination';
+import Searchbar from '../components/UI/Searchbar';
+import * as Styled from '../styles/Results.styled';
+import { Main } from '../styles/UI.styled';
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);

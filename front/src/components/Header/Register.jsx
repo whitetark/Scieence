@@ -1,11 +1,11 @@
+import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 
-import Button from '../UI/Button';
-import AuthWrapper from './AuthWrapper';
 import { useRegister } from '../../hooks/use-auth';
+import Button from '../UI/Button';
 import Loading from '../UI/Loading';
+import AuthWrapper from './AuthWrapper';
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
   login: Yup.string().min(3, 'Too Short!').max(12, 'Too Long!').required('Required'),
@@ -16,15 +16,12 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
   repeatPassword: Yup.string()
     .min(3, 'Too Short!')
     .max(12, 'Must be 12 characters or less')
-    .required('Required'),
+    .required('Required')
+    .oneOf([Yup.ref('password')], 'Passwords must match'),
 });
 
-const repeatPasswordValidation = (value, passwordValue) => {
-  return value === passwordValue;
-};
-
 const Register = (props) => {
-  const { mutateAsync: register } = useRegister();
+  const { mutateAsync: register, error: registerError } = useRegister();
 
   return (
     <AuthWrapper onClick={props.onClick} onToggle={props.onToggle} type='Register'>
@@ -41,26 +38,23 @@ const Register = (props) => {
             password: values.password,
           };
 
-          await register(user);
-          props.onHide();
-          actions.setSubmitting(false);
+          await register(user).then(() => {
+            props.onHide();
+          });
           actions.resetForm();
+          actions.setSubmitting(false);
         }}>
-        {({ values, errors, touched, isValid, isSubmitting }) => (
+        {({ errors, touched, isValid, isSubmitting }) => (
           <Form>
             <Field type='text' name='login' placeholder='Login' />
             {errors.login && touched.login ? <div>{errors.login}</div> : null}
             <Field type='password' placeholder='Password' name='password' />
             {errors.password && touched.password ? <div>{errors.password}</div> : null}
-            <Field
-              type='password'
-              placeholder='Password'
-              name='repeatPassword'
-              validate={() => repeatPasswordValidation(values.repeatPassword, values.password)}
-            />
+            <Field type='password' placeholder='Password' name='repeatPassword' />
             {errors.repeatPassword && touched.repeatPassword ? (
               <div>{errors.repeatPassword}</div>
             ) : null}
+            {registerError ? <div>{registerError.response.data}</div> : null}
             {isSubmitting ? (
               <Loading />
             ) : (

@@ -16,7 +16,7 @@ export const AuthContextProvider = ({ children }) => {
 
   useQuery('user data', () => UserService.fetchUserData(), {
     onSuccess: ({ data }) => {
-      setUserData(data.user);
+      setUserData(data);
     },
     onError: (error) => {
       console.log('Fetching Data error', error.message);

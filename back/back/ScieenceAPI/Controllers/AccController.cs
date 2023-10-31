@@ -23,12 +23,6 @@ namespace ScieenceAPI.Controllers
             _accountServices = accountServices;
             _configuration = configuration;
         }
-        [Route("getById/{id}")]
-        [HttpGet]
-        public async Task<ActionResult<Account>> GetAccount(string id)
-        {
-            return Ok(await _accountServices.GetAccountById(id));
-        }
 
         [Route("getByUsername")]
         [HttpGet]
@@ -45,15 +39,8 @@ namespace ScieenceAPI.Controllers
             {
                 return BadRequest("User not found");
             }
-            return Ok(user);
-        }
-
-        [Route("create")]
-        [HttpPost]
-        public async Task<ActionResult> AddAccount(Account account)
-        {
-            await _accountServices.AddAccount(account);
-            return Ok();
+            var result = CreateUserResponse(user);
+            return Ok(result);
         }
 
         [Route("deleteById/{id}")]
@@ -73,7 +60,7 @@ namespace ScieenceAPI.Controllers
         }
 
         [Route("checkCredentials")]
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult> CheckCredentials([FromBody] UserDto request)
         {
             var user = await _accountServices.GetAccountByUsername(request.username);
@@ -91,6 +78,24 @@ namespace ScieenceAPI.Controllers
             return Ok();
         }
 
+        [Route("changePassword")]
+        [HttpPatch]
+        public async Task<ActionResult> ChangePassword([FromBody] UserDto request)
+        {
+            var user = await _accountServices.GetAccountByUsername(request.username);
+
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
+
+            user.PasswordHash = newPasswordHash;
+            await _accountServices.UpdateAccount(user);
+
+            return Ok();
+        }
 
         [AllowAnonymous]
         [Route("register")]
@@ -109,8 +114,8 @@ namespace ScieenceAPI.Controllers
             string token = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
             SetResponseCookies(refreshToken, user);
-
-            return Ok(new { token, user });
+            var result = CreateUserResponse(user);
+            return Ok(new { token, result });
         }
 
         [AllowAnonymous]
@@ -133,8 +138,8 @@ namespace ScieenceAPI.Controllers
             string token = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
             SetResponseCookies(refreshToken, user);
-
-            return Ok(new { token, user });
+            var result = CreateUserResponse(user);
+            return Ok(new { token, result });
         }
         [AllowAnonymous]
         [Route("logout")]
@@ -190,7 +195,8 @@ namespace ScieenceAPI.Controllers
             string token = GenerateAccessToken(user);
             var newRefreshToken = GenerateRefreshToken();
             SetResponseCookies(newRefreshToken, user);
-            return Ok(new { token, user });
+            var result = CreateUserResponse(user);
+            return Ok(new { token, result });
         }
 
         private void SetResponseCookies(RefreshToken newRefreshToken, Account account)
@@ -241,6 +247,20 @@ namespace ScieenceAPI.Controllers
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        private UserResponse CreateUserResponse(Account account)
+        {
+            var response = new UserResponse {
+                Id = account.Id,
+                Username = account.Username,
+                Favourites = account.Favourites,
+                RefreshToken = account.RefreshToken,
+                TokenCreated = account.TokenCreated,
+                TokenExpires = account.TokenExpires,
+            
+            };
+            return response;
         }
     }
 }

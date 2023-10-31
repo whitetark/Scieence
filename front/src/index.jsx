@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import App from './App';
 import { AuthContextProvider } from './app/store/auth-context';
 import './index.css';
-import App from './App';
 
 const queryClient = new QueryClient({
   defaultOptions: {

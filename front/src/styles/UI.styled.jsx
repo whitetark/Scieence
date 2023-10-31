@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
-import * as variables from './Variables';
-import { ModalMain } from './Modal.styled';
 import { Filter } from './Filter.styled';
+import { ModalMain } from './Modal.styled';
+import * as variables from './Variables';
 
 export const Main = styled.main`
   flex: 1 1 auto;

@@ -1,21 +1,21 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import {
-  faUser,
+  faArrowLeft,
+  faArrowRight,
   faHeart,
   faMagnifyingGlass,
+  faUser,
   faXmark,
-  faArrowRight,
-  faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import RootLayout from './pages/Root';
 import ErrorPage from './pages/Error';
-import HomePage from './pages/Home';
 import FavoritePage from './pages/Favorite';
-import SearchPage from './pages/Search';
+import HomePage from './pages/Home';
 import NotFound from './pages/NotFound';
+import RootLayout from './pages/Root';
+import SearchPage from './pages/Search';
 library.add(faUser, faHeart, faMagnifyingGlass, faXmark, faHeartRegular, faArrowLeft, faArrowRight);
 
 function App() {
