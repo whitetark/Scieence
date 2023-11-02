@@ -3,16 +3,13 @@
 3. Initial Load in Searchpage shouldn't create a search query
 4. Don't forget about ErrorPage
 5. Modul Routing
-6. Two requests instead of one (Because Of Strict Mode)
+6. Think about LoadingBar component
 
 Plan:
 Auth-Context Arc
 
-1. Create a modal where user can change his password and log out
-2. Favorite user articles are showed in Favorites pages
-3. Set a correct error flow. Initial load errors are not showed, Error which was created by user are shown on error page or in login-register modals.
-4. Initial update user request needs fixes
-5. React Queries instead of useeffects
+1. Favorite user articles are showed in Favorites pages
+2. Set a correct error flow. Initial load errors are not showed, Error which was created by user are shown on error page.
 
 Search Articles Arc
 inc

@@ -11,6 +11,12 @@ export const Main = styled.main`
   justify-content: center;
 `;
 
+export const Error = styled.div`
+  color: red;
+  font-size: 1.4rem;
+  font-weight: 500;
+`;
+
 export const Button = styled.button`
   background-color: ${variables.BLUE_COLOR};
   color: ${variables.WHITE_COLOR};
@@ -74,6 +80,7 @@ export const Overlay = styled.div`
   background-color: ${(props) => props.color};
   opacity: 0.75;
 `;
+
 export const Pagination = styled.div`
   margin-left: auto;
   display: flex;
@@ -89,28 +96,6 @@ export const Pagination = styled.div`
     &:disabled {
       color: ${variables.TEXT_COLOR};
       cursor: default;
-    }
-  }
-`;
-
-export const Loading = styled.div``;
-
-export const LoadingSpinner = styled.div`
-  .loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 10px solid #f3f3f3; /* Light grey */
-    border-top: 10px solid #383636; /* Black */
-    border-radius: 50%;
-    animation: spinner 1.5s linear infinite;
-  }
-
-  @keyframes spinner {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
     }
   }
 `;

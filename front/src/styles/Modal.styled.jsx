@@ -78,7 +78,6 @@ export const ModalMain = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
     input {
       border: 1px solid ${variables.GRAY_COLOR};
       border-radius: 10px;
@@ -93,9 +92,19 @@ export const ModalMain = styled.div`
         width: 100%;
       }
 
-      &.input-error {
+      &.error {
         border-color: red;
+        border-width: 1.5px;
       }
+
+      &:not(:first-child) {
+        margin-top: 1rem;
+      }
+    }
+    div {
+      align-self: flex-start;
+      padding-left: 1rem;
+      padding-top: 0.5rem;
     }
   }
 `;

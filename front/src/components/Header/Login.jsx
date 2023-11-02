@@ -1,10 +1,11 @@
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
+import { ProgressBar } from 'react-loader-spinner';
 import { useLogin } from '../../hooks/use-auth';
+import { Error } from '../../styles/UI.styled';
 import Button from '../UI/Button';
-import Loading from '../UI/Loading';
 import AuthWrapper from './AuthWrapper';
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
@@ -39,13 +40,23 @@ const Login = (props) => {
         }}>
         {({ errors, touched, isValid, isSubmitting }) => (
           <Form>
-            <Field type='text' name='login' placeholder='Login' />
-            {errors.login && touched.login ? <div>{errors.login}</div> : null}
-            <Field type='password' placeholder='Password' name='password' />
-            {errors.password && touched.password ? <div>{errors.password}</div> : null}
+            <Field
+              type='text'
+              name='login'
+              placeholder='Login'
+              className={errors.login && touched.login ? 'error' : undefined}
+            />
+            <ErrorMessage name='login' component={Error} />
+            <Field
+              type='password'
+              placeholder='Password'
+              name='password'
+              className={errors.password && touched.password ? 'error' : undefined}
+            />
+            <ErrorMessage name='password' component={Error} />
             {loginError ? <div>{loginError.response.data}</div> : null}
             {isSubmitting ? (
-              <Loading />
+              <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
             ) : (
               <Button type='submit' disabled={!isValid}>
                 Login

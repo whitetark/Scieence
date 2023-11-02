@@ -1,9 +1,10 @@
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react';
+import { ProgressBar } from 'react-loader-spinner';
 import * as Yup from 'yup';
 import { useChangePassword } from '../../hooks/use-auth';
+import { Error } from '../../styles/UI.styled';
 import Button from '../UI/Button';
-import Loading from '../UI/Loading';
 
 const ChangePassword = ({ setIsSuccess, username }) => {
   const { mutateAsync: changePassword, error: changingPasswordError } = useChangePassword();
@@ -36,15 +37,23 @@ const ChangePassword = ({ setIsSuccess, username }) => {
       }}>
       {({ errors, touched, isValid, isSubmitting }) => (
         <Form>
-          <Field type='password' name='newPassword' placeholder='New Password' />
-          {errors.newPassword && touched.newPassword ? <div>{errors.newPassword}</div> : null}
-          <Field type='password' name='newRepeatPassword' placeholder='Repeat New Password' />
-          {errors.newRepeatPassword && touched.newRepeatPassword ? (
-            <div>{errors.newRepeatPassword}</div>
-          ) : null}
+          <Field
+            type='password'
+            name='newPassword'
+            placeholder='New Password'
+            className={errors.newPassword && touched.newPassword ? 'error' : undefined}
+          />
+          <ErrorMessage name='newPassword' component={Error} />
+          <Field
+            type='password'
+            name='newRepeatPassword'
+            placeholder='Repeat New Password'
+            className={errors.newRepeatPassword && touched.newRepeatPassword ? 'error' : undefined}
+          />
+          <ErrorMessage name='newRepeatPassword' component={Error} />
           {changingPasswordError ? changingPasswordError.response.data : null}
           {isSubmitting ? (
-            <Loading />
+            <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
           ) : (
             <Button type='submit' disabled={!isValid}>
               Change Password

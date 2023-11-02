@@ -21,7 +21,7 @@ const ChangePasswordPreview = ({ onClick, onToggle }) => {
   return (
     <Styled.ModalWrapper onClick={onClick}>
       <Styled.ModalHeader>
-        <h2>Change Password Form</h2>
+        <h2>Change Password</h2>
       </Styled.ModalHeader>
       <Styled.ModalMain>
         {isSuccess ? isSuccessContent : isNotSuccessContent}

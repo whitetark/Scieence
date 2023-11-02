@@ -1,9 +1,10 @@
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react';
+import { ProgressBar } from 'react-loader-spinner';
 import * as Yup from 'yup';
 import { useConfirmationData } from '../../hooks/use-auth';
+import { Error } from '../../styles/UI.styled';
 import Button from '../UI/Button';
-import Loading from '../UI/Loading';
 
 const ConfirmPassword = ({ setIsConfirmed, username }) => {
   const { mutateAsync: checkCredentials, error: confirmationError } = useConfirmationData();
@@ -30,11 +31,16 @@ const ConfirmPassword = ({ setIsConfirmed, username }) => {
       }}>
       {({ errors, touched, isValid, isSubmitting }) => (
         <Form>
-          <Field type='password' name='password' placeholder='Current Password' />
-          {errors.password && touched.password ? <div>{errors.password}</div> : null}
+          <Field
+            type='password'
+            name='password'
+            placeholder='Current Password'
+            className={errors.password && touched.password ? 'error' : undefined}
+          />
+          <ErrorMessage name='password' component={Error} />
           {confirmationError ? confirmationError.response.data : null}
           {isSubmitting ? (
-            <Loading />
+            <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
           ) : (
             <Button type='submit' disabled={!isValid}>
               Check
