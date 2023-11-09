@@ -13,6 +13,7 @@ export const AuthContextProvider = ({ children }) => {
     return null;
   });
   const [userData, setUserData] = useState([]);
+  const [serverIsOn, setServerIsOn] = useState(true);
 
   useQuery('user data', () => UserService.fetchUserData(), {
     onSuccess: ({ data }) => {
@@ -24,6 +25,14 @@ export const AuthContextProvider = ({ children }) => {
     },
   });
 
+  useQuery('get status', () => UserService.getStatus(), {
+    onSuccess: () => {
+      setServerIsOn(true);
+    },
+    onError: () => {
+      setServerIsOn(false);
+    },
+  });
   // useEffect(() => {
   //   const updateData = async (payload) => {
   //     await api
@@ -38,7 +47,8 @@ export const AuthContextProvider = ({ children }) => {
   // }, [userData]);
 
   return (
-    <AuthContext.Provider value={{ userToken, userData, setUserData, setUserToken }}>
+    <AuthContext.Provider
+      value={{ userToken, userData, serverIsOn, setUserData, setUserToken, setServerIsOn }}>
       {children}
     </AuthContext.Provider>
   );

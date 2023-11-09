@@ -1,5 +1,5 @@
 1. Make a typing animation for a Hero component
-2. Animation for Publication load
+2. Skeleton Animation for Publication load
 3. Initial Load in Searchpage shouldn't create a search query
 4. Don't forget about ErrorPage
 5. Modul Routing

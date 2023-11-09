@@ -28,30 +28,32 @@ api.interceptors.response.use(
       localStorage.setItem('token', JSON.stringify(apiResponse.data.token));
       error.config.headers['Authorization'] = `Bearer ${apiResponse.data.token}`;
       return axios.request(error.config);
-    } else {
-      return Promise.reject(error);
     }
+    return Promise.reject(error);
   },
 );
 
 export const UserService = {
   async login(payload) {
-    return api.post('/Acc/login', payload);
+    return api.post('/Auth/login', payload);
   },
   async register(payload) {
-    return api.post('/Acc/register', payload);
+    return api.post('/Auth/register', payload);
   },
   async logout() {
-    return api.post('/Acc/logout');
+    return api.post('/Auth/logout');
   },
   async fetchUserData() {
     return api.get('/Acc/getByUsername');
   },
   async checkCredentials(payload) {
-    return api.post('/Acc/checkCredentials', payload);
+    return api.post('/Auth/checkCredentials', payload);
   },
   async changePassword(payload) {
     return api.patch('/Acc/changePassword', payload);
+  },
+  async getStatus() {
+    return api.get('/Auth/getStatus');
   },
 };
 
