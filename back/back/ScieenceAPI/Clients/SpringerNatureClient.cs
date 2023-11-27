@@ -8,8 +8,8 @@ namespace ScieenceAPI.Clients
     public class SpringerNatureClient
     {
         private HttpClient _client;
-        private static string _baseUrl;
-        private static string _apiKey;
+        private static string? _baseUrl;
+        private static string? _apiKey;
 
         public SpringerNatureClient()
         {
@@ -20,11 +20,11 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationsByKeyword(string keyword, double numOf)
+        public async Task<Response> GetPublicationsByKeyword(string keyword)
         {
             try
             {
-                var response = await ApiDeserialzer(keyword, numOf);
+                var response = await ApiDeserialzer(keyword);
                 return ResponseBeautifier(response);
             } 
             catch
@@ -32,11 +32,11 @@ namespace ScieenceAPI.Clients
                 throw new Exception();
             }
         }
-        public async Task<Response> GetPublicationsByAuthor(string author, double numOf)
+        public async Task<Response> GetPublicationsByAuthor(string author)
         {
             try
             {
-                var response = await ApiDeserialzer("name:" + author, numOf);
+                var response = await ApiDeserialzer("name:" + author);
                 return ResponseBeautifier(response);
             }
             catch
@@ -44,11 +44,11 @@ namespace ScieenceAPI.Clients
                 throw new Exception();
             }
         }
-        public async Task<Response> GetPublicationsBySubject(string subject, double numOf)
+        public async Task<Response> GetPublicationsBySubject(string subject)
         {
             try
             {
-                var response = await ApiDeserialzer("subject:" + subject, numOf);
+                var response = await ApiDeserialzer("subject:" + subject);
                 return ResponseBeautifier(response);
             }
             catch
@@ -56,11 +56,11 @@ namespace ScieenceAPI.Clients
                 throw new Exception();
             }
         }
-        public async Task<Response> GetPublicationsByLanguage(string language, double numOf)
+        public async Task<Response> GetPublicationsByLanguage(string language)
         {
             try
             {
-                var response = await ApiDeserialzer("language:"+language, numOf);
+                var response = await ApiDeserialzer("language:"+language);
                 return ResponseBeautifier(response);
             }
             catch
@@ -69,28 +69,19 @@ namespace ScieenceAPI.Clients
             }
         }
 
-        public async Task<TotalSN> ApiDeserialzer(string query, double numOf)
+        public async Task<SpringerNaturePub> ApiDeserialzer(string query)
         {
             var s = 1;
-            string fullContent = "";
-            for (int i = 0; i < Math.Ceiling(numOf / 50); i++)
-            {
-                var response = await _client.GetAsync($"/metadata/json?q={query}&s={s}&p=50&api_key={_apiKey}");
-                response.EnsureSuccessStatusCode();
-                var content = response.Content.ReadAsStringAsync().Result;
+            var response = await _client.GetAsync($"/metadata/json?q={query}&s={s}&p=20&api_key={_apiKey}");
+            response.EnsureSuccessStatusCode();
+            var content = response.Content.ReadAsStringAsync().Result;
 
-                fullContent = fullContent + "," + content;
-
-                s += 50;
-            }
-            fullContent = "{\"totalContent\":[" + fullContent.Remove(0, 1) + "]}";
-            return JsonConvert.DeserializeObject<TotalSN>(fullContent);
+            return JsonConvert.DeserializeObject<SpringerNaturePub>(content);
         }
-        public Response ResponseBeautifier(TotalSN total)
+        public Response ResponseBeautifier(SpringerNaturePub response)
         {
             var result = new Response();
-            foreach (var response in total.totalContent)
-            {
+
                 foreach (var pub in response.records)
                 {
                     var newPub = new Publication
@@ -108,7 +99,6 @@ namespace ScieenceAPI.Clients
                     };
                     result.Records.Add(newPub);
                 }
-            }
             return result;
         }
     }

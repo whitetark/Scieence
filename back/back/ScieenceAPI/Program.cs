@@ -55,7 +55,6 @@ builder.Services.AddSingleton<SpringerNatureClient>();
 builder.Services.AddSingleton<SemanticScholarClient>();
 
 builder.Services.AddSingleton<DbClient>();
-builder.Services.AddTransient<PubServices>();
 builder.Services.AddTransient<AccountServices>();
 builder.Services.Configure<DbConfig>(builder.Configuration);
 builder.Services.AddCors(options =>

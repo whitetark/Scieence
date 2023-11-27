@@ -10,10 +10,6 @@ namespace ScieenceAPI.Models.ForClients
             records = new List<Records>();
         }
     }
-    public class TotalSN
-    {
-        public List<SpringerNaturePub> totalContent { get; set; }
-    }
     public class Records
     {
         public string contentType { get; set; }

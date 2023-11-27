@@ -18,29 +18,21 @@ namespace ScieenceAPI.Clients
             _client.BaseAddress = new Uri(_baseUrl);
         }
 
-        public async Task<Response> GetPublicationsByKeyword(string q, double numOf)
+        public async Task<Response> GetPublicationsByKeyword(string q)
         {
             try
             {
                 var s = 1;
-                string fullContent = "";
-                for (int i = 0; i < Math.Ceiling(numOf / 100); i++)
-                {
-                    var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset={s}&limit=100&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
-                    response.EnsureSuccessStatusCode();
-                    var content = response.Content.ReadAsStringAsync().Result;
 
-                    fullContent = fullContent + "," + content.Remove(content.Length - 1);
+                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset={s}&limit=20&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
+                response.EnsureSuccessStatusCode();
+                var content = response.Content.ReadAsStringAsync().Result;
 
-                    s += 100;
-                }
-                fullContent = "{\"totalContent\":[" + fullContent.Remove(0,1) + "]}\n";
-                TotalSSK resultOfDes = JsonConvert.DeserializeObject<TotalSSK>(fullContent);
+                var resultOfDes = JsonConvert.DeserializeObject<SemanticScholarByKeyword>(content);
 
                 var result = new Response();
-                foreach (SemanticScholarByKeyword response in resultOfDes.totalContent)
-                {
-                    foreach (var pub in response.data)
+
+                    foreach (var pub in resultOfDes.data)
                     {
                         var newPub = new Publication
                         {
@@ -61,7 +53,6 @@ namespace ScieenceAPI.Clients
                         newPub.PublicationType = pub.publicationTypes[0];
                         result.Records.Add(newPub);
                     }
-                }
                 return result;
             }
             catch
@@ -70,20 +61,20 @@ namespace ScieenceAPI.Clients
             }
         }
 
-        public async Task<Response> GetPublicationsByLanguage(string language, double numOf)
+        public async Task<Response> GetPublicationsByLanguage(string language)
         {
             var result = new Response();
             if (language == "en")
             {
                 Random rnd = new Random();
                 char randomChar = (char)rnd.Next('a', 'z');
-                var publications = await GetPublicationsByKeyword(randomChar.ToString(), numOf);
+                var publications = await GetPublicationsByKeyword(randomChar.ToString());
                 result.Records.AddRange(publications.Records);
             }
             return result;
         }
 
-        public async Task<Response> GetPublicationsByAuthor(string author, double numOf)
+        public async Task<Response> GetPublicationsByAuthor(string author)
         {
             var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit={numOf}");
             response.EnsureSuccessStatusCode();
@@ -92,16 +83,10 @@ namespace ScieenceAPI.Clients
             SemanticScholarByAuthor resultOfDes = JsonConvert.DeserializeObject<SemanticScholarByAuthor>(content);
 
             var result = new Response();
-            int num = 0;
             foreach (var data in resultOfDes.data)
             {
                 foreach (var pub in data.papers)
                 {
-                    if (num > numOf)
-                    {
-                        return result;
-                    }
-                    num++;
 
                     var newPub = new Publication
                     {
