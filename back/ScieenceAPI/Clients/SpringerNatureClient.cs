@@ -6,7 +6,7 @@ namespace ScieenceAPI.Clients
 {
     public class SpringerNatureClient
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
         private static string? _baseUrl;
         private static string? _apiKey;
 
@@ -15,8 +15,10 @@ namespace ScieenceAPI.Clients
             _baseUrl = Config.SpringerNature.baseUrl;
             _apiKey = Config.SpringerNature.apiKey;
 
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri(_baseUrl);
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri(_baseUrl)
+            };
         }
 
         public async Task<Response> GetPublicationsByKeyword(string keyword)

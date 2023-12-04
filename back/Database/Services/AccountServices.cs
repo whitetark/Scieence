@@ -11,24 +11,19 @@ using System.Threading.Tasks;
 
 namespace Database.Services
 {
-    public class AccountServices
+    public class AccountServices(DbClient dbClient)
     {
-        private readonly IMongoCollection<Account> _accounts;
-        private readonly string key = "ScieenceSecurityKeyTopSecret";
+        private readonly IMongoCollection<Account> _accounts = dbClient.GetAccountCollection();
 
-        public AccountServices(DbClient dbClient)
-        {
-            _accounts = dbClient.GetAccountCollection();
-        }
         public async Task<List<Account>> GetAccs()
         {
             try
             {
                 return await _accounts.Find(account => true).ToListAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
         public async Task<Account> GetAccountById(string id)
@@ -37,9 +32,9 @@ namespace Database.Services
             {
                 return await _accounts.Find(account => account.Id == id).FirstOrDefaultAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
         public async Task<Account> GetAccountByUsername(string username)
@@ -48,9 +43,9 @@ namespace Database.Services
             {
                 return await _accounts.Find(account => account.Username == username).FirstOrDefaultAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
         public async Task AddAccount(Account account)
@@ -59,9 +54,9 @@ namespace Database.Services
             {
                 await _accounts.InsertOneAsync(account);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
         public async Task<DeleteResult> DeleteAccount(string id)
@@ -70,9 +65,9 @@ namespace Database.Services
             {
                 return await _accounts.DeleteOneAsync(account => account.Id == id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
         public async Task<ReplaceOneResult> UpdateAccount(Account newAccount)
@@ -82,9 +77,9 @@ namespace Database.Services
                 //await GetAccount(newAccount.Id);
                 return await _accounts.ReplaceOneAsync(b => b.Id == newAccount.Id, newAccount);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }

@@ -11,7 +11,6 @@ namespace Database
 {
     public class DbClient
     {
-        private readonly IMongoCollection<DbPublication> _publications;
         private readonly IMongoCollection<Account> _accounts;
         public DbClient(IOptions<DbConfig> publicationsDbConfig)
         {

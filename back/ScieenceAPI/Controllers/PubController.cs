@@ -12,25 +12,15 @@ namespace ScieenceAPI.Controllers
     [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
-    public class PubController : ControllerBase
+    public class PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, AccountServices accountServices) : ControllerBase
     {
-        private readonly SpringerNatureClient _springerNatureClient;
-        private readonly SemanticScholarClient _semanticScholarClient;
-        private readonly AccountServices _accountServices;
-
-        public PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, AccountServices accountServices)
-        {
-            _semanticScholarClient = semanticScholarClient;
-            _springerNatureClient = springerNatureClient;
-            _accountServices = accountServices;
-        }
 
         //ApiPub
         [HttpGet("aggregation/getByKeyword/{q}")]
         public async Task<Response> GetPublicationsByKeyword(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationsByKeyword(q);
-            var sspublications = await _semanticScholarClient.GetPublicationsByKeyword(q);
+            var snpublications = await springerNatureClient.GetPublicationsByKeyword(q);
+            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(q);
             //var dbpublications = await _pubServices.GetPublicationsByKeyword(q);
 
             var result = new Response();
@@ -45,8 +35,8 @@ namespace ScieenceAPI.Controllers
         [HttpGet("aggregation/getByAuthor/{q}")]
         public async Task<Response> GetPublicationsByAuthor(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationsByAuthor(q);
-            var sspublications = await _semanticScholarClient.GetPublicationsByAuthor(q);
+            var snpublications = await springerNatureClient.GetPublicationsByAuthor(q);
+            var sspublications = await semanticScholarClient.GetPublicationsByAuthor(q);
             //var dbpublications = await _pubServices.GetPublicationsByAuthor(q);
 
             var result = new Response();
@@ -61,8 +51,8 @@ namespace ScieenceAPI.Controllers
         [HttpGet("aggregation/getBySubject{q}")]
         public async Task<Response> GetPublicationsBySubject(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationsBySubject(q);
-            var sspublications = await _semanticScholarClient.GetPublicationsByKeyword(q);
+            var snpublications = await springerNatureClient.GetPublicationsBySubject(q);
+            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(q);
             //var dbpublications = await _pubServices.GetPublicationsBySubject(q);
 
             var result = new Response();
@@ -76,8 +66,8 @@ namespace ScieenceAPI.Controllers
         [HttpGet("aggregation/getByLanguage/{q}")]
         public async Task<Response> GetPublicationsByLanguage(string q)
         {
-            var snpublications = await _springerNatureClient.GetPublicationsByLanguage(q);
-            var sspublications = await _semanticScholarClient.GetPublicationsByLanguage(q);
+            var snpublications = await springerNatureClient.GetPublicationsByLanguage(q);
+            var sspublications = await semanticScholarClient.GetPublicationsByLanguage(q);
             //var dbpublications = await _pubServices.GetPublicationsByLanguage(q);
 
             var result = new Response();

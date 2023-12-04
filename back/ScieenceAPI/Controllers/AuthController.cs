@@ -13,16 +13,8 @@ namespace ScieenceAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase 
+    public class AuthController(AccountServices accountServices, IConfiguration configuration) : ControllerBase 
     {
-        private readonly AccountServices _accountServices;
-        private readonly IConfiguration _configuration;
-        public AuthController(AccountServices accountServices, IConfiguration configuration)
-        {
-            _accountServices = accountServices;
-            _configuration = configuration;
-        }
-
         [Route("register")]
         [HttpPost]
         public async Task<ActionResult<Account>> Register([FromBody] UserDto request)
@@ -34,7 +26,7 @@ namespace ScieenceAPI.Controllers
                 PasswordHash = passwordHash,
                 Favourites = new List<DbPublication>(),
             };
-            await _accountServices.AddAccount(user);
+            await accountServices.AddAccount(user);
 
             string token = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
@@ -47,7 +39,7 @@ namespace ScieenceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Login([FromBody] UserDto request)
         {
-            var user = await _accountServices.GetAccountByUsername(request.username);
+            var user = await accountServices.GetAccountByUsername(request.username);
 
             if (user == null)
             {
@@ -75,12 +67,12 @@ namespace ScieenceAPI.Controllers
             {
                 return BadRequest("User not found");
             }
-            var user = await _accountServices.GetAccountByUsername(username);
+            var user = await accountServices.GetAccountByUsername(username);
 
             user.RefreshToken = "";
             user.TokenExpires = DateTime.UtcNow;
             user.TokenCreated = DateTime.UtcNow;
-            _ = _accountServices.UpdateAccount(user);
+            _ = accountServices.UpdateAccount(user);
 
             Response.Cookies.Delete("username");
             Response.Cookies.Delete("refresh_token");
@@ -99,7 +91,7 @@ namespace ScieenceAPI.Controllers
                 return BadRequest("Refresh Token not found");
             }
 
-            var user = await _accountServices.GetAccountByUsername(username);
+            var user = await accountServices.GetAccountByUsername(username);
 
             if (user == null)
             {
@@ -128,7 +120,7 @@ namespace ScieenceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CheckCredentials([FromBody] UserDto request)
         {
-            var user = await _accountServices.GetAccountByUsername(request.username);
+            var user = await accountServices.GetAccountByUsername(request.username);
 
             if (user == null)
             {
@@ -165,10 +157,10 @@ namespace ScieenceAPI.Controllers
             account.RefreshToken = newRefreshToken.Token;
             account.TokenCreated = newRefreshToken.Created;
             account.TokenExpires = newRefreshToken.Expires;
-            _ = _accountServices.UpdateAccount(account);
+            _ = accountServices.UpdateAccount(account);
         }
 
-        private RefreshToken GenerateRefreshToken()
+        private static RefreshToken GenerateRefreshToken()
         {
             var refreshToken = new RefreshToken
             {
@@ -181,13 +173,13 @@ namespace ScieenceAPI.Controllers
 
         private string GenerateAccessToken(Account account)
         {
-            List<Claim> claims = new List<Claim>
-            {
+            List<Claim> claims =
+            [
                 new Claim(ClaimTypes.Name, account.Username),
                 new Claim(ClaimTypes.Role, "User")
-            };
+            ];
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings:Key").Value!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings:Key").Value!));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
@@ -200,7 +192,7 @@ namespace ScieenceAPI.Controllers
             return jwt;
         }
 
-        private UserResponse CreateUserResponse(Account account)
+        private static UserResponse CreateUserResponse(Account account)
         {
             var response = new UserResponse
             {

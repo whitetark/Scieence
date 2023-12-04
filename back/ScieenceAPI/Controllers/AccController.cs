@@ -14,16 +14,8 @@ namespace ScieenceAPI.Controllers
     [Authorize(Roles ="User, Admin")]
     [Route("[controller]")]
     [ApiController]
-    public class AccController : ControllerBase
+    public class AccController(AccountServices accountServices, IConfiguration configuration) : ControllerBase
     {
-        private readonly AccountServices _accountServices;
-        private readonly IConfiguration _configuration;
-        public AccController(AccountServices accountServices, IConfiguration configuration)
-        {
-            _accountServices = accountServices;
-            _configuration = configuration;
-        }
-
         [Route("getByUsername")]
         [HttpGet]
         public async Task<ActionResult<Account>> GetAccount()
@@ -34,7 +26,7 @@ namespace ScieenceAPI.Controllers
                 return BadRequest("No username cookie");
             }
 
-            var user = await _accountServices.GetAccountByUsername(username);
+            var user = await accountServices.GetAccountByUsername(username);
             if(user == null)
             {
                 return BadRequest("User not found");
@@ -47,7 +39,7 @@ namespace ScieenceAPI.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteAccount(string id)
         {
-            await _accountServices.DeleteAccount(id);
+            await accountServices.DeleteAccount(id);
             return Ok();
         }
 
@@ -55,7 +47,7 @@ namespace ScieenceAPI.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateAccount(Account account)
         {
-            await _accountServices.UpdateAccount(account);
+            await accountServices.UpdateAccount(account);
             return Ok();
         }
 
@@ -64,7 +56,7 @@ namespace ScieenceAPI.Controllers
         [HttpPatch]
         public async Task<ActionResult> ChangePassword([FromBody] UserDto request)
         {
-            var user = await _accountServices.GetAccountByUsername(request.username);
+            var user = await accountServices.GetAccountByUsername(request.username);
 
             if (user == null)
             {
@@ -74,12 +66,12 @@ namespace ScieenceAPI.Controllers
             string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
 
             user.PasswordHash = newPasswordHash;
-            await _accountServices.UpdateAccount(user);
+            await accountServices.UpdateAccount(user);
 
             return Ok();
         }
 
-        private UserResponse CreateUserResponse(Account account)
+        private static UserResponse CreateUserResponse(Account account)
         {
             var response = new UserResponse
             {

@@ -8,15 +8,17 @@ namespace ScieenceAPI.Clients
 
     public class SemanticScholarClient
     {
-        private HttpClient _client;
-        private static string _baseUrl;
+        private readonly HttpClient _client;
+        private static string? _baseUrl;
 
         public SemanticScholarClient()
         {
             _baseUrl = Config.SemanticScholar.baseUrl;
 
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri(_baseUrl);
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri(_baseUrl)
+            };
         }
 
         public async Task<Response> GetPublicationsByKeyword(string q)
@@ -47,10 +49,7 @@ namespace ScieenceAPI.Clients
                         Doi = pub.externalIds.DOI,
                         Subjects = pub.fieldsOfStudy
                     };
-                    if (pub.publicationTypes == null)
-                    {
-                        pub.publicationTypes = new List<string>() { "Article" };
-                    }
+                    pub.publicationTypes ??= ["Article"];
                     newPub.PublicationType = pub.publicationTypes[0];
                     result.Records.Add(newPub);
                 }
@@ -67,7 +66,7 @@ namespace ScieenceAPI.Clients
             var result = new Response();
             if (language == "en")
             {
-                Random rnd = new Random();
+                Random rnd = new();
                 char randomChar = (char)rnd.Next('a', 'z');
                 var publications = await GetPublicationsByKeyword(randomChar.ToString());
                 result.Records.AddRange(publications.Records);
@@ -101,10 +100,7 @@ namespace ScieenceAPI.Clients
                         Doi = pub.externalIds.DOI,
                         Subjects = pub.fieldsOfStudy
                     };
-                    if (pub.publicationTypes == null)
-                    {
-                        pub.publicationTypes = new List<string>() { "Article" };
-                    }
+                    pub.publicationTypes ??= ["Article"];
                     newPub.PublicationType = pub.publicationTypes[0];
                     result.Records.Add(newPub);
                 }
