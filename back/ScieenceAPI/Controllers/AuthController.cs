@@ -32,7 +32,7 @@ namespace ScieenceAPI.Controllers
             {
                 Username = request.username,
                 PasswordHash = passwordHash,
-                Favourites = new Response(),
+                Favourites = new List<DbPublication>(),
             };
             await _accountServices.AddAccount(user);
 

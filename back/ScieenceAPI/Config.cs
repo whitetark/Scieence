@@ -9,7 +9,7 @@
 
             //https://dev.springernature.com/example-metadata-response
         }
- 
+
         public class SemanticScholar
         {
             public static string baseUrl = "https://api.semanticscholar.org";

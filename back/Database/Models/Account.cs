@@ -14,7 +14,7 @@ namespace Database.Models
         public string Id { get; set; }
         public string Username { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-        public Response Favourites { get; set; } = new Response();
+        public List<DbPublication> Favourites { get; set; }
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime TokenCreated { get; set; }
         public DateTime TokenExpires { get; set; }

@@ -22,6 +22,7 @@
         "ACCOUNTS_COLLECTION_NAME": "Accounts"
       }
     },
+
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

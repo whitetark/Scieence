@@ -5,6 +5,7 @@ using ScieenceAPI.Models.ForClients;
 
 namespace ScieenceAPI.Clients
 {
+
     public class SemanticScholarClient
     {
         private HttpClient _client;
@@ -32,27 +33,27 @@ namespace ScieenceAPI.Clients
 
                 var result = new Response();
 
-                    foreach (var pub in resultOfDes.data)
+                foreach (var pub in resultOfDes.data)
+                {
+                    var newPub = new Publication
                     {
-                        var newPub = new Publication
-                        {
-                            Language = "en",
-                            Url = pub.url,
-                            Title = pub.title,
-                            Authors = pub.authors.ConvertAll(x => x.name),
-                            PublicationDate = pub.publicationDate,
-                            PublicationYear = pub.year,
-                            Description = pub.Abstract,
-                            Doi = pub.externalIds.DOI,
-                            Subjects = pub.fieldsOfStudy
-                        };
-                        if (pub.publicationTypes == null)
-                        {
-                            pub.publicationTypes = new List<string>() { "Article" };
-                        }
-                        newPub.PublicationType = pub.publicationTypes[0];
-                        result.Records.Add(newPub);
+                        Language = "en",
+                        Url = pub.url,
+                        Title = pub.title,
+                        Authors = pub.authors.ConvertAll(x => x.name),
+                        PublicationDate = pub.publicationDate,
+                        PublicationYear = pub.year,
+                        Description = pub.Abstract,
+                        Doi = pub.externalIds.DOI,
+                        Subjects = pub.fieldsOfStudy
+                    };
+                    if (pub.publicationTypes == null)
+                    {
+                        pub.publicationTypes = new List<string>() { "Article" };
                     }
+                    newPub.PublicationType = pub.publicationTypes[0];
+                    result.Records.Add(newPub);
+                }
                 return result;
             }
             catch
@@ -76,7 +77,7 @@ namespace ScieenceAPI.Clients
 
         public async Task<Response> GetPublicationsByAuthor(string author)
         {
-            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit={numOf}");
+            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=20");
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync().Result;
 

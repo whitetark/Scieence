@@ -1,3 +1,5 @@
+use master
+
 CREATE DATABASE Publications
 GO
 
@@ -23,8 +25,4 @@ CREATE TABLE ScieenceSchema.Publication
     DOI VARCHAR(256),
 )
 
-CREATE TABLE ScieenceSchema.Authors
-(
-    AuthorsId INT IDENTITY(1,1) PRIMARY KEY,
-
-)
+SELECT * FROM ScieenceSchema.Publication;
