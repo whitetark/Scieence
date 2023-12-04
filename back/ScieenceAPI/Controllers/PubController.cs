@@ -12,7 +12,7 @@ namespace ScieenceAPI.Controllers
     [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
-    public class PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, AccountServices accountServices) : ControllerBase
+    public class PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient) : ControllerBase
     {
 
         //ApiPub

@@ -17,8 +17,8 @@
       "applicationUrl": "http://localhost:7253;http://localhost:5253",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DATABASE_NAME": "ScieenceDB",
-        "PUBLICATIONS_COLLECTION_NAME": "Publications",
+        "PUB_DATABASE_CONNECTION": "Server=localhost; Database=ScieencePubDb; Trusted_Connection=true; TrustServerCertificate=true",
+        "USER_DATABASE_NAME": "ScieenceDB",
         "ACCOUNTS_COLLECTION_NAME": "Accounts"
       }
     },
@@ -29,8 +29,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DATABASE_NAME": "ScieenceDB",
-        "PUB_COLLECTION_NAME": "Publications",
+        "PUB_DATABASE_CONNECTION": "Server=localhost; Database=ScieencePubDb; Trusted_Connection=true; TrustServerCertificate=true",
+        "USER_DATABASE_NAME": "ScieenceDB",
         "ACCOUNTS_COLLECTION_NAME": "Accounts"
       }
     }
