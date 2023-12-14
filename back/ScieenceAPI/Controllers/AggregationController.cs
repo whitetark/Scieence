@@ -12,11 +12,11 @@ namespace ScieenceAPI.Controllers
     [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
-    public class PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, PublicationServices pubServices) : ControllerBase
+    public class AggregationController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient, PublicationServices pubServices) : ControllerBase
     {
 
         //ApiPub
-        [HttpGet("aggregation/getByKeyword/{q}")]
+        [HttpGet("getByKeyword/{q}")]
         public async Task<Response> GetPublicationsByKeyword(string q)
         {
             var snpublications = await springerNatureClient.GetPublicationsByKeyword(q);
@@ -32,7 +32,7 @@ namespace ScieenceAPI.Controllers
             return result;
         }
 
-        [HttpGet("aggregation/getByAuthor/{q}")]
+        [HttpGet("getByAuthor/{q}")]
         public async Task<Response> GetPublicationsByAuthor(string q)
         {
             var snpublications = await springerNatureClient.GetPublicationsByAuthor(q);
@@ -48,7 +48,7 @@ namespace ScieenceAPI.Controllers
             return result;
         }
 
-        [HttpGet("aggregation/getBySubject{q}")]
+        [HttpGet("getBySubject{q}")]
         public async Task<Response> GetPublicationsBySubject(string q)
         {
             var snpublications = await springerNatureClient.GetPublicationsBySubject(q);
@@ -63,7 +63,7 @@ namespace ScieenceAPI.Controllers
 
             return result;
         }
-        [HttpGet("aggregation/getByLanguage/{q}")]
+        [HttpGet("getByLanguage/{q}")]
         public async Task<Response> GetPublicationsByLanguage(string q)
         {
             var snpublications = await springerNatureClient.GetPublicationsByLanguage(q);

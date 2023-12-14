@@ -96,7 +96,8 @@ namespace Database.Services
                 "', '" + publication.DOI + "')";
 
             if(await ExecuteSql(sql)) {  return; }
-        }
 
+            throw new Exception("Failed to Create Publication");
+        }
     }
 }
