@@ -56,6 +56,7 @@ builder.Services.AddSingleton<SemanticScholarClient>();
 
 builder.Services.AddSingleton<DbClient>();
 builder.Services.AddTransient<AccountServices>();
+builder.Services.AddTransient<PublicationServices>();
 builder.Services.Configure<DbConfig>(builder.Configuration);
 builder.Services.AddCors(options =>
 {

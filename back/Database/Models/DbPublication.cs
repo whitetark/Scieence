@@ -9,18 +9,16 @@ namespace Database.Models
 {
     public class DbPublication
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string PublicationId { get; set; }
         public string? Description { get; set; }
-        public List<string>? Authors { get; set; }
+        public string? Authors { get; set; }
+        public string? Subjects { get; set; }
         public string? PublicationDate { get; set; }
         public string? PublicationType { get; set; }
-        public string? Language { get; set; }
         public int? PublicationYear { get; set; }
-        public string? Url { get; set; }
+        public string? Language { get; set; }
+        public string? URL { get; set; }
         public string? Title { get; set; }
-        public string? Doi { get; set; }
-        public List<string>? Subjects { get; set; }
+        public string? DOI { get; set; }
     }
 }

@@ -1,81 +1,39 @@
-using Database;
-using Database.Models;
+﻿using Database.Models;
 using Database.Services;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ScieenceAPI.Clients;
-using ScieenceAPI.Models;
-using System.Data;
 
 namespace ScieenceAPI.Controllers
 {
-    [AllowAnonymous]
-    [ApiController]
-    [Route("[controller]")]
-    public class PubController(SemanticScholarClient semanticScholarClient, SpringerNatureClient springerNatureClient) : ControllerBase
+    public class PubController(PublicationServices pubServices) : ControllerBase
     {
-
-        //ApiPub
-        [HttpGet("aggregation/getByKeyword/{q}")]
-        public async Task<Response> GetPublicationsByKeyword(string q)
+        [HttpGet]
+        public async Task<DbPublication> GetPublication(string id)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByKeyword(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(q);
-            //var dbpublications = await _pubServices.GetPublicationsByKeyword(q);
-
-            var result = new Response();
-
-            result.Records.AddRange(snpublications.Records);
-            //result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
-
-            return result;
+            return await pubServices.GetPublication(id);
         }
-
-        [HttpGet("aggregation/getByAuthor/{q}")]
-        public async Task<Response> GetPublicationsByAuthor(string q)
+        [HttpGet]
+        public async Task<List<DbPublication>> GetPublications()
         {
-            var snpublications = await springerNatureClient.GetPublicationsByAuthor(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByAuthor(q);
-            //var dbpublications = await _pubServices.GetPublicationsByAuthor(q);
-
-            var result = new Response();
-
-            result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
-
-            return result;
+            return await pubServices.GetPublications();
         }
-
-        [HttpGet("aggregation/getBySubject{q}")]
-        public async Task<Response> GetPublicationsBySubject(string q)
+        [HttpDelete]
+        public async Task DeletePublication(string id)
         {
-            var snpublications = await springerNatureClient.GetPublicationsBySubject(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(q);
-            //var dbpublications = await _pubServices.GetPublicationsBySubject(q);
-
-            var result = new Response();
-
-            result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
-
-            return result;
+            await pubServices.DeletePublication(id);
+            return;
         }
-        [HttpGet("aggregation/getByLanguage/{q}")]
-        public async Task<Response> GetPublicationsByLanguage(string q)
+        [HttpPut]
+        public async Task UpdatePublication(DbPublication publication)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByLanguage(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByLanguage(q);
-            //var dbpublications = await _pubServices.GetPublicationsByLanguage(q);
-
-            var result = new Response();
-
-            result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
-            return result;
+            await pubServices.UpdatePublication(publication);
+            return;
+        }
+        [HttpPost]
+        public async Task CreatePublication(DbPublication publication)
+        {
+            await pubServices.CreatePublication(publication);
+            return;
         }
     }
 }
