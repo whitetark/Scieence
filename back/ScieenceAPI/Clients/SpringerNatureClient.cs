@@ -73,7 +73,7 @@ namespace ScieenceAPI.Clients
         public async Task<SpringerNaturePub> ApiDeserialzer(string query)
         {
             var s = 1;
-            var response = await _client.GetAsync($"/metadata/json?q={query}&s={s}&p=20&api_key={_apiKey}");
+            var response = await _client.GetAsync($"/metadata/json?q={query}&s={s}&p=100&api_key={_apiKey}");
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync().Result;
 

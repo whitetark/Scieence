@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { useQuery } from 'react-query';
+import { PubService } from '../app/services/api';
 import data from '../app/store/data.json';
 import Filter from '../components/Home/Filter';
 import PublicationList from '../components/Publications/PublicationList';
@@ -15,6 +17,33 @@ const SearchPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { refetchByAuthor } = useQuery(
+    'getPubsByAuthor',
+    (payload) => PubService.getPubsByAuthor(payload),
+    {
+      onError: (error) => {
+        console.log('Get Publications By Authors error: ' + error.message);
+      },
+      onSuccess: (data) => {
+        setJsonData(data);
+      },
+      enabled: false,
+    },
+  );
+
+  const { refetchByKeyword } = useQuery(
+    'getPubsByKeyword',
+    (payload) => PubService.getPubsByKeyword(payload),
+    {
+      onError: (error) => {
+        console.log('Get Publications By Keyword error: ' + error.message);
+      },
+      onSuccess: (data) => {
+        setJsonData(data);
+      },
+      enabled: false,
+    },
+  );
   const postsPerPage = 4;
 
   useEffect(() => {
@@ -33,6 +62,15 @@ const SearchPage = () => {
     setSearchParams({ page: currentPage });
   }, [currentPage]);
 
+  const handleSubmit = (payload) => {
+    const request = {
+      Query: payload.query,
+      Language: 'eng',
+    };
+
+    payload.type ? refetchByKeyword(request) : refetchByAuthor(request);
+  };
+
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = jsonData.slice(firstPostIndex, lastPostIndex);
@@ -40,7 +78,7 @@ const SearchPage = () => {
     <Main>
       <Styled.MainSearchbar>
         <Background />
-        <Searchbar />
+        <Searchbar handleSubmit={handleSubmit} />
       </Styled.MainSearchbar>
       <Styled.MainWrapper>
         <Styled.MainContent>

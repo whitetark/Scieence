@@ -5,7 +5,7 @@ const BORDER_RADIUS = '25px';
 const PADDING = '1rem 2rem';
 const BOX_SHADOW = '4px 4px 4px 0px rgba(0, 0, 0, 0.25)';
 
-export const Searchbar = styled.form`
+export const Searchbar = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -13,26 +13,42 @@ export const Searchbar = styled.form`
   color: ${variables.BLACK_COLOR};
   font-size: 2.2rem;
   width: 100%;
+  padding: ${PADDING};
 
   input {
     width: 100%;
-    background-color: ${variables.WHITE_COLOR};
-    border-radius: 0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0;
     border: none;
     outline: none;
     padding: ${PADDING};
-    box-shadow: ${BOX_SHADOW};
-  }
-
-  button {
     background-color: ${variables.WHITE_COLOR};
-    font-size: 2.2rem;
-    padding: ${PADDING};
-    border-radius: ${BORDER_RADIUS} 0 0 ${BORDER_RADIUS};
-    box-shadow: ${BOX_SHADOW};
-    transition: all 0.2s ease-out;
-    &:hover {
-      background-color: ${variables.GRAY_COLOR};
-    }
+  }
+`;
+
+export const SearchbarDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: ${variables.WHITE_COLOR};
+  box-shadow: ${BOX_SHADOW};
+  border-radius: ${BORDER_RADIUS} ${BORDER_RADIUS} ${BORDER_RADIUS} ${BORDER_RADIUS};
+  overflow: hidden;
+`;
+
+export const SearchButton = styled.button`
+  font-size: 2.6rem;
+  transition: all 0.2s ease-out;
+  padding: ${PADDING};
+  justify-self: flex-start;
+  &:hover {
+    background-color: ${variables.GRAY_COLOR};
+  }
+`;
+
+export const TypeButton = styled.button`
+  background-color: ${variables.BLUE_COLOR};
+  color: ${variables.WHITE_COLOR};
+  padding: ${PADDING};
+  transition: all 0.2s ease-out;
+  &:hover {
+    background-color: ${variables.BLUE_HOVER_COLOR};
   }
 `;

@@ -57,4 +57,12 @@ export const UserService = {
   },
 };
 
+export const PubService = {
+  async getPubsByKeyword(payload) {
+    return api.get('/Aggregation/getByKeyword/', payload);
+  },
+  async getPubsByAuthor(payload) {
+    return api.get('/Aggregation/getByAuthor/', payload);
+  },
+};
 export default api;

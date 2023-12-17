@@ -76,7 +76,7 @@ namespace ScieenceAPI.Clients
 
         public async Task<Response> GetPublicationsByAuthor(string author)
         {
-            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=20");
+            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=100");
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync().Result;
 

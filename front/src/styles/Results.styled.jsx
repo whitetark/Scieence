@@ -21,12 +21,10 @@ export const MainSearchbar = styled.div`
   display: flex;
   position: relative;
   height: 20rem;
-  input {
-    margin: 1rem 0;
-    width: 50%;
-    max-width: 46rem;
-  }
+  align-items: center;
+  justify-content: center;
 `;
+
 export const FoundHeader = styled.div`
   display: flex;
   flex-direction: row;
