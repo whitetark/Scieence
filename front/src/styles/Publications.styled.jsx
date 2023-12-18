@@ -27,13 +27,15 @@ export const PublicationMain = styled.div`
   font-weight: 500;
 
   .title {
-    font-size: 3.6rem;
+    font-size: 2.8rem;
     font-weight: 600;
     text-transform: uppercase;
   }
 
   .authors {
     color: ${variables.BLUE_COLOR};
+    max-height: 10ch;
+    overflow-y: hidden;
   }
 
   .details {
@@ -81,6 +83,7 @@ export const PublicationKeywords = styled.div`
     box-shadow: ${variables.BOX_SHADOW};
     border-radius: 10px;
     text-align: center;
+    overflow: hidden;
   }
 `;
 
@@ -105,6 +108,9 @@ export const PublicationButton = styled.article`
   .title {
     text-transform: uppercase;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4ch;
     font-size: 1.8rem;
   }
 
@@ -119,6 +125,9 @@ export const PublicationButton = styled.article`
   .authors {
     color: ${variables.BLUE_COLOR};
     font-size: 1.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4ch;
     transition: all 0.3s ease-out;
   }
 

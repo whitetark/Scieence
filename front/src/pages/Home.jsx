@@ -13,6 +13,10 @@ const HomePage = () => {
     navigate('/search');
   };
 
+  const handleSubmit = (payload) => {
+    navigate('/search?query=' + payload.value + '&type=' + payload.type);
+  };
+
   return (
     <Main>
       <Background />
@@ -21,7 +25,7 @@ const HomePage = () => {
         <button className='advanced' onClick={onClickHandler}>
           Advanced Search
         </button>
-        <Searchbar />
+        <Searchbar handleSubmit={handleSubmit} />
       </Styled.Home>
     </Main>
   );

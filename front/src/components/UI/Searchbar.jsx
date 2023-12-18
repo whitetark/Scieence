@@ -1,16 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import * as Styled from '../../styles/Searchbar.styled';
 
 const Searchbar = (props) => {
-  const [type, setType] = useState(true);
-  const [query, setQuery] = useState('');
-  const toggleButton = () => setType(!type);
+  const queryRef = useRef();
+  const [type, setType] = useState('keyword');
+
+  const handleChange = (e) => {
+    setType(e.target.value);
+  };
 
   const handleButton = (e) => {
     e.preventDefault();
-    props.handleSubmit({ query, type });
+    const value = queryRef.current.value;
+    props.handleSubmit({ value, type });
   };
 
   return (
@@ -22,14 +26,15 @@ const Searchbar = (props) => {
         <input
           type='text'
           name='search'
-          value={query}
+          ref={queryRef}
           placeholder='What you need to find?'
           autoComplete='off'
-          onChange={(e) => setQuery(e.target.value)}
         />
-        <Styled.TypeButton type='text' onClick={toggleButton}>
-          {type ? 'Keyword' : 'Authors'}
-        </Styled.TypeButton>
+        <Styled.TypeSelect value={type} onChange={handleChange}>
+          <option value='keyword'>Keyword</option>
+          <option value='author'>Author</option>
+          <option value='subject'>Subject</option>
+        </Styled.TypeSelect>
       </Styled.SearchbarDiv>
     </Styled.Searchbar>
   );

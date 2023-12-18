@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { ProgressBar } from 'react-loader-spinner';
 import { useQuery } from 'react-query';
 import { PubService } from '../app/services/api';
 import data from '../app/store/data.json';
@@ -12,12 +13,19 @@ import Searchbar from '../components/UI/Searchbar';
 import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
 
+const initialState = {
+  Query: '',
+};
+
 const SearchPage = () => {
-  const [jsonData, setJsonData] = useState([]);
+  const [jsonData, setJsonData] = useState(data.data);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
+  const [type, setType] = useState('keyword');
   const [searchParams, setSearchParams] = useSearchParams();
-  const { refetchByAuthor } = useQuery(
+  const [requestBody, setRequestBody] = useState(initialState);
+
+  const { isLoading: authorIsLoading, refetch: refetchByAuthor } = useQuery(
     'getPubsByAuthor',
     (payload) => PubService.getPubsByAuthor(payload),
     {
@@ -31,15 +39,15 @@ const SearchPage = () => {
     },
   );
 
-  const { refetchByKeyword } = useQuery(
-    'getPubsByKeyword',
-    (payload) => PubService.getPubsByKeyword(payload),
+  const { isLoading: keywordIsLoading, refetch: refetchByKeyword } = useQuery(
+    ['getPubsByKeyword', requestBody],
+    () => PubService.getPubsByKeyword(requestBody),
     {
       onError: (error) => {
         console.log('Get Publications By Keyword error: ' + error.message);
       },
       onSuccess: (data) => {
-        setJsonData(data);
+        setJsonData(data.data.records);
       },
       enabled: false,
     },
@@ -49,9 +57,19 @@ const SearchPage = () => {
   useEffect(() => {
     setJsonData(data.data);
     const pageValue = parseInt(searchParams.get('page'));
+    if (searchParams.get('type')) {
+      setType(searchParams.get('type'));
+    }
     if (pageValue) {
       setCurrentPage(pageValue);
     }
+    if (searchParams.get('query')) {
+      setRequestBody((prevState) => {
+        return { ...prevState, Query: searchParams.get('query') };
+      });
+    }
+
+    fetchDataByType();
   }, []);
 
   useEffect(() => {
@@ -59,16 +77,46 @@ const SearchPage = () => {
   }, [jsonData]);
 
   useEffect(() => {
-    setSearchParams({ page: currentPage });
+    const newSearch = new URLSearchParams(searchParams);
+    newSearch.set('page', currentPage);
+    setSearchParams(newSearch);
   }, [currentPage]);
 
-  const handleSubmit = (payload) => {
-    const request = {
-      Query: payload.query,
-      Language: 'eng',
-    };
+  useEffect(() => {
+    const newSearch = new URLSearchParams(searchParams);
+    newSearch.set('type', type);
+    setSearchParams(newSearch);
+  }, [type]);
 
-    payload.type ? refetchByKeyword(request) : refetchByAuthor(request);
+  useEffect(() => {
+    fetchDataByType();
+  }, [requestBody]);
+
+  const fetchDataByType = () => {
+    switch (searchParams.get('type')) {
+      case 'keyword':
+        refetchByKeyword(requestBody);
+        break;
+
+      case 'author':
+        refetchByAuthor(requestBody);
+        break;
+
+      default:
+        console.log('No Type');
+        break;
+    }
+  };
+
+  const handleSubmit = (payload) => {
+    const newSearch = new URLSearchParams(searchParams);
+    newSearch.set('query', payload.value);
+    newSearch.set('type', payload.type);
+    setSearchParams(newSearch);
+    setType(payload.type);
+    setRequestBody((prevState) => {
+      return { ...prevState, Query: payload.value };
+    });
   };
 
   const lastPostIndex = currentPage * postsPerPage;
@@ -93,8 +141,8 @@ const SearchPage = () => {
           <Styled.FoundContent>
             <Filter />
             <div className='divider'></div>
-            {jsonData.length === 0 ? (
-              <div>Loading...</div>
+            {authorIsLoading || keywordIsLoading ? (
+              <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
             ) : (
               <PublicationList data={currentPosts} />
             )}
@@ -104,5 +152,4 @@ const SearchPage = () => {
     </Main>
   );
 };
-
 export default SearchPage;

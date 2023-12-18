@@ -45,9 +45,26 @@ namespace ScieenceAPI.Controllers
 
         [Route("update")]
         [HttpPut]
-        public async Task<ActionResult> UpdateAccount(Account account)
+        public async Task<ActionResult> UpdateAccount(AccountUpdateDto updateDto)
         {
-            await accountServices.UpdateAccount(account);
+            var account = await accountServices.GetAccountByUsername(updateDto.Username);
+            if(account == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            var newAccount = new Account
+            {
+                Id = updateDto.Id,
+                Username = updateDto.Username,
+                PasswordHash = account.PasswordHash,
+                Favourites = updateDto.Favourites,
+                RefreshToken = updateDto.RefreshToken,
+                TokenCreated = updateDto.TokenCreated,
+                TokenExpires = updateDto.TokenExpires,
+            };
+
+            await accountServices.UpdateAccount(newAccount);
             return Ok();
         }
 

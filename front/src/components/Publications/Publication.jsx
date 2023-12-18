@@ -1,13 +1,24 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
+import { useAuthContext } from '../../app/store/auth-context';
 import * as Styled from '../../styles/Publications.styled';
 
 const Publication = ({ data, onClick, hide }) => {
+  const { userData, updateUser } = useAuthContext();
+  const addPublicationHandler = () => {
+    let user = userData;
+    console.log(userData);
+    data.authors = data.authors.join(', ');
+    data.subjects = data.subjects.join(', ');
+    user.favourites.push(data);
+    updateUser(user);
+  };
+
   return (
     <Styled.Publication onClick={onClick}>
       <Styled.PublicationActions>
-        <button>
+        <button onClick={addPublicationHandler}>
           <FontAwesomeIcon icon='fa-regular fa-heart' fixedWidth />
         </button>
         <button onClick={hide}>
@@ -21,16 +32,16 @@ const Publication = ({ data, onClick, hide }) => {
         <Styled.PublicationDetails>
           <Styled.PublicationInfo>
             <p>
-              Publication Date: <span>{data.publication_date}</span>
+              Publication Date: <span>{data.publicationDate}</span>
             </p>
             <p>
-              Genre: <span>{data.genre}</span>
+              Genre: <span>{data.Genre}</span>
             </p>
             <p>
               Language: <span>{data.language}</span>
             </p>
             <p>
-              Publication Type: <span>{data.publication_type}</span>
+              Publication Type: <span>{data.publicationType.split(' ')[0]}</span>
             </p>
           </Styled.PublicationInfo>
           <Styled.PublicationLinks>
@@ -42,9 +53,14 @@ const Publication = ({ data, onClick, hide }) => {
             </p>
             <span>Keywords:</span>
             <Styled.PublicationKeywords>
-              {data.keywords.map((keyword, index) => {
-                return <span key={index}>{keyword}</span>;
-              })}
+              {data.subjects ? (
+                data.subjects.map((keyword, index) => {
+                  const first = keyword.split(' ')[0];
+                  return <span key={index}>{first}</span>;
+                })
+              ) : (
+                <span>No Keywords</span>
+              )}
             </Styled.PublicationKeywords>
           </Styled.PublicationLinks>
         </Styled.PublicationDetails>

@@ -43,11 +43,13 @@ export const SearchButton = styled.button`
   }
 `;
 
-export const TypeButton = styled.button`
+export const TypeSelect = styled.select`
   background-color: ${variables.BLUE_COLOR};
   color: ${variables.WHITE_COLOR};
   padding: ${PADDING};
   transition: all 0.2s ease-out;
+  outline: none;
+  border: none;
   &:hover {
     background-color: ${variables.BLUE_HOVER_COLOR};
   }

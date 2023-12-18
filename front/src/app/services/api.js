@@ -22,7 +22,7 @@ api.interceptors.response.use(
   },
   async (error) => {
     if (error.response.status === 401) {
-      let apiResponse = await api.post('/Acc/refresh-token', {
+      let apiResponse = await UserService.refreshToken({
         withCredentials: true,
       });
       localStorage.setItem('token', JSON.stringify(apiResponse.data.token));
@@ -46,6 +46,9 @@ export const UserService = {
   async fetchUserData() {
     return api.get('/Acc/getByUsername');
   },
+  async updateUser(payload) {
+    return api.put('/Acc/update', payload);
+  },
   async checkCredentials(payload) {
     return api.post('/Auth/checkCredentials', payload);
   },
@@ -55,14 +58,19 @@ export const UserService = {
   async getStatus() {
     return api.get('/Auth/getStatus');
   },
+  async refreshToken(payload) {
+    return api.post('/Auth/refresh-token', payload);
+  },
 };
 
 export const PubService = {
   async getPubsByKeyword(payload) {
-    return api.get('/Aggregation/getByKeyword/', payload);
+    const query = payload.Query;
+    return api.get('/Aggregation/getByKeyword' + '?query=' + query);
   },
   async getPubsByAuthor(payload) {
-    return api.get('/Aggregation/getByAuthor/', payload);
+    const query = payload.Query;
+    return api.get('/Aggregation/getByAuthor' + '?query=' + query);
   },
 };
 export default api;

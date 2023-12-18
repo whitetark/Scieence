@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from 'react-query';
-import { PubService, UserService } from '../app/services/api';
+import { useMutation } from 'react-query';
+import { UserService } from '../app/services/api';
 import { useAuthContext } from '../app/store/auth-context';
 
 export const useLogin = () => {
@@ -43,6 +43,14 @@ export const useLogout = () => {
   });
 };
 
+export const useUpdateUser = () => {
+  return useMutation('update user', (payload) => UserService.updateUser(payload), {
+    onError: (error) => {
+      console.log('Update User error: ' + error.message);
+    },
+  });
+};
+
 export const useConfirmationData = () => {
   return useMutation('confirm creds', (payload) => UserService.checkCredentials(payload), {
     enabled: false,
@@ -54,23 +62,5 @@ export const useChangePassword = () => {
     onError: (error) => {
       console.log('Changing Password error: ' + error.message);
     },
-  });
-};
-
-export const useGetPublicationsByKeyword = () => {
-  return useQuery('getPubsByKeyword', (payload) => PubService.getPubsByKeyword(payload), {
-    onError: (error) => {
-      console.log('Get Publications By Keyword error: ' + error.message);
-    },
-    enabled: false,
-  });
-};
-
-export const useGetPublicationsByAuthor = () => {
-  return useQuery('getPubsByAuthor', (payload) => PubService.getPubsByAuthor(payload), {
-    onError: (error) => {
-      console.log('Get Publications By Authors error: ' + error.message);
-    },
-    enabled: false,
   });
 };

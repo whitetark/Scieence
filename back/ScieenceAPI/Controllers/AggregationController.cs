@@ -1,3 +1,4 @@
+using Azure.Core;
 using Database;
 using Database.Models;
 using Database.Services;
@@ -16,11 +17,11 @@ namespace ScieenceAPI.Controllers
     {
 
         //ApiPub
-        [HttpGet("getByKeyword/{q}")]
-        public async Task<Response> GetPublicationsByKeyword(string q)
+        [HttpGet("getByKeyword")]
+        public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByKeyword(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(q);
+            var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
+            //var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
             //var dbpublications = await _pubServices.GetPublicationsByKeyword(q);
 
             var result = new Response();
@@ -32,17 +33,17 @@ namespace ScieenceAPI.Controllers
             return result;
         }
 
-        [HttpGet("getByAuthor/{q}")]
-        public async Task<Response> GetPublicationsByAuthor(string q)
+        [HttpGet("getByAuthor")]
+        public async Task<Response> GetPublicationsByAuthor([FromQuery(Name = "query")] string query)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByAuthor(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByAuthor(q);
+            var snpublications = await springerNatureClient.GetPublicationsByAuthor(query);
+            //var sspublications = await semanticScholarClient.GetPublicationsByAuthor(query);
             //var dbpublications = await _pubServices.GetPublicationsByAuthor(q);
 
             var result = new Response();
 
             result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
+            //result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
 
             return result;
@@ -61,20 +62,6 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
 
-            return result;
-        }
-        [HttpGet("getByLanguage/{q}")]
-        public async Task<Response> GetPublicationsByLanguage(string q)
-        {
-            var snpublications = await springerNatureClient.GetPublicationsByLanguage(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByLanguage(q);
-            //var dbpublications = await _pubServices.GetPublicationsByLanguage(q);
-
-            var result = new Response();
-
-            result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
             return result;
         }
     }
