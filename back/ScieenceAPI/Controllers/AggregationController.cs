@@ -1,4 +1,5 @@
 using Azure.Core;
+using Azure.Core.GeoJson;
 using Database;
 using Database.Models;
 using Database.Services;
@@ -20,16 +21,18 @@ namespace ScieenceAPI.Controllers
         [HttpGet("getByKeyword")]
         public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
         {
-            //var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
-            //var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
+            var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
+            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
             var dbpublications = await pubServices.GetPublicationsByKeyword(query);
 
             var result = new Response();
 
-            //result.Records.AddRange(snpublications.Records);
-            //result.Records.AddRange(sspublications.Records);
+            result.Records.AddRange(snpublications.Records);
+            result.Records.AddRange(sspublications.Records);
             result.Records.AddRange(dbpublications.Records);
-
+            
+            //FilterListByDOI(result);
+            
             return result;
         }
 
@@ -45,6 +48,8 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(snpublications.Records);
             //result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
+
+            FilterListByDOI(result);
 
             return result;
         }
@@ -62,6 +67,15 @@ namespace ScieenceAPI.Controllers
             result.Records.AddRange(sspublications.Records);
             //result.Records.AddRange(dbpublications.Records);
 
+            FilterListByDOI(result);
+
+            return result;
+        }
+
+        public static Response FilterListByDOI(Response response)
+        {
+            var result = new Response();
+            result.Records = response.Records.DistinctBy(x => x.Doi).ToList();
             return result;
         }
     }
