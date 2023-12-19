@@ -7,7 +7,6 @@ import Publication from './Publication';
 
 const PublicationButton = (props) => {
   const { isShowing, toggle } = useModal();
-
   const data = props.data;
 
   return (
@@ -20,7 +19,7 @@ const PublicationButton = (props) => {
       <Styled.PublicationButton onClick={toggle}>
         <h4 className='title'>{data.title}</h4>
         <p className='details'>{data.description}</p>
-        <p className='authors'>{data.authors.join(', ')}</p>
+        <p className='authors'>{data.authors.replaceAll(';', ', ')}</p>
       </Styled.PublicationButton>
     </>
   );

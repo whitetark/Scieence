@@ -20,15 +20,15 @@ namespace ScieenceAPI.Controllers
         [HttpGet("getByKeyword")]
         public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
+            //var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
             //var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
-            //var dbpublications = await _pubServices.GetPublicationsByKeyword(q);
+            var dbpublications = await pubServices.GetPublicationsByKeyword(query);
 
             var result = new Response();
 
-            result.Records.AddRange(snpublications.Records);
+            //result.Records.AddRange(snpublications.Records);
             //result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
+            result.Records.AddRange(dbpublications.Records);
 
             return result;
         }

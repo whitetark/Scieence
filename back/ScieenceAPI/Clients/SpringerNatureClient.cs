@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ScieenceAPI.Models;
 using ScieenceAPI.Models.ForClients;
+using Database.Models;
 
 namespace ScieenceAPI.Clients
 {
@@ -30,7 +31,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception();
+                throw new Exception("Failure on Springer Nature");
             }
         }
         public async Task<Response> GetPublicationsByAuthor(string author)
@@ -42,7 +43,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception();
+                throw new Exception("Failure on Springer Nature");
             }
         }
         public async Task<Response> GetPublicationsBySubject(string subject)
@@ -54,7 +55,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception();
+                throw new Exception("Failure on Springer Nature");
             }
         }
         public async Task<Response> GetPublicationsByLanguage(string language)
@@ -66,7 +67,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception();
+                throw new Exception("Failure on Springer Nature");
             }
         }
 
@@ -90,13 +91,13 @@ namespace ScieenceAPI.Clients
                     Language = pub.language,
                     Url = pub.url[0].value,
                     Title = pub.title,
-                    Authors = pub.creators.ConvertAll(x => x.creator),
+                    Authors = string.Join("; ", pub.creators.ConvertAll(x => x.creator)).Replace(",", ""),
                     PublicationDate = pub.publicationDate,
                     PublicationType = pub.contentType,
                     PublicationYear = Int32.Parse(pub.publicationDate.Remove(4)),
                     Description = pub.Abstract,
                     Doi = pub.identifier.Remove(0, 4),
-                    Subjects = pub.subjects
+                    Subjects = string.Join("; ", pub.subjects),
                 };
                 result.Records.Add(newPub);
             }

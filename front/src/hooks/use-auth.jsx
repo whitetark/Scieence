@@ -9,7 +9,7 @@ export const useLogin = () => {
       console.log(data);
       localStorage.setItem('token', JSON.stringify(data.token));
       setUserToken(data.token);
-      setUserData(data.user);
+      setUserData(data.result);
     },
     onError: (error) => {
       console.log('Login error: ' + error);
@@ -21,7 +21,7 @@ export const useRegister = () => {
   const { setUserData, setUserToken } = useAuthContext();
   return useMutation('user register', (payload) => UserService.register(payload), {
     onSuccess: ({ data }) => {
-      setUserData(data.user);
+      setUserData(data.result);
       setUserToken(data.token);
     },
     onError: (error) => {
@@ -31,11 +31,12 @@ export const useRegister = () => {
 };
 
 export const useLogout = () => {
-  const { setUserToken } = useAuthContext();
+  const { setUserToken, setUserData } = useAuthContext();
   return useMutation('user logout', () => UserService.logout(), {
     onSuccess: () => {
       localStorage.removeItem('token');
       setUserToken(null);
+      setUserData(null);
     },
     onError: (error) => {
       console.log('Logout error: ' + error.message);
@@ -44,9 +45,17 @@ export const useLogout = () => {
 };
 
 export const useUpdateUser = () => {
-  return useMutation('update user', (payload) => UserService.updateUser(payload), {
+  return useMutation('update user', (payload) => UserService.update(payload), {
     onError: (error) => {
       console.log('Update User error: ' + error.message);
+    },
+  });
+};
+
+export const useAddPublication = () => {
+  return useMutation('add publication', (payload) => UserService.addPublication(payload), {
+    onError: (error) => {
+      console.log('Add Publication error: ' + error.message);
     },
   });
 };

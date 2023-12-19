@@ -5,29 +5,45 @@ import { useAuthContext } from '../../app/store/auth-context';
 import * as Styled from '../../styles/Publications.styled';
 
 const Publication = ({ data, onClick, hide }) => {
-  const { userData, updateUser } = useAuthContext();
+  const { userData, updateUser, addPublicationToUser } = useAuthContext();
+  const userLikePub = userData.favourites.some((publication) => publication.doi === data.doi);
   const addPublicationHandler = () => {
+    const request = {
+      account: userData,
+      publicationToAdd: data,
+    };
+
+    addPublicationToUser(request);
+  };
+
+  const removePublicationHandler = () => {
+    const index = userData.favourites.findIndex((publication) => publication.doi === data.doi);
     let user = userData;
-    console.log(userData);
-    data.authors = data.authors.join(', ');
-    data.subjects = data.subjects.join(', ');
-    user.favourites.push(data);
+    user.favourites.splice(index, 1);
     updateUser(user);
   };
 
   return (
     <Styled.Publication onClick={onClick}>
       <Styled.PublicationActions>
-        <button onClick={addPublicationHandler}>
-          <FontAwesomeIcon icon='fa-regular fa-heart' fixedWidth />
-        </button>
+        {userData ? (
+          userLikePub ? (
+            <button onClick={removePublicationHandler}>
+              <FontAwesomeIcon icon='fa-solid fa-heart' fixedWidth />
+            </button>
+          ) : (
+            <button onClick={addPublicationHandler}>
+              <FontAwesomeIcon icon='fa-regular fa-heart' fixedWidth />
+            </button>
+          )
+        ) : undefined}
         <button onClick={hide}>
           <FontAwesomeIcon icon='fa-solid fa-xmark' fixedWidth />
         </button>
       </Styled.PublicationActions>
       <Styled.PublicationMain>
         <h1 className='title'>{data.title}</h1>
-        <p className='authors'>{data.authors.join(', ')}</p>
+        <p className='authors'>{data.authors.replace('; ', ', ')}</p>
         <p className='details'>{data.description}</p>
         <Styled.PublicationDetails>
           <Styled.PublicationInfo>
@@ -54,7 +70,7 @@ const Publication = ({ data, onClick, hide }) => {
             <span>Keywords:</span>
             <Styled.PublicationKeywords>
               {data.subjects ? (
-                data.subjects.map((keyword, index) => {
+                data.subjects.split('; ').map((keyword, index) => {
                   const first = keyword.split(' ')[0];
                   return <span key={index}>{first}</span>;
                 })

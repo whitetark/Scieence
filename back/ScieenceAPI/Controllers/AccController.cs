@@ -14,7 +14,7 @@ namespace ScieenceAPI.Controllers
     [Authorize(Roles ="User, Admin")]
     [Route("[controller]")]
     [ApiController]
-    public class AccController(AccountServices accountServices, IConfiguration configuration) : ControllerBase
+    public class AccController(AccountServices accountServices, IConfiguration configuration, PublicationServices pubServices) : ControllerBase
     {
         [Route("getByUsername")]
         [HttpGet]
@@ -65,9 +65,26 @@ namespace ScieenceAPI.Controllers
             };
 
             await accountServices.UpdateAccount(newAccount);
-            return Ok();
+            return Ok(newAccount);
         }
 
+        [Route("addPublicationToAccount")]
+        [HttpPut]
+        public async Task<ActionResult> AddPublicationToAccount(AddPublicationToAccountDto request)
+        {
+            var account = await accountServices.GetAccountByUsername(request.account.Username);
+            if (account == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            var publication = await pubServices.CreatePublication(request.publicationToAdd);
+
+            account.Favourites.Add(publication);
+            await accountServices.UpdateAccount(account);
+
+            return Ok(account);
+        }
   
         [Route("changePassword")]
         [HttpPatch]

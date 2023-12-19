@@ -42,12 +42,12 @@ namespace ScieenceAPI.Clients
                         Language = "en",
                         Url = pub.url,
                         Title = pub.title,
-                        Authors = pub.authors.ConvertAll(x => x.name),
+                        Authors = string.Join("; ", pub.authors.ConvertAll(x => x.name)),
                         PublicationDate = pub.publicationDate,
                         PublicationYear = pub.year,
                         Description = pub.Abstract,
                         Doi = pub.externalIds.DOI,
-                        Subjects = pub.fieldsOfStudy
+                        Subjects = string.Join("; ", pub.fieldsOfStudy),
                     };
                     pub.publicationTypes ??= ["Article"];
                     newPub.PublicationType = pub.publicationTypes[0];
@@ -57,7 +57,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception();
+                throw new Exception("Failure on SemanticScholar");
             }
         }
 
@@ -76,36 +76,43 @@ namespace ScieenceAPI.Clients
 
         public async Task<Response> GetPublicationsByAuthor(string author)
         {
-            var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=100");
-            response.EnsureSuccessStatusCode();
-            var content = response.Content.ReadAsStringAsync().Result;
-
-            SemanticScholarByAuthor resultOfDes = JsonConvert.DeserializeObject<SemanticScholarByAuthor>(content);
-
-            var result = new Response();
-            foreach (var data in resultOfDes.data)
+            try
             {
-                foreach (var pub in data.papers)
-                {
+                var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=100");
+                response.EnsureSuccessStatusCode();
+                var content = response.Content.ReadAsStringAsync().Result;
 
-                    var newPub = new Publication
+                SemanticScholarByAuthor resultOfDes = JsonConvert.DeserializeObject<SemanticScholarByAuthor>(content);
+
+                var result = new Response();
+                foreach (var data in resultOfDes.data)
+                {
+                    foreach (var pub in data.papers)
                     {
-                        Language = "en",
-                        Url = pub.url,
-                        Title = pub.title,
-                        Authors = pub.authors.ConvertAll(x => x.name),
-                        PublicationDate = pub.publicationDate,
-                        PublicationYear = pub.year,
-                        Description = pub.Abstract,
-                        Doi = pub.externalIds.DOI,
-                        Subjects = pub.fieldsOfStudy
-                    };
-                    pub.publicationTypes ??= ["Article"];
-                    newPub.PublicationType = pub.publicationTypes[0];
-                    result.Records.Add(newPub);
+
+                        var newPub = new Publication
+                        {
+                            Language = "en",
+                            Url = pub.url,
+                            Title = pub.title,
+                            Authors = string.Join("; ", pub.authors.ConvertAll(x => x.name)),
+                            PublicationDate = pub.publicationDate,
+                            PublicationYear = pub.year,
+                            Description = pub.Abstract,
+                            Doi = pub.externalIds.DOI,
+                            Subjects = string.Join("; ", pub.fieldsOfStudy),
+                        };
+                        pub.publicationTypes ??= ["Article"];
+                        newPub.PublicationType = pub.publicationTypes[0];
+                        result.Records.Add(newPub);
+                    }
                 }
+                return result;
             }
-            return result;
+            catch
+            {
+                throw new Exception("Failure on SemanticScholar");
+            }
         }
         //https://api.semanticscholar.org/graph/v1/paper/search?query=covid+vaccination&offset=100&limit=3&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds
     }

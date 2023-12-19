@@ -50,6 +50,7 @@ export const TypeSelect = styled.select`
   transition: all 0.2s ease-out;
   outline: none;
   border: none;
+  cursor: pointer;
   &:hover {
     background-color: ${variables.BLUE_HOVER_COLOR};
   }

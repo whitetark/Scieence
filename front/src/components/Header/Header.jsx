@@ -13,7 +13,7 @@ import Register from './Register';
 import Settings from './Settings';
 
 const MainNavigation = () => {
-  const { userToken } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   const { isShowing: modalIsShowing, toggle: toggleModal } = useModal();
   const [authModalName, setAuthModalName] = useState('login');
   const [userModalName, setUserModalName] = useState('settings');
@@ -40,7 +40,7 @@ const MainNavigation = () => {
           <h1>Scieence</h1>
         </Styled.NavLogo>
         <Styled.Actions>
-          {userToken ? (
+          {userData ? (
             <NavLink to='/favorite' className={({ isActive }) => (isActive ? 'active' : undefined)}>
               <FontAwesomeIcon icon='fa-solid fa-heart' fixedWidth />
             </NavLink>
@@ -49,7 +49,7 @@ const MainNavigation = () => {
             <FontAwesomeIcon icon='fa-solid fa-user' fixedWidth />
           </button>
           <Modal isShowing={modalIsShowing} hide={toggleModal} className='login-modal'>
-            {userToken ? tokenModalContent : nonTokenModalContent}
+            {userData ? tokenModalContent : nonTokenModalContent}
           </Modal>
         </Styled.Actions>
       </Styled.Nav>

@@ -4,7 +4,6 @@ import { useSearchParams } from 'react-router-dom';
 import { ProgressBar } from 'react-loader-spinner';
 import { useQuery } from 'react-query';
 import { PubService } from '../app/services/api';
-import data from '../app/store/data.json';
 import Filter from '../components/Home/Filter';
 import PublicationList from '../components/Publications/PublicationList';
 import Background from '../components/UI/Background';
@@ -13,12 +12,10 @@ import Searchbar from '../components/UI/Searchbar';
 import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
 
-const initialState = {
-  Query: '',
-};
+const initialState = {};
 
 const SearchPage = () => {
-  const [jsonData, setJsonData] = useState(data.data);
+  const [jsonData, setJsonData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
   const [type, setType] = useState('keyword');
@@ -55,7 +52,6 @@ const SearchPage = () => {
   const postsPerPage = 4;
 
   useEffect(() => {
-    setJsonData(data.data);
     const pageValue = parseInt(searchParams.get('page'));
     if (searchParams.get('type')) {
       setType(searchParams.get('type'));
@@ -68,8 +64,6 @@ const SearchPage = () => {
         return { ...prevState, Query: searchParams.get('query') };
       });
     }
-
-    fetchDataByType();
   }, []);
 
   useEffect(() => {
@@ -93,6 +87,9 @@ const SearchPage = () => {
   }, [requestBody]);
 
   const fetchDataByType = () => {
+    if (JSON.stringify(requestBody) === '{}') {
+      return;
+    }
     switch (searchParams.get('type')) {
       case 'keyword':
         refetchByKeyword(requestBody);
@@ -122,6 +119,8 @@ const SearchPage = () => {
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = jsonData.slice(firstPostIndex, lastPostIndex);
+
+  const isLoading = authorIsLoading || keywordIsLoading;
   return (
     <Main>
       <Styled.MainSearchbar>
@@ -132,16 +131,18 @@ const SearchPage = () => {
         <Styled.MainContent>
           <Styled.FoundHeader>
             <h2>Your Search Result</h2>
-            <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
+            {!isLoading ? (
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            ) : undefined}
           </Styled.FoundHeader>
           <Styled.FoundContent>
             <Filter />
             <div className='divider'></div>
-            {authorIsLoading || keywordIsLoading ? (
+            {isLoading ? (
               <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
             ) : (
               <PublicationList data={currentPosts} />

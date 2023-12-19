@@ -23,7 +23,7 @@ namespace Database.Services
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Failed to Get Accounts");
             }
         }
         public async Task<Account> GetAccountById(string id)
@@ -34,7 +34,7 @@ namespace Database.Services
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Failed to Get Account");
             }
         }
         public async Task<Account> GetAccountByUsername(string username)
@@ -45,7 +45,7 @@ namespace Database.Services
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Failed to Get Account");
             }
         }
         public async Task AddAccount(Account account)
@@ -56,7 +56,7 @@ namespace Database.Services
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Failed to Add Account");
             }
         }
         public async Task<DeleteResult> DeleteAccount(string id)
@@ -67,7 +67,7 @@ namespace Database.Services
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Failed to Delete Account");
             }
         }
         public async Task<ReplaceOneResult> UpdateAccount(Account newAccount)
@@ -79,7 +79,7 @@ namespace Database.Services
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Failed to Update Account");
             }
         }
     }

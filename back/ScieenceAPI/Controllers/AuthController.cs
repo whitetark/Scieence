@@ -91,6 +91,11 @@ namespace ScieenceAPI.Controllers
                 return BadRequest("Refresh Token not found");
             }
 
+            if (username == null)
+            {
+                return BadRequest("No Username");
+            }
+
             var user = await accountServices.GetAccountByUsername(username);
 
             if (user == null)

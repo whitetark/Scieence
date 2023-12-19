@@ -37,7 +37,7 @@ namespace ScieenceAPI.Controllers
         }
         [HttpPost]
         [Route("create")]
-        public async Task CreatePublication(DbPublication publication)
+        public async Task CreatePublication(Publication publication)
         {
             await pubServices.CreatePublication(publication);
             return;

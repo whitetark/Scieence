@@ -9,9 +9,6 @@ import { Main } from '../styles/UI.styled';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const onClickHandler = () => {
-    navigate('/search');
-  };
 
   const handleSubmit = (payload) => {
     navigate('/search?query=' + payload.value + '&type=' + payload.type);
@@ -22,9 +19,6 @@ const HomePage = () => {
       <Background />
       <Styled.Home>
         <Hero />
-        <button className='advanced' onClick={onClickHandler}>
-          Advanced Search
-        </button>
         <Searchbar handleSubmit={handleSubmit} />
       </Styled.Home>
     </Main>
