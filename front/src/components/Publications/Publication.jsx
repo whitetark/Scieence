@@ -43,21 +43,18 @@ const Publication = ({ data, onClick, hide }) => {
       </Styled.PublicationActions>
       <Styled.PublicationMain>
         <h1 className='title'>{data.title}</h1>
-        <p className='authors'>{data.authors.replace('; ', ', ')}</p>
-        <p className='details'>{data.description}</p>
+        <p className='authors'>{data.authors.replace('; ', ', ') || 'No authors.'}</p>
+        <p className='details'>{data.description || 'No description.'}</p>
         <Styled.PublicationDetails>
           <Styled.PublicationInfo>
             <p>
-              Publication Date: <span>{data.publicationDate}</span>
+              Publication Date: <span>{data.publicationDate || data.publicationYear}</span>
             </p>
             <p>
-              Genre: <span>{data.Genre}</span>
+              Language: <span>{data.language || 'eng'}</span>
             </p>
             <p>
-              Language: <span>{data.language}</span>
-            </p>
-            <p>
-              Publication Type: <span>{data.publicationType.split(' ')[0]}</span>
+              Publication Type: <span>{data.publicationType.split(' ')[0] || 'Article'}</span>
             </p>
           </Styled.PublicationInfo>
           <Styled.PublicationLinks>

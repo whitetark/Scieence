@@ -40,7 +40,7 @@ namespace ScieenceAPI.Clients
                 {
                     var newPub = new Publication
                     {
-                        Language = "en",
+                        Language = "eng",
                         Url = pub.url,
                         Title = pub.title,
                         PublicationDate = pub.publicationDate,
@@ -101,7 +101,7 @@ namespace ScieenceAPI.Clients
 
                         var newPub = new Publication
                         {
-                            Language = "en",
+                            Language = "eng",
                             Url = pub.url,
                             Title = pub.title,
                             PublicationDate = pub.publicationDate,

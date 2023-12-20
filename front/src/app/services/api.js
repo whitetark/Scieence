@@ -75,5 +75,9 @@ export const PubService = {
     const query = payload.Query;
     return api.get('/Aggregation/getByAuthor' + '?query=' + query);
   },
+  async getPubsBySubject(payload) {
+    const query = payload.Query;
+    return api.get('/Aggregation/getBySubject' + '?query=' + query);
+  },
 };
 export default api;

@@ -52,6 +52,19 @@ const SearchPage = () => {
       enabled: false,
     },
   );
+  const { isLoading: subjectIsLoading, refetch: refetchBySubject } = useQuery(
+    ['getPubsBySubject', requestBody],
+    () => PubService.getPubsBySubject(requestBody),
+    {
+      onError: (error) => {
+        console.log('Get Publications By Subject error: ' + error.message);
+      },
+      onSuccess: (data) => {
+        setJsonData(data.data.records);
+      },
+      enabled: false,
+    },
+  );
 
   useEffect(() => {
     if (state) {
@@ -105,6 +118,10 @@ const SearchPage = () => {
         refetchByAuthor(requestBody);
         break;
 
+      case 'subject':
+        refetchBySubject(requestBody);
+        break;
+
       default:
         console.log('No Type', searchParams.get('type'));
         break;
@@ -125,7 +142,7 @@ const SearchPage = () => {
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = jsonData.slice(firstPostIndex, lastPostIndex);
 
-  const isLoading = authorIsLoading || keywordIsLoading;
+  const isLoading = authorIsLoading || keywordIsLoading || subjectIsLoading;
   return (
     <Main>
       <Styled.MainSearchbar>

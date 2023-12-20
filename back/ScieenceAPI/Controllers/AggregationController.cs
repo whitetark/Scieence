@@ -22,13 +22,13 @@ namespace ScieenceAPI.Controllers
         public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
         {
             //var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
-            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
+            //var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
             var dbpublications = await pubServices.GetPublicationsByKeyword(query);
 
             var result = new Response();
 
             //result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
+            //result.Records.AddRange(sspublications.Records);
             result.Records.AddRange(dbpublications.Records);
             
             FilterListByDOI(result);
@@ -65,7 +65,7 @@ namespace ScieenceAPI.Controllers
 
             result.Records.AddRange(snpublications.Records);
             result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
+            result.Records.AddRange(dbpublications.Records);
 
             FilterListByDOI(result);
 

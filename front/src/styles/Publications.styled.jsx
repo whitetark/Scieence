@@ -68,6 +68,7 @@ export const PublicationLinks = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-wrap: break-word;
   color: ${variables.TEXT_COLOR};
   a {
     color: ${variables.BLUE_COLOR};
