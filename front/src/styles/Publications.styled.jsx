@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { HelpDiv } from './UI.styled.jsx';
 import * as variables from './Variables.js';
 
 const MAIN_MARGIN = '4rem';
@@ -90,7 +91,18 @@ export const PublicationKeywords = styled.div`
 export const PublicationList = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 2rem;
+
+  ${HelpDiv} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: ${variables.BLUE_COLOR};
+    font-weight: 500;
+  }
 `;
 
 export const PublicationButton = styled.article`

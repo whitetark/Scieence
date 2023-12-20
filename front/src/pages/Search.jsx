@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { ProgressBar } from 'react-loader-spinner';
 import { useQuery } from 'react-query';
@@ -10,32 +10,35 @@ import Background from '../components/UI/Background';
 import Pagination from '../components/UI/Pagination';
 import Searchbar from '../components/UI/Searchbar';
 import * as Styled from '../styles/Results.styled';
-import { Main } from '../styles/UI.styled';
+import { HelpDiv, Main } from '../styles/UI.styled';
 
-const initialState = {};
+const initialState = {
+  Query: 'a',
+  Type: 'keyword',
+};
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
-  const [type, setType] = useState('keyword');
   const [searchParams, setSearchParams] = useSearchParams();
   const [requestBody, setRequestBody] = useState(initialState);
+  const postsPerPage = 4;
 
+  const { state } = useLocation();
   const { isLoading: authorIsLoading, refetch: refetchByAuthor } = useQuery(
-    'getPubsByAuthor',
-    (payload) => PubService.getPubsByAuthor(payload),
+    ['getPubsByAuthor', requestBody],
+    () => PubService.getPubsByAuthor(requestBody),
     {
       onError: (error) => {
         console.log('Get Publications By Authors error: ' + error.message);
       },
       onSuccess: (data) => {
-        setJsonData(data);
+        setJsonData(data.data.records);
       },
       enabled: false,
     },
   );
-
   const { isLoading: keywordIsLoading, refetch: refetchByKeyword } = useQuery(
     ['getPubsByKeyword', requestBody],
     () => PubService.getPubsByKeyword(requestBody),
@@ -49,20 +52,25 @@ const SearchPage = () => {
       enabled: false,
     },
   );
-  const postsPerPage = 4;
 
   useEffect(() => {
-    const pageValue = parseInt(searchParams.get('page'));
-    if (searchParams.get('type')) {
-      setType(searchParams.get('type'));
+    if (state) {
+      setRequestBody({ ...requestBody, Query: state.value, Type: state.type });
+    } else {
+      let request = {};
+      searchParams.get('type')
+        ? (request = { ...request, Type: searchParams.get('type') })
+        : undefined;
+      searchParams.get('query')
+        ? (request = { ...request, Query: searchParams.get('query') })
+        : undefined;
+
+      console.log(request);
+      setRequestBody({ ...requestBody, Query: request.Query, Type: request.Type });
     }
+    const pageValue = parseInt(searchParams.get('page'));
     if (pageValue) {
       setCurrentPage(pageValue);
-    }
-    if (searchParams.get('query')) {
-      setRequestBody((prevState) => {
-        return { ...prevState, Query: searchParams.get('query') };
-      });
     }
   }, []);
 
@@ -78,19 +86,17 @@ const SearchPage = () => {
 
   useEffect(() => {
     const newSearch = new URLSearchParams(searchParams);
-    newSearch.set('type', type);
+    newSearch.set('query', requestBody.Query);
+    newSearch.set('type', requestBody.Type);
     setSearchParams(newSearch);
-  }, [type]);
-
-  useEffect(() => {
     fetchDataByType();
   }, [requestBody]);
 
   const fetchDataByType = () => {
-    if (JSON.stringify(requestBody) === '{}') {
+    if (requestBody === initialState) {
       return;
     }
-    switch (searchParams.get('type')) {
+    switch (requestBody.Type) {
       case 'keyword':
         refetchByKeyword(requestBody);
         break;
@@ -100,7 +106,7 @@ const SearchPage = () => {
         break;
 
       default:
-        console.log('No Type');
+        console.log('No Type', searchParams.get('type'));
         break;
     }
   };
@@ -110,9 +116,8 @@ const SearchPage = () => {
     newSearch.set('query', payload.value);
     newSearch.set('type', payload.type);
     setSearchParams(newSearch);
-    setType(payload.type);
     setRequestBody((prevState) => {
-      return { ...prevState, Query: payload.value };
+      return { ...prevState, Query: payload.value, Type: payload.type };
     });
   };
 
@@ -125,7 +130,7 @@ const SearchPage = () => {
     <Main>
       <Styled.MainSearchbar>
         <Background />
-        <Searchbar handleSubmit={handleSubmit} />
+        <Searchbar handleSubmit={handleSubmit} type={requestBody.Type} />
       </Styled.MainSearchbar>
       <Styled.MainWrapper>
         <Styled.MainContent>
@@ -143,7 +148,9 @@ const SearchPage = () => {
             <Filter />
             <div className='divider'></div>
             {isLoading ? (
-              <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
+              <HelpDiv>
+                <ProgressBar width='100' height='100' borderColor='#98A4DF' barColor='#747DAB' />
+              </HelpDiv>
             ) : (
               <PublicationList data={currentPosts} />
             )}

@@ -5,7 +5,7 @@ import * as Styled from '../../styles/Searchbar.styled';
 
 const Searchbar = (props) => {
   const queryRef = useRef();
-  const [type, setType] = useState('keyword');
+  const [type, setType] = useState(props.type || 'keyword');
 
   const handleChange = (e) => {
     setType(e.target.value);

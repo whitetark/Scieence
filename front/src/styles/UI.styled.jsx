@@ -17,6 +17,11 @@ export const Error = styled.div`
   font-weight: 500;
 `;
 
+export const HelpDiv = styled.div`
+  font-size: 4.8rem;
+  text-align: center;
+`;
+
 export const Button = styled.button`
   background-color: ${variables.BLUE_COLOR};
   color: ${variables.WHITE_COLOR};

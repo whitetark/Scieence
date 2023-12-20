@@ -21,17 +21,17 @@ namespace ScieenceAPI.Controllers
         [HttpGet("getByKeyword")]
         public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
+            //var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
             var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
             var dbpublications = await pubServices.GetPublicationsByKeyword(query);
 
             var result = new Response();
 
-            result.Records.AddRange(snpublications.Records);
+            //result.Records.AddRange(snpublications.Records);
             result.Records.AddRange(sspublications.Records);
             result.Records.AddRange(dbpublications.Records);
             
-            //FilterListByDOI(result);
+            FilterListByDOI(result);
             
             return result;
         }
@@ -40,26 +40,26 @@ namespace ScieenceAPI.Controllers
         public async Task<Response> GetPublicationsByAuthor([FromQuery(Name = "query")] string query)
         {
             var snpublications = await springerNatureClient.GetPublicationsByAuthor(query);
-            //var sspublications = await semanticScholarClient.GetPublicationsByAuthor(query);
-            //var dbpublications = await _pubServices.GetPublicationsByAuthor(q);
+            var sspublications = await semanticScholarClient.GetPublicationsByAuthor(query);
+            var dbpublications = await pubServices.GetPublicationsByAuthor(query);
 
             var result = new Response();
 
             result.Records.AddRange(snpublications.Records);
-            //result.Records.AddRange(sspublications.Records);
-            //result.Records.AddRange(dbpublications.Records);
+            result.Records.AddRange(sspublications.Records);
+            result.Records.AddRange(dbpublications.Records);
 
             FilterListByDOI(result);
 
             return result;
         }
 
-        [HttpGet("getBySubject{q}")]
-        public async Task<Response> GetPublicationsBySubject(string q)
+        [HttpGet("getBySubject")]
+        public async Task<Response> GetPublicationsBySubject([FromQuery(Name = "query")] string query)
         {
-            var snpublications = await springerNatureClient.GetPublicationsBySubject(q);
-            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(q);
-            //var dbpublications = await _pubServices.GetPublicationsBySubject(q);
+            var snpublications = await springerNatureClient.GetPublicationsBySubject(query);
+            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
+            var dbpublications = await pubServices.GetPublicationsBySubject(query);
 
             var result = new Response();
 

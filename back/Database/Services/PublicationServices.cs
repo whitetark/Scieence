@@ -154,5 +154,67 @@ namespace Database.Services
             }
             return result;
         }
+
+        public async Task<Models.Response> GetPublicationsByAuthor(string query)
+        {
+            string sql = @"SELECT * FROM PublicationSchema.Publications
+            WHERE Authors LIKE @query";
+
+            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%" });
+            List<DbPublication> pubList = publications.ToList();
+
+            var result = new Models.Response();
+
+            foreach (var pub in pubList)
+            {
+                var newPub = new Publication
+                {
+                    Language = pub.Language,
+                    Url = pub.URL,
+                    Title = pub.Title,
+                    Authors = pub.Authors,
+                    PublicationDate = pub.PublicationDate,
+                    PublicationType = pub.PublicationType,
+                    PublicationYear = pub.PublicationYear,
+                    Description = pub.Description,
+                    Doi = pub.DOI,
+                    Subjects = pub.Subjects,
+                };
+
+                result.Records.Add(newPub);
+            }
+            return result;
+        }
+
+        public async Task<Models.Response> GetPublicationsBySubject(string query)
+        {
+            string sql = @"SELECT * FROM PublicationSchema.Publications
+            WHERE Subjects LIKE @query";
+
+            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%" });
+            List<DbPublication> pubList = publications.ToList();
+
+            var result = new Models.Response();
+
+            foreach (var pub in pubList)
+            {
+                var newPub = new Publication
+                {
+                    Language = pub.Language,
+                    Url = pub.URL,
+                    Title = pub.Title,
+                    Authors = pub.Authors,
+                    PublicationDate = pub.PublicationDate,
+                    PublicationType = pub.PublicationType,
+                    PublicationYear = pub.PublicationYear,
+                    Description = pub.Description,
+                    Doi = pub.DOI,
+                    Subjects = pub.Subjects,
+                };
+
+                result.Records.Add(newPub);
+            }
+            return result;
+        }
     }
 }

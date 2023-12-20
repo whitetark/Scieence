@@ -11,7 +11,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (payload) => {
-    navigate('/search?query=' + payload.value + '&type=' + payload.type);
+    navigate('/search', { state: { type: payload.type, value: payload.value } });
   };
 
   return (

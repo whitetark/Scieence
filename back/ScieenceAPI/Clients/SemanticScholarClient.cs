@@ -1,4 +1,5 @@
 ﻿using Database.Models;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using ScieenceAPI.Models;
 using ScieenceAPI.Models.ForClients;
@@ -27,7 +28,7 @@ namespace ScieenceAPI.Clients
             {
                 var s = 1;
 
-                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset={s}&limit=20&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
+                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset={s}&limit=100&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
                 response.EnsureSuccessStatusCode();
                 var content = response.Content.ReadAsStringAsync().Result;
 
@@ -42,22 +43,30 @@ namespace ScieenceAPI.Clients
                         Language = "en",
                         Url = pub.url,
                         Title = pub.title,
-                        Authors = string.Join("; ", pub.authors.ConvertAll(x => x.name)),
                         PublicationDate = pub.publicationDate,
                         PublicationYear = pub.year,
                         Description = pub.Abstract,
                         Doi = pub.externalIds.DOI,
-                        Subjects = string.Join("; ", pub.fieldsOfStudy),
                     };
+                    if(pub.authors != null)
+                    {
+                        newPub.Authors = string.Join("; ", pub.authors.ConvertAll(x => x.name));
+                    }
+
+                    if(pub.fieldsOfStudy != null)
+                    {
+                        newPub.Subjects = string.Join("; ", pub.fieldsOfStudy);
+                    }
+
                     pub.publicationTypes ??= ["Article"];
                     newPub.PublicationType = pub.publicationTypes[0];
                     result.Records.Add(newPub);
                 }
                 return result;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Failure on SemanticScholar");
+                throw new Exception("Failure on SemanticScholar", ex);
             }
         }
 
@@ -78,7 +87,7 @@ namespace ScieenceAPI.Clients
         {
             try
             {
-                var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=100");
+                var response = await _client.GetAsync($"/graph/v1/author/search?query={author}&fields=papers.title,papers.url,papers.abstract,papers.year,papers.isOpenAccess,papers.fieldsOfStudy,papers.publicationTypes,papers.authors,papers.externalIds,papers.publicationDate&limit=200");
                 response.EnsureSuccessStatusCode();
                 var content = response.Content.ReadAsStringAsync().Result;
 
@@ -95,13 +104,21 @@ namespace ScieenceAPI.Clients
                             Language = "en",
                             Url = pub.url,
                             Title = pub.title,
-                            Authors = string.Join("; ", pub.authors.ConvertAll(x => x.name)),
                             PublicationDate = pub.publicationDate,
                             PublicationYear = pub.year,
                             Description = pub.Abstract,
                             Doi = pub.externalIds.DOI,
-                            Subjects = string.Join("; ", pub.fieldsOfStudy),
                         };
+                        if (pub.authors != null)
+                        {
+                            newPub.Authors = string.Join("; ", pub.authors.ConvertAll(x => x.name));
+                        }
+
+                        if (pub.fieldsOfStudy != null)
+                        {
+                            newPub.Subjects = string.Join("; ", pub.fieldsOfStudy);
+                        }
+
                         pub.publicationTypes ??= ["Article"];
                         newPub.PublicationType = pub.publicationTypes[0];
                         result.Records.Add(newPub);
@@ -109,9 +126,9 @@ namespace ScieenceAPI.Clients
                 }
                 return result;
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Failure on SemanticScholar");
+                throw new Exception("Failure on SemanticScholar", ex);
             }
         }
         //https://api.semanticscholar.org/graph/v1/paper/search?query=covid+vaccination&offset=100&limit=3&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds
