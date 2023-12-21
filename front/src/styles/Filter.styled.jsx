@@ -11,7 +11,7 @@ export const Filter = styled.div`
   align-items: flex-start;
   align-self: flex-start;
   padding: 2rem;
-  gap: 2rem;
+  gap: 1rem;
 
   p {
     font-size: 2rem;
@@ -36,6 +36,10 @@ export const FilterDiv = styled.div`
   }
 `;
 
+export const FilterSlider = styled.div`
+  width: 100%;
+`;
+
 const keywordPadding = '1rem';
 
 export const KeywordList = styled.div`
@@ -43,13 +47,14 @@ export const KeywordList = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;
-  max-height: 20rem;
+  max-height: 15rem;
   background-color: ${variables.WHITE_COLOR};
   border-radius: 10px;
   caret-color: ${variables.BLUE_COLOR};
   text-transform: capitalize;
   gap: 0.5rem;
   word-break: unset;
+  color: ${variables.TEXT_COLOR};
 
   > div {
     display: flex;

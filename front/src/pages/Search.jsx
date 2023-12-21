@@ -5,6 +5,7 @@ import { ProgressBar } from 'react-loader-spinner';
 import { useQuery } from 'react-query';
 import { PubService } from '../app/services/api';
 import FilterClient from '../components/Home/FilterClient';
+import FilterServer from '../components/Home/FilterServer';
 import PublicationList from '../components/Publications/PublicationList';
 import Background from '../components/UI/Background';
 import Pagination from '../components/UI/Pagination';
@@ -140,7 +141,7 @@ const SearchPage = () => {
       return { ...prevState, Query: payload.value, Type: payload.type };
     });
   };
-  const getFiltersHandler = (filtersValue) => {
+  const clientFiltersHandler = (filtersValue) => {
     let rawData = Array.from(jsonData);
 
     if (filtersValue.checkedKeywords.length > 0) {
@@ -168,6 +169,9 @@ const SearchPage = () => {
 
     setShowData(sorted);
   };
+  const serverFiltersHandler = (filtersValue) => {
+    console.log(filtersValue);
+  };
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
@@ -193,11 +197,12 @@ const SearchPage = () => {
             ) : undefined}
           </Styled.FoundHeader>
           <Styled.FoundContent>
-            <div>
-              {jsonData && (
-                <FilterClient keywordsList={keywordsList} getFilters={getFiltersHandler} />
-              )}
-            </div>
+            {jsonData && (
+              <Styled.Filters>
+                <FilterClient keywordsList={keywordsList} getClientFilters={clientFiltersHandler} />
+                <FilterServer getServerFilters={serverFiltersHandler} />
+              </Styled.Filters>
+            )}
             <div className='divider'></div>
             {isLoading ? (
               <HelpDiv>

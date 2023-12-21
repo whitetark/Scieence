@@ -15,6 +15,7 @@ namespace Database.Models
         public Response()
         {
             Records = new List<Publication>();
+            keywordCounts = new List<KeywordCount>();
         }
 
     }

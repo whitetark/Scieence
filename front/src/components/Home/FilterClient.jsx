@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import * as Styled from '../../styles/Filter.styled';
 
-const FilterClient = ({ keywordsList, getFilters }) => {
+const FilterClient = ({ keywordsList, getClientFilters }) => {
   const [checkedKeywords, setCheckedKeywords] = useState([]);
   const [sortBy, setSortBy] = useState('titleAsc');
 
@@ -25,7 +25,7 @@ const FilterClient = ({ keywordsList, getFilters }) => {
       sortBy: sortBy,
     };
 
-    getFilters(filtersValue);
+    getClientFilters(filtersValue);
   }, [checkedKeywords, sortBy]);
 
   return (

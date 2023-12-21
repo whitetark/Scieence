@@ -1,6 +1,6 @@
 ﻿using Database.Models;
 
-namespace ScieenceAPI.Models
+namespace ScieenceAPI.Models.Dto
 {
     public class AccountUpdateDto
     {

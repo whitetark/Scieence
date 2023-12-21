@@ -40,3 +40,9 @@ export const FoundContent = styled.div`
     border-left: 2px solid ${variables.DIVIDER_COLOR};
   }
 `;
+
+export const Filters = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;

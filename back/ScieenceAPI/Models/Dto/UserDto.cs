@@ -1,4 +1,4 @@
-﻿namespace ScieenceAPI.Models
+﻿namespace ScieenceAPI.Models.Dto
 {
     public class UserDto
     {

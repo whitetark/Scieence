@@ -35,8 +35,7 @@ export const Button = styled.button`
 
   ${Filter} & {
     padding: 0.5rem 5.5rem;
-    margin: 2rem 3rem;
-    justify-self: flex-end;
+    place-self: center;
   }
 
   ${ModalMain} & {
