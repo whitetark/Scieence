@@ -4,7 +4,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { ProgressBar } from 'react-loader-spinner';
 import { useQuery } from 'react-query';
 import { PubService } from '../app/services/api';
-import Filter from '../components/Home/Filter';
+import FilterClient from '../components/Home/FilterClient';
 import PublicationList from '../components/Publications/PublicationList';
 import Background from '../components/UI/Background';
 import Pagination from '../components/UI/Pagination';
@@ -19,6 +19,8 @@ const initialState = {
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);
+  const [keywordsList, setKeywordsList] = useState([]);
+  const [showData, setShowData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,6 +37,7 @@ const SearchPage = () => {
       },
       onSuccess: (data) => {
         setJsonData(data.data.records);
+        setKeywordsList(data.data.keywordCounts);
       },
       enabled: false,
     },
@@ -48,6 +51,7 @@ const SearchPage = () => {
       },
       onSuccess: (data) => {
         setJsonData(data.data.records);
+        setKeywordsList(data.data.keywordCounts);
       },
       enabled: false,
     },
@@ -61,6 +65,7 @@ const SearchPage = () => {
       },
       onSuccess: (data) => {
         setJsonData(data.data.records);
+        setKeywordsList(data.data.keywordCounts);
       },
       enabled: false,
     },
@@ -78,7 +83,6 @@ const SearchPage = () => {
         ? (request = { ...request, Query: searchParams.get('query') })
         : undefined;
 
-      console.log(request);
       setRequestBody({ ...requestBody, Query: request.Query, Type: request.Type });
     }
     const pageValue = parseInt(searchParams.get('page'));
@@ -86,17 +90,17 @@ const SearchPage = () => {
       setCurrentPage(pageValue);
     }
   }, []);
-
   useEffect(() => {
-    setTotalPages(Math.ceil(jsonData.length / postsPerPage));
+    setShowData(jsonData);
   }, [jsonData]);
-
+  useEffect(() => {
+    setTotalPages(Math.ceil(showData.length / postsPerPage));
+  }, [showData]);
   useEffect(() => {
     const newSearch = new URLSearchParams(searchParams);
     newSearch.set('page', currentPage);
     setSearchParams(newSearch);
   }, [currentPage]);
-
   useEffect(() => {
     const newSearch = new URLSearchParams(searchParams);
     newSearch.set('query', requestBody.Query);
@@ -127,7 +131,6 @@ const SearchPage = () => {
         break;
     }
   };
-
   const handleSubmit = (payload) => {
     const newSearch = new URLSearchParams(searchParams);
     newSearch.set('query', payload.value);
@@ -137,10 +140,38 @@ const SearchPage = () => {
       return { ...prevState, Query: payload.value, Type: payload.type };
     });
   };
+  const getFiltersHandler = (filtersValue) => {
+    let rawData = Array.from(jsonData);
+
+    if (filtersValue.checkedKeywords.length > 0) {
+      rawData = rawData.filter((publication) =>
+        filtersValue.checkedKeywords.some((keyword) => publication.subjects.includes(keyword)),
+      );
+    }
+
+    const sorted = Array.from(
+      rawData.sort((pub1, pub2) => {
+        switch (filtersValue.sortBy) {
+          case 'titleAsc':
+            return pub1.title.localeCompare(pub2.title);
+          case 'titleDesc':
+            return pub2.title.localeCompare(pub1.title);
+          case 'yearAsc':
+            return pub2.publicationYear - pub1.publicationYear;
+          case 'yearDesc':
+            return pub1.publicationYear - pub2.publicationYear;
+          default:
+            return 0;
+        }
+      }),
+    );
+
+    setShowData(sorted);
+  };
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
-  const currentPosts = jsonData.slice(firstPostIndex, lastPostIndex);
+  let currentPosts = showData.slice(firstPostIndex, lastPostIndex);
 
   const isLoading = authorIsLoading || keywordIsLoading || subjectIsLoading;
   return (
@@ -153,7 +184,7 @@ const SearchPage = () => {
         <Styled.MainContent>
           <Styled.FoundHeader>
             <h2>Your Search Result</h2>
-            {!isLoading ? (
+            {!isLoading || jsonData.length !== 0 ? (
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
@@ -162,7 +193,11 @@ const SearchPage = () => {
             ) : undefined}
           </Styled.FoundHeader>
           <Styled.FoundContent>
-            <Filter />
+            <div>
+              {jsonData && (
+                <FilterClient keywordsList={keywordsList} getFilters={getFiltersHandler} />
+              )}
+            </div>
             <div className='divider'></div>
             {isLoading ? (
               <HelpDiv>

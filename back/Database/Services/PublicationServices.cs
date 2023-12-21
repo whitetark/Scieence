@@ -97,9 +97,9 @@ namespace Database.Services
             try
             {
                 string sql = @"SELECT * FROM PublicationSchema.Publications 
-                WHERE DOI = @Doi";
+                WHERE DOI = @Doi OR URL = @Url";
 
-                var test = await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new { publication.Doi });
+                var test = await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new { publication.Doi, publication.Url });
                 return test;
             }
             catch(Exception)

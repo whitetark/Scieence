@@ -21,17 +21,20 @@ namespace ScieenceAPI.Controllers
         [HttpGet("getByKeyword")]
         public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
         {
+            var result = new Response();
             //var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
             //var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
-            var dbpublications = await pubServices.GetPublicationsByKeyword(query);
-
-            var result = new Response();
+            if (query.Length > 2)
+            {
+                var dbpublications = await pubServices.GetPublicationsByKeyword(query);
+                result.Records.AddRange(dbpublications.Records);
+            }
 
             //result.Records.AddRange(snpublications.Records);
             //result.Records.AddRange(sspublications.Records);
-            result.Records.AddRange(dbpublications.Records);
             
-            FilterListByDOI(result);
+            result = FilterListByDOI(result);
+            result = FormKeywordCount(result);
             
             return result;
         }
@@ -77,6 +80,30 @@ namespace ScieenceAPI.Controllers
             var result = new Response();
             result.Records = response.Records.DistinctBy(x => x.Doi).ToList();
             return result;
+        }
+
+        public static Response FormKeywordCount(Response response)
+        {
+            var allKeywords = new List<string>();
+            foreach (Publication publication in response.Records)
+            {
+                if(publication.Subjects != null)
+                {
+                    allKeywords.AddRange(publication.Subjects.Split("; "));
+                }
+            }
+
+            var keywordCounts = new List<KeywordCount>();
+            foreach (string keyword in allKeywords.Distinct())
+            {
+                int count = allKeywords.Count(kw => kw == keyword);
+                keywordCounts.Add(new KeywordCount(keyword, count));
+            }
+            keywordCounts.Sort((x, y) => y.Count.CompareTo(x.Count));
+            keywordCounts.RemoveAll(kw => kw.Count == 1);
+
+            response.keywordCounts = keywordCounts;
+            return response;
         }
     }
 }
