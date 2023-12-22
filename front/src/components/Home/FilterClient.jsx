@@ -20,6 +20,11 @@ const FilterClient = ({ keywordsList, getClientFilters }) => {
   };
 
   useEffect(() => {
+    setCheckedKeywords([]);
+    setSortBy('titleAsc');
+  }, [keywordsList]);
+
+  useEffect(() => {
     const filtersValue = {
       checkedKeywords: checkedKeywords,
       sortBy: sortBy,

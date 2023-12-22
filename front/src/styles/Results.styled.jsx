@@ -32,8 +32,8 @@ export const FoundHeader = styled.div`
 `;
 
 export const FoundContent = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 0.01fr 4fr;
   gap: 2rem;
   .divider {
     content: '';

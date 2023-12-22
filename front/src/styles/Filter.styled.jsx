@@ -53,7 +53,6 @@ export const KeywordList = styled.div`
   caret-color: ${variables.BLUE_COLOR};
   text-transform: capitalize;
   gap: 0.5rem;
-  word-break: unset;
   color: ${variables.TEXT_COLOR};
 
   > div {
@@ -70,6 +69,7 @@ export const KeywordList = styled.div`
 
     .keyword {
       text-align: center;
+      word-break: break-all;
     }
     &:first-child {
       padding-top: ${keywordPadding};

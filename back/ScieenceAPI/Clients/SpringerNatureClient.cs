@@ -22,11 +22,24 @@ namespace ScieenceAPI.Clients
             };
         }
 
-        public async Task<Response> GetPublicationsByKeyword(string keyword)
+        public async Task<Response> GetPublicationsByKeyword(string keyword, string language, int[] year)
         {
             try
             {
-                var response = await ApiDeserialzer(keyword);
+
+                var response = await ApiDeserialzer($"{keyword} language:{language} datefrom:{year[0]}-01-01 dateto:{year[1]}-12-31");
+                return ResponseBeautifier(response);
+            }
+            catch (Exception ex) { 
+                throw new Exception("Failure on Springer Nature", ex);
+            }
+        }
+
+        public async Task<Response> GetPublicationsByAuthor(string author, string language, int[] year)
+        {
+            try
+            {
+                var response = await ApiDeserialzer($"name:{author} language:{language} datefrom:{year[0]}-01-01 dateto:{year[1]}-12-31");
                 return ResponseBeautifier(response);
             }
             catch
@@ -34,23 +47,11 @@ namespace ScieenceAPI.Clients
                 throw new Exception("Failure on Springer Nature");
             }
         }
-        public async Task<Response> GetPublicationsByAuthor(string author)
+        public async Task<Response> GetPublicationsBySubject(string subject, string language, int[] year)
         {
             try
             {
-                var response = await ApiDeserialzer("name:" + author);
-                return ResponseBeautifier(response);
-            }
-            catch
-            {
-                throw new Exception("Failure on Springer Nature");
-            }
-        }
-        public async Task<Response> GetPublicationsBySubject(string subject)
-        {
-            try
-            {
-                var response = await ApiDeserialzer("subject:" + subject);
+                var response = await ApiDeserialzer($"subject:{subject} language:{language} datefrom:{year[0]}-01-01 dateto:{year[1]}-12-31");
                 return ResponseBeautifier(response);
             }
             catch
@@ -74,7 +75,7 @@ namespace ScieenceAPI.Clients
         public async Task<SpringerNaturePub> ApiDeserialzer(string query)
         {
             var s = 1;
-            var response = await _client.GetAsync($"/metadata/json?q={query}&s={s}&p=200&api_key={_apiKey}");
+            var response = await _client.GetAsync($"/metadata/json?q={query}&s=1&p=200&api_key={_apiKey}");
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync().Result;
 

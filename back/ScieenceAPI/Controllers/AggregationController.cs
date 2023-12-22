@@ -19,20 +19,22 @@ namespace ScieenceAPI.Controllers
 
         //ApiPub
         [HttpGet("getByKeyword")]
-        public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query)
+        public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query, [FromQuery(Name ="lang")] string language, [FromQuery(Name ="year")] int[] year)
         {
             var result = new Response();
-            //var snpublications = await springerNatureClient.GetPublicationsByKeyword(query);
-            //var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
+            var snpublications = await springerNatureClient.GetPublicationsByKeyword(query, language, year);
+            result.Records.AddRange(snpublications.Records);
+            if (language == "en")
+            {
+                var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query, year);
+                result.Records.AddRange(sspublications.Records);
+            }
             if (query.Length > 2)
             {
-                var dbpublications = await pubServices.GetPublicationsByKeyword(query);
+                var dbpublications = await pubServices.GetPublicationsByKeyword(query, language, year);
                 result.Records.AddRange(dbpublications.Records);
             }
 
-            //result.Records.AddRange(snpublications.Records);
-            //result.Records.AddRange(sspublications.Records);
-            
             result = FilterListByDOI(result);
             result = FormKeywordCount(result);
             
@@ -40,37 +42,47 @@ namespace ScieenceAPI.Controllers
         }
 
         [HttpGet("getByAuthor")]
-        public async Task<Response> GetPublicationsByAuthor([FromQuery(Name = "query")] string query)
+        public async Task<Response> GetPublicationsByAuthor([FromQuery(Name = "query")] string query, [FromQuery(Name = "lang")] string language, [FromQuery(Name = "year")] int[] year)
         {
-            var snpublications = await springerNatureClient.GetPublicationsByAuthor(query);
-            var sspublications = await semanticScholarClient.GetPublicationsByAuthor(query);
-            var dbpublications = await pubServices.GetPublicationsByAuthor(query);
-
             var result = new Response();
-
+            var snpublications = await springerNatureClient.GetPublicationsByAuthor(query, language, year);
             result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
-            result.Records.AddRange(dbpublications.Records);
+            if (language == "en")
+            {
+                var sspublications = await semanticScholarClient.GetPublicationsByAuthor(query, year);
+                result.Records.AddRange(sspublications.Records);
+            }
+            if (query.Length > 2)
+            {
+                var dbpublications = await pubServices.GetPublicationsByAuthor(query, language, year);
+                result.Records.AddRange(dbpublications.Records);
+            }
 
-            FilterListByDOI(result);
+            result = FilterListByDOI(result);
+            result = FormKeywordCount(result);
 
             return result;
         }
 
         [HttpGet("getBySubject")]
-        public async Task<Response> GetPublicationsBySubject([FromQuery(Name = "query")] string query)
+        public async Task<Response> GetPublicationsBySubject([FromQuery(Name = "query")] string query, [FromQuery(Name = "lang")] string language, [FromQuery(Name = "year")] int[] year)
         {
-            var snpublications = await springerNatureClient.GetPublicationsBySubject(query);
-            var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query);
-            var dbpublications = await pubServices.GetPublicationsBySubject(query);
-
             var result = new Response();
-
+            var snpublications = await springerNatureClient.GetPublicationsBySubject(query, language, year);
             result.Records.AddRange(snpublications.Records);
-            result.Records.AddRange(sspublications.Records);
-            result.Records.AddRange(dbpublications.Records);
+            if (language == "en")
+            {
+                var sspublications = await semanticScholarClient.GetPublicationsByKeyword(query, year);
+                result.Records.AddRange(sspublications.Records);
+            }
+            if (query.Length > 2)
+            {
+                var dbpublications = await pubServices.GetPublicationsBySubject(query, language, year);
+                result.Records.AddRange(dbpublications.Records);
+            }
 
-            FilterListByDOI(result);
+            result = FilterListByDOI(result);
+            result = FormKeywordCount(result);
 
             return result;
         }

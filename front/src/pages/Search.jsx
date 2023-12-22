@@ -14,9 +14,14 @@ import * as Styled from '../styles/Results.styled';
 import { HelpDiv, Main } from '../styles/UI.styled';
 
 const initialState = {
-  Query: 'a',
+  Query: 'aha',
   Type: 'keyword',
+  Language: 'en',
+  Year: [2020, 2024],
 };
+
+const types = ['keyword', 'author', 'subject'];
+const languages = ['en', 'fr', 'de'];
 
 const SearchPage = () => {
   const [jsonData, setJsonData] = useState([]);
@@ -77,14 +82,31 @@ const SearchPage = () => {
       setRequestBody({ ...requestBody, Query: state.value, Type: state.type });
     } else {
       let request = {};
-      searchParams.get('type')
-        ? (request = { ...request, Type: searchParams.get('type') })
-        : undefined;
-      searchParams.get('query')
-        ? (request = { ...request, Query: searchParams.get('query') })
-        : undefined;
+      const searchType = searchParams.get('type');
+      const searchQuery = searchParams.get('query');
+      const searchLang = searchParams.get('lang');
+      const searchYear1 = searchParams.get('year1');
+      const searchYear2 = searchParams.get('year2');
 
-      setRequestBody({ ...requestBody, Query: request.Query, Type: request.Type });
+      searchType && types.includes(searchType)
+        ? (request = { ...request, Type: searchType })
+        : (request = { ...request, Type: initialState.Type });
+      searchQuery
+        ? (request = { ...request, Query: searchQuery })
+        : (request = { ...request, Query: initialState.Query });
+      searchLang && languages.includes(searchLang)
+        ? (request = { ...request, Language: searchLang })
+        : (request = { ...request, Language: initialState.Language });
+      searchYear1 && searchYear2
+        ? (request = { ...request, Year: [searchYear1, searchYear2] })
+        : (request = { ...request, Year: initialState.Year });
+
+      setRequestBody({
+        Query: request.Query,
+        Type: request.Type,
+        Language: request.Language,
+        Year: request.Year,
+      });
     }
     const pageValue = parseInt(searchParams.get('page'));
     if (pageValue) {
@@ -104,8 +126,12 @@ const SearchPage = () => {
   }, [currentPage]);
   useEffect(() => {
     const newSearch = new URLSearchParams(searchParams);
+    console.log(requestBody);
     newSearch.set('query', requestBody.Query);
     newSearch.set('type', requestBody.Type);
+    newSearch.set('lang', requestBody.Language);
+    newSearch.set('year1', requestBody.Year[0]);
+    newSearch.set('year2', requestBody.Year[1]);
     setSearchParams(newSearch);
     fetchDataByType();
   }, [requestBody]);
@@ -146,7 +172,9 @@ const SearchPage = () => {
 
     if (filtersValue.checkedKeywords.length > 0) {
       rawData = rawData.filter((publication) =>
-        filtersValue.checkedKeywords.some((keyword) => publication.subjects.includes(keyword)),
+        filtersValue.checkedKeywords.some((keyword) =>
+          publication.subjects ? publication.subjects.includes(keyword) : null,
+        ),
       );
     }
 
@@ -170,7 +198,14 @@ const SearchPage = () => {
     setShowData(sorted);
   };
   const serverFiltersHandler = (filtersValue) => {
-    console.log(filtersValue);
+    const newSearch = new URLSearchParams(searchParams);
+    newSearch.set('lang', filtersValue.lang);
+    newSearch.set('year1', filtersValue.year[0]);
+    newSearch.set('year2', filtersValue.year[1]);
+    setSearchParams(newSearch);
+    setRequestBody((prevState) => {
+      return { ...prevState, Language: filtersValue.lang, Year: filtersValue.year };
+    });
   };
 
   const lastPostIndex = currentPage * postsPerPage;
@@ -200,7 +235,10 @@ const SearchPage = () => {
             {jsonData && (
               <Styled.Filters>
                 <FilterClient keywordsList={keywordsList} getClientFilters={clientFiltersHandler} />
-                <FilterServer getServerFilters={serverFiltersHandler} />
+                <FilterServer
+                  getServerFilters={serverFiltersHandler}
+                  currentType={requestBody.Type}
+                />
               </Styled.Filters>
             )}
             <div className='divider'></div>

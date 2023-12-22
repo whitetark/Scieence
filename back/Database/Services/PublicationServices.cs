@@ -124,12 +124,13 @@ namespace Database.Services
             }
         }
 
-        public async Task<Models.Response> GetPublicationsByKeyword(string query)
+        public async Task<Models.Response> GetPublicationsByKeyword(string query, string language, int[] year)
         {
             string sql = @"SELECT * FROM PublicationSchema.Publications
-            WHERE Title LIKE @query OR Description LIKE @query";
+            WHERE (Title LIKE @query OR Description LIKE @query) AND (Language LIKE @language)
+            AND (PublicationYear BETWEEN @year1 AND @year2)";
 
-            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%" });
+            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%", language, year1 = year[0], year2 = year[1] });
             List<DbPublication> pubList = publications.ToList();
 
             var result = new Models.Response();
@@ -155,12 +156,13 @@ namespace Database.Services
             return result;
         }
 
-        public async Task<Models.Response> GetPublicationsByAuthor(string query)
+        public async Task<Models.Response> GetPublicationsByAuthor(string query, string language, int[] year)
         {
             string sql = @"SELECT * FROM PublicationSchema.Publications
-            WHERE Authors LIKE @query";
+            WHERE (Authors LIKE @query) AND (Language LIKE @language)
+            AND (PublicationYear BETWEEN @year1 AND @year2)";
 
-            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%" });
+            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%", language, year1 = year[0], year2 = year[1] });
             List<DbPublication> pubList = publications.ToList();
 
             var result = new Models.Response();
@@ -186,12 +188,13 @@ namespace Database.Services
             return result;
         }
 
-        public async Task<Models.Response> GetPublicationsBySubject(string query)
+        public async Task<Models.Response> GetPublicationsBySubject(string query, string language, int[] year)
         {
             string sql = @"SELECT * FROM PublicationSchema.Publications
-            WHERE Subjects LIKE @query";
+            WHERE (Subjects LIKE @query) AND (Language LIKE @language)
+            AND (PublicationYear BETWEEN @year1 AND @year2)";
 
-            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%" });
+            var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%", language, year1 = year[0], year2 = year[1] });
             List<DbPublication> pubList = publications.ToList();
 
             var result = new Models.Response();

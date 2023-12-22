@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import * as Styled from '../../styles/Filter.styled';
 import { Button } from '../../styles/UI.styled';
 
-const FilterServer = ({ getServerFilters }) => {
-  const [language, setLanguage] = useState('eng');
-  const [year, setYear] = useState([2015, 2023]);
+const FilterServer = ({ getServerFilters, currentType }) => {
+  const [language, setLanguage] = useState('en');
+  const [year, setYear] = useState([2020, 2024]);
 
   const handleLanguage = (event) => {
     event.preventDefault();
@@ -19,7 +19,7 @@ const FilterServer = ({ getServerFilters }) => {
   };
 
   const handleSubmit = () => {
-    getServerFilters({ language, year });
+    getServerFilters({ lang: language, year: year });
   };
 
   return (
@@ -27,9 +27,9 @@ const FilterServer = ({ getServerFilters }) => {
       <Styled.FilterDiv>
         <p>Language</p>
         <select name='language' value={language} onChange={handleLanguage}>
-          <option value='eng'>English</option>
-          <option value='ger'>German</option>
-          <option value='spa'>Spanish</option>
+          <option value='en'>English</option>
+          <option value='de'>German</option>
+          <option value='fr'>French</option>
         </select>
       </Styled.FilterDiv>
       <Styled.FilterDiv>

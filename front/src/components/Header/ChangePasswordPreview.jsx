@@ -11,7 +11,7 @@ const ChangePasswordPreview = ({ onClick, onToggle }) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const isSuccessContent = <div>Success</div>;
+  const isSuccessContent = <Styled.Success>You succesfully changed password!</Styled.Success>;
   const isNotSuccessContent = isConfirmed ? (
     <ChangePassword setIsSuccess={setIsSuccess} username={userData.username} />
   ) : (

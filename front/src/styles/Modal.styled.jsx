@@ -123,3 +123,10 @@ export const ModalInfo = styled.div`
     }
   }
 `;
+
+export const Success = styled.div`
+  text-align: center;
+  font-size: 1.8rem;
+  color: ${variables.TEXT_COLOR};
+  font-weight: 500;
+`;

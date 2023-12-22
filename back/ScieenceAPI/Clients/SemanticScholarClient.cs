@@ -22,13 +22,11 @@ namespace ScieenceAPI.Clients
             };
         }
 
-        public async Task<Response> GetPublicationsByKeyword(string q)
+        public async Task<Response> GetPublicationsByKeyword(string q, int[] year)
         {
             try
             {
-                var s = 1;
-
-                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&offset={s}&limit=100&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
+                var response = await _client.GetAsync($"/graph/v1/paper/search?query={q}&year={year[0]}-{year[1]}&offset=1&limit=100&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds,publicationDate");
                 response.EnsureSuccessStatusCode();
                 var content = response.Content.ReadAsStringAsync().Result;
 
@@ -40,7 +38,7 @@ namespace ScieenceAPI.Clients
                 {
                     var newPub = new Publication
                     {
-                        Language = "eng",
+                        Language = "en",
                         Url = pub.url,
                         Title = pub.title,
                         PublicationDate = pub.publicationDate,
@@ -70,20 +68,7 @@ namespace ScieenceAPI.Clients
             }
         }
 
-        public async Task<Response> GetPublicationsByLanguage(string language)
-        {
-            var result = new Response();
-            if (language == "en")
-            {
-                Random rnd = new();
-                char randomChar = (char)rnd.Next('a', 'z');
-                var publications = await GetPublicationsByKeyword(randomChar.ToString());
-                result.Records.AddRange(publications.Records);
-            }
-            return result;
-        }
-
-        public async Task<Response> GetPublicationsByAuthor(string author)
+        public async Task<Response> GetPublicationsByAuthor(string author, int[] year)
         {
             try
             {
@@ -101,7 +86,7 @@ namespace ScieenceAPI.Clients
 
                         var newPub = new Publication
                         {
-                            Language = "eng",
+                            Language = "en",
                             Url = pub.url,
                             Title = pub.title,
                             PublicationDate = pub.publicationDate,
@@ -121,7 +106,10 @@ namespace ScieenceAPI.Clients
 
                         pub.publicationTypes ??= ["Article"];
                         newPub.PublicationType = pub.publicationTypes[0];
-                        result.Records.Add(newPub);
+                        if(newPub.PublicationYear > year[0] && newPub.PublicationYear < year[1])
+                        {
+                            result.Records.Add(newPub);
+                        }
                     }
                 }
                 return result;

@@ -68,16 +68,31 @@ export const UserService = {
 
 export const PubService = {
   async getPubsByKeyword(payload) {
-    const query = payload.Query;
-    return api.get('/Aggregation/getByKeyword' + '?query=' + query);
+    return api.get(
+      '/Aggregation/getByKeyword' +
+        `?query=${payload.Query}` +
+        `&lang=${payload.Language}` +
+        `&year=${payload.Year[0]}` +
+        `&year=${payload.Year[1]}`,
+    );
   },
   async getPubsByAuthor(payload) {
-    const query = payload.Query;
-    return api.get('/Aggregation/getByAuthor' + '?query=' + query);
+    return api.get(
+      '/Aggregation/getByAuthor' +
+        `?query=${payload.Query}` +
+        `&lang=${payload.Language}` +
+        `&year=${payload.Year[0]}` +
+        `&year=${payload.Year[1]}`,
+    );
   },
   async getPubsBySubject(payload) {
-    const query = payload.Query;
-    return api.get('/Aggregation/getBySubject' + '?query=' + query);
+    return api.get(
+      '/Aggregation/getBySubject' +
+        `?query=${payload.Query}` +
+        `&lang=${payload.Language}` +
+        `&year=${payload.Year[0]}` +
+        `&year=${payload.Year[1]}`,
+    );
   },
 };
 export default api;

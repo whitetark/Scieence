@@ -3,7 +3,6 @@ import React from 'react';
 import { useAuthContext } from '../app/store/auth-context';
 import PublicationList from '../components/Publications/PublicationList';
 import Background from '../components/UI/Background';
-import Searchbar from '../components/UI/Searchbar';
 import * as Styled from '../styles/Results.styled';
 import { Main } from '../styles/UI.styled';
 
@@ -13,7 +12,6 @@ const FavoritePage = () => {
     <Main>
       <Styled.MainSearchbar>
         <Background />
-        <Searchbar />
       </Styled.MainSearchbar>
       <Styled.MainWrapper>
         <Styled.MainContent>
