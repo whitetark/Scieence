@@ -20,6 +20,10 @@ const initialState = {
   Year: [2020, 2024],
 };
 
+const validateYear = (value) => {
+  return typeof value === Number && 2000 < Number(value) < 2024;
+};
+
 const types = ['keyword', 'author', 'subject'];
 const languages = ['en', 'fr', 'de'];
 
@@ -88,16 +92,16 @@ const SearchPage = () => {
       const searchYear1 = searchParams.get('year1');
       const searchYear2 = searchParams.get('year2');
 
-      searchType && types.includes(searchType)
+      types.includes(searchType)
         ? (request = { ...request, Type: searchType })
         : (request = { ...request, Type: initialState.Type });
       searchQuery
         ? (request = { ...request, Query: searchQuery })
         : (request = { ...request, Query: initialState.Query });
-      searchLang && languages.includes(searchLang)
+      languages.includes(searchLang)
         ? (request = { ...request, Language: searchLang })
         : (request = { ...request, Language: initialState.Language });
-      searchYear1 && searchYear2
+      validateYear(searchYear1) && validateYear(searchYear2)
         ? (request = { ...request, Year: [searchYear1, searchYear2] })
         : (request = { ...request, Year: initialState.Year });
 

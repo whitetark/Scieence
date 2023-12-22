@@ -11,10 +11,10 @@ namespace ScieenceAPI.Clients
         private static string? _baseUrl;
         private static string? _apiKey;
 
-        public SpringerNatureClient()
+        public SpringerNatureClient(IConfiguration configuration)
         {
-            _baseUrl = Config.SpringerNature.baseUrl;
-            _apiKey = Config.SpringerNature.apiKey;
+            _baseUrl = configuration["SpringerNature:Url"];
+            _apiKey = configuration["SpringerNature:ApiKey"];
 
             _client = new HttpClient
             {
@@ -92,14 +92,20 @@ namespace ScieenceAPI.Clients
                     Language = pub.language,
                     Url = pub.url[0].value,
                     Title = pub.title,
-                    Authors = string.Join("; ", pub.creators.ConvertAll(x => x.creator)).Replace(",", ""),
                     PublicationDate = pub.publicationDate,
                     PublicationType = pub.contentType,
                     PublicationYear = Int32.Parse(pub.publicationDate.Remove(4)),
                     Description = pub.Abstract,
                     Doi = pub.identifier.Remove(0, 4),
-                    Subjects = string.Join("; ", pub.subjects),
                 };
+                if(pub.creators != null) {
+                    newPub.Authors = string.Join("; ", pub.creators.ConvertAll(x => x.creator)).Replace(",", "");
+                }
+                
+                if(pub.subjects != null)
+                {
+                    newPub.Subjects = string.Join("; ", pub.subjects);
+                }
                 result.Records.Add(newPub);
             }
             return result;

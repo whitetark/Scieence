@@ -22,7 +22,6 @@ namespace Database
             _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             var database = client.GetDatabase(dbConfig.Value.User_Database_Name);
             _accounts = database.GetCollection<Account>(dbConfig.Value.Accounts_Collection_Name);
-
         }
 
         public IDbConnection GetPubDbConnection()

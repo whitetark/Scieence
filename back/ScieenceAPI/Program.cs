@@ -8,6 +8,7 @@ using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.Extensions.DependencyInjection;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -35,9 +36,7 @@ builder.Services.AddAuthentication(x =>
 });
 
 
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -55,8 +54,8 @@ builder.Services.AddSingleton<SpringerNatureClient>();
 builder.Services.AddSingleton<SemanticScholarClient>();
 
 builder.Services.AddSingleton<DbClient>();
-builder.Services.AddTransient<AccountServices>();
-builder.Services.AddTransient<PublicationServices>();
+builder.Services.AddScoped<AccountServices>();
+builder.Services.AddScoped<PublicationServices>();
 builder.Services.Configure<DbConfig>(builder.Configuration);
 builder.Services.AddCors(options =>
 {

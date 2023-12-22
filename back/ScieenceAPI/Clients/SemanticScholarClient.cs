@@ -12,9 +12,9 @@ namespace ScieenceAPI.Clients
         private readonly HttpClient _client;
         private static string? _baseUrl;
 
-        public SemanticScholarClient()
+        public SemanticScholarClient(IConfiguration configuration)
         {
-            _baseUrl = Config.SemanticScholar.baseUrl;
+            _baseUrl = configuration["SemanticScholar:Url"];
 
             _client = new HttpClient
             {
