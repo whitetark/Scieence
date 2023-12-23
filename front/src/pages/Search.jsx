@@ -21,7 +21,11 @@ const initialState = {
 };
 
 const validateYear = (value) => {
-  return typeof value === Number && 2000 < Number(value) < 2024;
+  return Number(value) && 1900 < Number(value) && Number(value) < 2024;
+};
+
+const validateQuery = (value) => {
+  return value.length > 2;
 };
 
 const types = ['keyword', 'author', 'subject'];
@@ -38,7 +42,7 @@ const SearchPage = () => {
   const postsPerPage = 4;
 
   const { state } = useLocation();
-  const { isLoading: authorIsLoading, refetch: refetchByAuthor } = useQuery(
+  const { isFetching: authorIsLoading, refetch: refetchByAuthor } = useQuery(
     ['getPubsByAuthor', requestBody],
     () => PubService.getPubsByAuthor(requestBody),
     {
@@ -52,7 +56,7 @@ const SearchPage = () => {
       enabled: false,
     },
   );
-  const { isLoading: keywordIsLoading, refetch: refetchByKeyword } = useQuery(
+  const { isFetching: keywordIsLoading, refetch: refetchByKeyword } = useQuery(
     ['getPubsByKeyword', requestBody],
     () => PubService.getPubsByKeyword(requestBody),
     {
@@ -66,7 +70,7 @@ const SearchPage = () => {
       enabled: false,
     },
   );
-  const { isLoading: subjectIsLoading, refetch: refetchBySubject } = useQuery(
+  const { isFetching: subjectIsLoading, refetch: refetchBySubject } = useQuery(
     ['getPubsBySubject', requestBody],
     () => PubService.getPubsBySubject(requestBody),
     {
@@ -95,7 +99,7 @@ const SearchPage = () => {
       types.includes(searchType)
         ? (request = { ...request, Type: searchType })
         : (request = { ...request, Type: initialState.Type });
-      searchQuery
+      validateQuery(searchQuery)
         ? (request = { ...request, Query: searchQuery })
         : (request = { ...request, Query: initialState.Query });
       languages.includes(searchLang)
@@ -117,20 +121,23 @@ const SearchPage = () => {
       setCurrentPage(pageValue);
     }
   }, []);
+
   useEffect(() => {
     setShowData(jsonData);
   }, [jsonData]);
+
   useEffect(() => {
     setTotalPages(Math.ceil(showData.length / postsPerPage));
   }, [showData]);
+
   useEffect(() => {
     const newSearch = new URLSearchParams(searchParams);
     newSearch.set('page', currentPage);
     setSearchParams(newSearch);
   }, [currentPage]);
+
   useEffect(() => {
     const newSearch = new URLSearchParams(searchParams);
-    console.log(requestBody);
     newSearch.set('query', requestBody.Query);
     newSearch.set('type', requestBody.Type);
     newSearch.set('lang', requestBody.Language);
@@ -221,13 +228,13 @@ const SearchPage = () => {
     <Main>
       <Styled.MainSearchbar>
         <Background />
-        <Searchbar handleSubmit={handleSubmit} type={requestBody.Type} />
+        <Searchbar handleSubmit={handleSubmit} type={requestBody.Type} isLoading={isLoading} />
       </Styled.MainSearchbar>
       <Styled.MainWrapper>
         <Styled.MainContent>
           <Styled.FoundHeader>
             <h2>Your Search Result</h2>
-            {!isLoading || jsonData.length !== 0 ? (
+            {!isLoading && jsonData.length !== 0 ? (
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
@@ -242,6 +249,7 @@ const SearchPage = () => {
                 <FilterServer
                   getServerFilters={serverFiltersHandler}
                   currentType={requestBody.Type}
+                  isLoading={isLoading}
                 />
               </Styled.Filters>
             )}

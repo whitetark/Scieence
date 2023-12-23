@@ -33,9 +33,16 @@ export const Button = styled.button`
     background-color: ${variables.BLUE_HOVER_COLOR};
   }
 
+  &:disabled {
+    cursor: default;
+  }
+
   ${Filter} & {
     padding: 0.5rem 5.5rem;
     place-self: center;
+    &:disabled {
+      background-color: ${variables.GRAY_COLOR};
+    }
   }
 
   ${ModalMain} & {
@@ -46,7 +53,6 @@ export const Button = styled.button`
 
     &:disabled {
       background-color: ${variables.GRAY_COLOR};
-      cursor: default;
     }
   }
 `;

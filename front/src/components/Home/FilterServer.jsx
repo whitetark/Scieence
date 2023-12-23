@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import * as Styled from '../../styles/Filter.styled';
 import { Button } from '../../styles/UI.styled';
 
-const FilterServer = ({ getServerFilters, currentType }) => {
+const FilterServer = ({ getServerFilters, isLoading }) => {
   const [language, setLanguage] = useState('en');
   const [year, setYear] = useState([2020, 2024]);
 
@@ -48,7 +48,9 @@ const FilterServer = ({ getServerFilters, currentType }) => {
           </Box>
         </Styled.FilterSlider>
       </Styled.FilterDiv>
-      <Button onClick={handleSubmit}>Apply</Button>
+      <Button onClick={handleSubmit} disabled={isLoading}>
+        Apply
+      </Button>
     </Styled.Filter>
   );
 };

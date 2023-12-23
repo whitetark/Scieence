@@ -14,13 +14,15 @@ const Searchbar = (props) => {
   const handleButton = (e) => {
     e.preventDefault();
     const value = queryRef.current.value;
-    props.handleSubmit({ value, type });
+    if (value.length > 0) {
+      props.handleSubmit({ value, type });
+    }
   };
 
   return (
     <Styled.Searchbar>
       <Styled.SearchbarDiv>
-        <Styled.SearchButton type='submit' onClick={handleButton}>
+        <Styled.SearchButton onClick={handleButton} disabled={props.isLoading}>
           <FontAwesomeIcon icon='fa-solid fa-magnifying-glass' fixedWidth />
         </Styled.SearchButton>
         <input

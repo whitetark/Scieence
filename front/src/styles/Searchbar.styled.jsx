@@ -38,8 +38,13 @@ export const SearchButton = styled.button`
   transition: all 0.2s ease-out;
   padding: ${PADDING};
   justify-self: flex-start;
+  background-color: ${variables.WHITE_COLOR};
   &:hover {
     background-color: ${variables.GRAY_COLOR};
+  }
+  &:disabled {
+    background-color: ${variables.GRAY_COLOR};
+    cursor: default;
   }
 `;
 
