@@ -64,7 +64,7 @@ namespace ScieenceAPI.Clients
             }
             catch (Exception ex)
             {
-                throw new Exception("Failure on SemanticScholar", ex);
+                return new Response();
             }
         }
 
@@ -116,7 +116,7 @@ namespace ScieenceAPI.Clients
             }
             catch(Exception ex)
             {
-                throw new Exception("Failure on SemanticScholar", ex);
+                return new Response();
             }
         }
         //https://api.semanticscholar.org/graph/v1/paper/search?query=covid+vaccination&offset=100&limit=3&fields=title,url,abstract,year,isOpenAccess,fieldsOfStudy,publicationTypes,authors,externalIds

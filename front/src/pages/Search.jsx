@@ -146,6 +146,9 @@ const SearchPage = () => {
     setSearchParams(newSearch);
     fetchDataByType();
   }, [requestBody]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [totalPages]);
 
   const fetchDataByType = () => {
     if (requestBody === initialState) {

@@ -30,8 +30,8 @@ namespace ScieenceAPI.Clients
                 var response = await ApiDeserialzer($"{keyword} language:{language} datefrom:{year[0]}-01-01 dateto:{year[1]}-12-31");
                 return ResponseBeautifier(response);
             }
-            catch (Exception ex) { 
-                throw new Exception("Failure on Springer Nature", ex);
+            catch (Exception ex) {
+                return new Response();
             }
         }
 
@@ -44,7 +44,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception("Failure on Springer Nature");
+                return new Response();
             }
         }
         public async Task<Response> GetPublicationsBySubject(string subject, string language, int[] year)
@@ -56,7 +56,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception("Failure on Springer Nature");
+                return new Response();
             }
         }
         public async Task<Response> GetPublicationsByLanguage(string language)
@@ -68,7 +68,7 @@ namespace ScieenceAPI.Clients
             }
             catch
             {
-                throw new Exception("Failure on Springer Nature");
+                return new Response();
             }
         }
 

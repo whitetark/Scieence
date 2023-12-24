@@ -19,7 +19,9 @@ const PublicationButton = (props) => {
       <Styled.PublicationButton onClick={toggle}>
         <h4 className='title'>{data.title}</h4>
         <p className='details'>{data.description || 'No description.'}</p>
-        <p className='authors'>{data.authors.replaceAll(';', ', ') || 'No authors.'}</p>
+        <p className='authors'>
+          {data.authors ? data.authors.replaceAll(';', ', ') : 'No authors.'}
+        </p>
       </Styled.PublicationButton>
     </>
   );

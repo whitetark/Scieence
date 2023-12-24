@@ -6,7 +6,9 @@ import * as Styled from '../../styles/Publications.styled';
 
 const Publication = ({ data, onClick, hide }) => {
   const { userData, updateUser, addPublicationToUser } = useAuthContext();
-  const userLikePub = userData.favourites.some((publication) => publication.doi === data.doi);
+  const userLikePub = userData.favourites.some((publication) =>
+    data.doi ? publication.doi === data.doi : publication.url === data.url,
+  );
   const addPublicationHandler = () => {
     const request = {
       account: userData,
@@ -43,7 +45,7 @@ const Publication = ({ data, onClick, hide }) => {
       </Styled.PublicationActions>
       <Styled.PublicationMain>
         <h1 className='title'>{data.title}</h1>
-        <p className='authors'>{data.authors.replace('; ', ', ') || 'No authors.'}</p>
+        <p className='authors'>{data.authors ? data.authors.replace('; ', ', ') : 'No authors.'}</p>
         <p className='details'>{data.description || 'No description.'}</p>
         <Styled.PublicationDetails>
           <Styled.PublicationInfo>
@@ -54,7 +56,8 @@ const Publication = ({ data, onClick, hide }) => {
               Language: <span>{data.language || 'eng'}</span>
             </p>
             <p>
-              Publication Type: <span>{data.publicationType.split(' ')[0] || 'Article'}</span>
+              Publication Type:{' '}
+              <span>{data.publicationType ? data.publicationType.split(' ')[0] : 'Article'}</span>
             </p>
           </Styled.PublicationInfo>
           <Styled.PublicationLinks>
