@@ -47,6 +47,19 @@ namespace Database.Services
             {
                 throw new Exception("Failed to Get Publication");
             }
+        }
+        public async Task<DbPublication> GetPublicationByUrl(string url)
+        {
+            try
+            {
+                string sql = @"SELECT * FROM PublicationSchema.Publications 
+                WHERE URL = @url";
+                return await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new { url });
+            }
+            catch
+            {
+                throw new Exception("Failed to Get Publication");
+            }
 
         }
         public async Task<List<DbPublication>> GetPublications()
@@ -97,30 +110,39 @@ namespace Database.Services
             try
             {
                 string sql = @"SELECT * FROM PublicationSchema.Publications 
-                WHERE DOI = @Doi OR URL = @Url";
+                WHERE URL = @Url";
 
-                var test = await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new { publication.Doi, publication.Url });
-                return test;
-            }
-            catch(Exception)
-            {
-                string sql = @"INSERT INTO PublicationSchema.Publications
+                var test = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { publication.Url });
+
+                if (test.Count() > 0)
+                {
+                    return test.FirstOrDefault();
+                }
+
+                sql = @"INSERT INTO PublicationSchema.Publications
                 ([Description], [Authors], [Subjects],
                 [PublicationDate], [PublicationType], [PublicationYear], 
                 [Language], [URL], [Title], [DOI]) 
                 OUTPUT INSERTED.*
-                VALUES (" + "'" + publication.Description +
-                       "', '" + publication.Authors +
-                       "', '" + publication.Subjects +
-                       "', '" + publication.PublicationDate +
-                       "', '" + publication.PublicationType +
-                       "', '" + publication.PublicationYear +
-                       "', '" + publication.Language +
-                       "', '" + publication.Url +
-                       "', '" + publication.Title +
-                       "', '" + publication.Doi + "')";
+                VALUES (@description, @authors, @subjects, @publicationDate,
+                @publicationType, @publicationYear, @language, @url, @title, @doi)";
 
-                return await _pubDbConnection.QuerySingleAsync<DbPublication>(sql);
+                return await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new {
+                    description = publication.Description,
+                    authors = publication.Authors,
+                    subjects = publication.Subjects,
+                    publicationDate = publication.PublicationDate,
+                    publicationType = publication.PublicationType,
+                    publicationYear = publication.PublicationYear,
+                    language = publication.Language,
+                    url = publication.Url,
+                    title = publication.Title,
+                    doi = publication.Doi,
+                });
+            }
+            catch(Exception)
+            {
+                throw new Exception();
             }
         }
 

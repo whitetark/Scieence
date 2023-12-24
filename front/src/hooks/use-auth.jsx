@@ -44,10 +44,10 @@ export const useLogout = () => {
   });
 };
 
-export const useUpdateUser = () => {
-  return useMutation('update user', (payload) => UserService.update(payload), {
+export const useRemovePublication = () => {
+  return useMutation('remove publication', (payload) => UserService.removePublication(payload), {
     onError: (error) => {
-      console.log('Update User error: ' + error.message);
+      console.log('Remove Publication error: ' + error.message);
     },
   });
 };

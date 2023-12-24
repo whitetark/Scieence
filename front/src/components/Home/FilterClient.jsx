@@ -44,11 +44,11 @@ const FilterClient = ({ keywordsList, getClientFilters }) => {
           <option value='yearDesc'>By Year - Old First</option>
         </select>
       </Styled.FilterDiv>
-      <Styled.FilterDiv>
-        <p>Keywords</p>
-        <Styled.KeywordList>
-          {keywordsList &&
-            keywordsList.map((keyword, index) => {
+      {keywordsList && (
+        <Styled.FilterDiv>
+          <p>Keywords</p>
+          <Styled.KeywordList>
+            {keywordsList.map((keyword, index) => {
               return (
                 <div key={index} className={index % 2 ? 'odd' : 'even'}>
                   <input
@@ -62,8 +62,9 @@ const FilterClient = ({ keywordsList, getClientFilters }) => {
                 </div>
               );
             })}
-        </Styled.KeywordList>
-      </Styled.FilterDiv>
+          </Styled.KeywordList>
+        </Styled.FilterDiv>
+      )}
     </Styled.Filter>
   );
 };

@@ -9,14 +9,11 @@ namespace Database.Models
 {
     public class Account
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string? Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-        public required List<DbPublication> Favourites { get; set; }
-        public string RefreshToken { get; set; } = string.Empty;
-        public DateTime TokenCreated { get; set; }
-        public DateTime TokenExpires { get; set; }
+        public int AccountId { get; set; }
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
+        public string RefreshToken { get; set; }
+        public string TokenCreated { get; set; }
+        public string TokenExpires { get; set; }
     }
 }

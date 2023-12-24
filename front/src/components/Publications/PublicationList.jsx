@@ -8,7 +8,7 @@ const PublicationList = (props) => {
   const publications = props.data;
   return (
     <Styled.PublicationList>
-      {publications.length !== 0 ? (
+      {publications && publications.length > 0 ? (
         publications.map((publication, index) => {
           return <PublicationButton data={publication} key={index} />;
         })

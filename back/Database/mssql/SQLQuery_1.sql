@@ -25,6 +25,26 @@ CREATE TABLE PublicationSchema.Publications
     DOI VARCHAR(256),
 )
 
+CREATE TABLE PublicationSchema.Accounts
+(
+    AccountId INT IDENTITY(1,1) PRIMARY KEY,
+    Username VARCHAR(32),
+    PasswordHash VARCHAR(1000),
+    RefreshToken VARCHAR(2000),
+    TokenCreated VARCHAR(2000),
+    TokenExpires VARCHAR(2000)
+)
+
+DROP TABLE PublicationSchema.Accounts
+
+CREATE TABLE PublicationSchema.Favourites
+(
+    FavId INT IDENTITY(1,1) PRIMARY KEY,
+    AccountId INT REFERENCES PublicationSchema.Accounts(AccountId),
+    PublicationId INT REFERENCES PublicationSchema.Publications(PublicationId)
+)
+DROP TABLE PublicationSchema.Favourites
+
 SELECT * FROM PublicationSchema.Publications;
 
 USE ScieencePubDb;

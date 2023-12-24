@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useAddPublication, useUpdateUser } from '../../hooks/use-auth';
+import { useAddPublication, useRemovePublication } from '../../hooks/use-auth';
 import { UserService } from '../services/api';
 
 const AuthContext = createContext();
@@ -16,7 +16,7 @@ export const AuthContextProvider = ({ children }) => {
   const [userData, setUserData] = useState([]);
   const [serverIsOn, setServerIsOn] = useState(true);
   const { mutateAsync: addOnServer } = useAddPublication();
-  const { mutateAsync: updateOnServer } = useUpdateUser();
+  const { mutateAsync: removeFromServer } = useRemovePublication();
 
   useQuery('user data', () => UserService.fetchUserData(), {
     onSuccess: ({ data }) => {
@@ -42,12 +42,12 @@ export const AuthContextProvider = ({ children }) => {
       setUserData(data.data);
     });
   };
-
-  const updateUser = (newData) => {
-    updateOnServer(newData).then((data) => {
+  const removePublicationFromUser = (newData) => {
+    removeFromServer(newData).then((data) => {
       setUserData(data.data);
     });
   };
+
   // useEffect(() => {
   //   const updateData = async (payload) => {
   //     await api
@@ -70,8 +70,8 @@ export const AuthContextProvider = ({ children }) => {
         setUserData,
         setUserToken,
         setServerIsOn,
-        updateUser,
         addPublicationToUser,
+        removePublicationFromUser,
       }}>
       {children}
     </AuthContext.Provider>

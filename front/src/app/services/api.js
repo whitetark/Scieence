@@ -46,8 +46,8 @@ export const UserService = {
   async fetchUserData() {
     return api.get('/Acc/getByUsername');
   },
-  async update(payload) {
-    return api.put('/Acc/update', payload);
+  async removePublication(payload) {
+    return api.put('/Acc/removePublicationFromAccount', payload);
   },
   async addPublication(payload) {
     return api.put('/Acc/addPublicationToAccount', payload);

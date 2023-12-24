@@ -5,7 +5,7 @@ import { useAuthContext } from '../../app/store/auth-context';
 import * as Styled from '../../styles/Publications.styled';
 
 const Publication = ({ data, onClick, hide }) => {
-  const { userData, updateUser, addPublicationToUser } = useAuthContext();
+  const { userData, addPublicationToUser, removePublicationFromUser } = useAuthContext();
   const userLikePub = userData.favourites.some((publication) =>
     data.doi ? publication.doi === data.doi : publication.url === data.url,
   );
@@ -19,10 +19,13 @@ const Publication = ({ data, onClick, hide }) => {
   };
 
   const removePublicationHandler = () => {
-    const index = userData.favourites.findIndex((publication) => publication.doi === data.doi);
-    let user = userData;
-    user.favourites.splice(index, 1);
-    updateUser(user);
+    const request = {
+      account: userData,
+      publicationToAdd: data,
+    };
+
+    removePublicationFromUser(request);
+    hide();
   };
 
   return (

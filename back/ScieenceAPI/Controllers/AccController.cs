@@ -15,11 +15,11 @@ namespace ScieenceAPI.Controllers
     [Authorize(Roles ="User, Admin")]
     [Route("[controller]")]
     [ApiController]
-    public class AccController(AccountServices accountServices, IConfiguration configuration, PublicationServices pubServices) : ControllerBase
+    public class AccController(AccountServices accountServices, IConfiguration configuration, PublicationServices pubServices, FavouriteServices favouriteServices) : ControllerBase
     {
         [Route("getByUsername")]
         [HttpGet]
-        public async Task<ActionResult<Account>> GetAccount()
+        public async Task<ActionResult> GetAccount()
         {
             var username = Request.Cookies["username"];
             if(username == null)
@@ -32,6 +32,8 @@ namespace ScieenceAPI.Controllers
             {
                 return BadRequest("User not found");
             }
+
+
             var result = CreateUserResponse(user);
             return Ok(result);
         }
@@ -48,18 +50,17 @@ namespace ScieenceAPI.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateAccount(AccountUpdateDto updateDto)
         {
-            var account = await accountServices.GetAccountByUsername(updateDto.Username);
-            if(account == null)
+            var responseFromDb = await accountServices.GetAccountByUsername(updateDto.Username);
+            if(responseFromDb.account == null)
             {
                 return BadRequest("User not found");
             }
 
             var newAccount = new Account
             {
-                Id = updateDto.Id,
+                AccountId = updateDto.Id,
                 Username = updateDto.Username,
-                PasswordHash = account.PasswordHash,
-                Favourites = updateDto.Favourites,
+                PasswordHash = responseFromDb.account.PasswordHash,
                 RefreshToken = updateDto.RefreshToken,
                 TokenCreated = updateDto.TokenCreated,
                 TokenExpires = updateDto.TokenExpires,
@@ -73,31 +74,47 @@ namespace ScieenceAPI.Controllers
         [HttpPut]
         public async Task<ActionResult> AddPublicationToAccount(AddPublicationToAccountDto request)
         {
-            var account = await accountServices.GetAccountByUsername(request.account.Username);
-            if (account == null)
+            var responseFromDb = await accountServices.GetAccountByUsername(request.account.Username);
+            if (responseFromDb == null)
             {
                 return BadRequest("User not found");
             }
 
             var publication = await pubServices.CreatePublication(request.publicationToAdd);
-
-            account.Favourites.Add(publication);
-            await accountServices.UpdateAccount(account);
-
-            return Ok(account);
+            await favouriteServices.AddFavorite(responseFromDb.account.AccountId, publication.PublicationId);
+            var publications = await favouriteServices.GetFavoritesByUsername(responseFromDb.account.Username);
+            var result = CreateUserResponse(new AccountResponse(responseFromDb.account, publications));
+            return Ok(result);
         }
-  
-        [Route("changePassword")]
-        [HttpPatch]
-        public async Task<ActionResult> ChangePassword([FromBody] UserDto request)
-        {
-            var user = await accountServices.GetAccountByUsername(request.username);
 
-            if (user == null)
+        [Route("removePublicationFromAccount")]
+        [HttpPut]
+        public async Task<ActionResult> removePublicationFromAccount(AddPublicationToAccountDto request)
+        {
+            var responseFromDb = await accountServices.GetAccountByUsername(request.account.Username);
+            if (responseFromDb == null)
             {
                 return BadRequest("User not found");
             }
 
+            var publication = await pubServices.GetPublicationByUrl(request.publicationToAdd.Url);
+            await favouriteServices.DeleteFavorite(responseFromDb.account.AccountId, publication.PublicationId);
+            var publications = await favouriteServices.GetFavoritesByUsername(responseFromDb.account.Username);
+            var result = CreateUserResponse(new AccountResponse(responseFromDb.account, publications));
+            return Ok(result);
+        }
+
+        [Route("changePassword")]
+        [HttpPatch]
+        public async Task<ActionResult> ChangePassword([FromBody] UserDto request)
+        {
+            var responseFromDb = await accountServices.GetAccountByUsername(request.username);
+
+            if (responseFromDb == null)
+            {
+                return BadRequest("User not found");
+            }
+            var user = responseFromDb.account;
             string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
 
             user.PasswordHash = newPasswordHash;
@@ -105,18 +122,17 @@ namespace ScieenceAPI.Controllers
 
             return Ok();
         }
-
-        private static UserResponse CreateUserResponse(Account account)
+        private static UserResponse CreateUserResponse(AccountResponse responseFromDb)
         {
+            var account = responseFromDb.account;
             var response = new UserResponse
             {
-                Id = account.Id,
+                AccountId = account.AccountId,
                 Username = account.Username,
-                Favourites = account.Favourites,
+                Favourites = responseFromDb.publications,
                 RefreshToken = account.RefreshToken,
                 TokenCreated = account.TokenCreated,
                 TokenExpires = account.TokenExpires,
-
             };
             return response;
         }

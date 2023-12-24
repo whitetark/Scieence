@@ -9,7 +9,7 @@ namespace Database.Models
 {
     public class DbPublication
     {
-        public string? PublicationId { get; set; }
+        public int PublicationId { get; set; }
         public string? Description { get; set; }
         public string? Authors { get; set; }
         public string? Subjects { get; set; }
