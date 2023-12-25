@@ -12,7 +12,7 @@ using System.Text;
 
 namespace ScieenceAPI.Controllers
 {
-    [Authorize(Roles ="User, Admin")]
+    [Authorize(Roles = "User, Admin")]
     [Route("[controller]")]
     [ApiController]
     public class AccController(AccountServices accountServices, IConfiguration configuration, PublicationServices pubServices, FavouriteServices favouriteServices) : ControllerBase
@@ -22,13 +22,13 @@ namespace ScieenceAPI.Controllers
         public async Task<ActionResult> GetAccount()
         {
             var username = Request.Cookies["username"];
-            if(username == null)
+            if (username == null)
             {
                 return BadRequest("No username cookie");
             }
 
             var user = await accountServices.GetAccountByUsername(username);
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("User not found");
             }
@@ -51,7 +51,7 @@ namespace ScieenceAPI.Controllers
         public async Task<ActionResult> UpdateAccount(AccountUpdateDto updateDto)
         {
             var responseFromDb = await accountServices.GetAccountByUsername(updateDto.Username);
-            if(responseFromDb.account == null)
+            if (responseFromDb.account == null)
             {
                 return BadRequest("User not found");
             }

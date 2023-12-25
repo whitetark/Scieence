@@ -53,7 +53,6 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSingleton<SpringerNatureClient>();
 builder.Services.AddSingleton<SemanticScholarClient>();
 
-builder.Services.AddSingleton<DbClient>();
 builder.Services.AddScoped<AccountServices>();
 builder.Services.AddScoped<PublicationServices>();
 builder.Services.AddScoped<FavouriteServices>();

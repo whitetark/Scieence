@@ -54,7 +54,13 @@ const Login = (props) => {
               className={errors.password && touched.password ? 'error' : undefined}
             />
             <ErrorMessage name='password' component={Error} />
-            {loginError ? <div>{loginError.response.data}</div> : null}
+            {loginError ? (
+              loginError.response.data.length < 15 ? (
+                <div>{loginError.response.data}</div>
+              ) : (
+                <div>Server error!</div>
+              )
+            ) : null}
             {isSubmitting ? (
               <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
             ) : (

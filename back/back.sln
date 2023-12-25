@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScieenceAPI", "ScieenceAPI\ScieenceAPI.csproj", "{998EF2F9-86D3-4D7D-9CE8-43D7F7112CDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScieenceAPI", "ScieenceAPI\ScieenceAPI.csproj", "{998EF2F9-86D3-4D7D-9CE8-43D7F7112CDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{0DFB4FB0-374B-4C77-9C5F-23328D5DAD2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{0DFB4FB0-374B-4C77-9C5F-23328D5DAD2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,7 +14,7 @@ namespace ScieenceAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController(AccountServices accountServices, IConfiguration configuration, FavouriteServices favouriteServices) : ControllerBase 
+    public class AuthController(AccountServices accountServices, IConfiguration configuration, FavouriteServices favouriteServices) : ControllerBase
     {
         [Route("register")]
         [HttpPost]
@@ -35,7 +35,7 @@ namespace ScieenceAPI.Controllers
             var user = await accountServices.AddAccount(userRequest);
             string token = GenerateAccessToken(user);
             SetResponseCookies(refreshToken, user);
-            var result = CreateUserResponse(new AccountResponse(user, new List<DbPublication>()));
+            var result = CreateUserResponse(user, new List<DbPublication>());
             return Ok(new { token, result });
         }
 
@@ -61,7 +61,7 @@ namespace ScieenceAPI.Controllers
             SetResponseCookies(refreshToken, user);
 
             var publications = await favouriteServices.GetFavoritesByUsername(request.username);
-            var result = CreateUserResponse(new AccountResponse(responseFromDb.account, publications));
+            var result = CreateUserResponse(responseFromDb.account, publications);
             return Ok(new { token, result });
         }
 
@@ -78,8 +78,8 @@ namespace ScieenceAPI.Controllers
             var user = responseFromDb.account;
 
             user.RefreshToken = "";
-            user.TokenExpires = (DateTime.UtcNow).ToString("s");
-            user.TokenCreated = (DateTime.UtcNow).ToString("s");
+            user.TokenExpires = DateTime.UtcNow.ToString("s");
+            user.TokenCreated = DateTime.UtcNow.ToString("s");
             _ = accountServices.UpdateAccount(user);
 
             Response.Cookies.Delete("username");
@@ -127,7 +127,7 @@ namespace ScieenceAPI.Controllers
             SetResponseCookies(newRefreshToken, user);
 
             var publications = await favouriteServices.GetFavoritesByUsername(user.Username);
-            var result = CreateUserResponse(new AccountResponse(responseFromDb.account, publications));
+            var result = CreateUserResponse(responseFromDb.account, publications);
             return Ok(new { token, result });
         }
 
@@ -182,8 +182,8 @@ namespace ScieenceAPI.Controllers
             var refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-                Created = (DateTime.Now).ToString("s"),
-                Expires = (DateTime.Now.AddDays(7)).ToString("s"),
+                Created = DateTime.Now.ToString("s"),
+                Expires = DateTime.Now.AddDays(7).ToString("s"),
             };
 
             return refreshToken;
@@ -210,14 +210,13 @@ namespace ScieenceAPI.Controllers
             return jwt;
         }
 
-        private static UserResponse CreateUserResponse(AccountResponse responseFromDb)
+        private static UserResponse CreateUserResponse(Account account, List<DbPublication> dbPublications)
         {
-            var account = responseFromDb.account;
             var response = new UserResponse
             {
                 AccountId = account.AccountId,
                 Username = account.Username,
-                Favourites = responseFromDb.publications,
+                Favourites = dbPublications,
                 RefreshToken = account.RefreshToken,
                 TokenCreated = account.TokenCreated,
                 TokenExpires = account.TokenExpires,

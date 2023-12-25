@@ -4,6 +4,7 @@ using Dapper;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,9 +15,8 @@ using System.Threading.Tasks;
 
 namespace Database.Services
 {
-    public class PublicationServices(DbClient dbClient)
+    public class PublicationServices(IOptions<DbConfig> dbConfig)
     {
-        private readonly IDbConnection _pubDbConnection = dbClient.GetPubDbConnection();
         //public async Task<IEnumerable<T>> LoadData<T>(string sql)
         //{
         //    return await _pubDbConnection.QueryAsync<T>(sql);
@@ -42,6 +42,7 @@ namespace Database.Services
             {
                 string sql = @"SELECT * FROM PublicationSchema.Publications 
                 WHERE PublicationId = @id";
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 return await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new { id });
             } catch
             {
@@ -54,6 +55,7 @@ namespace Database.Services
             {
                 string sql = @"SELECT * FROM PublicationSchema.Publications 
                 WHERE URL = @url";
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 return await _pubDbConnection.QuerySingleAsync<DbPublication>(sql, new { url });
             }
             catch
@@ -67,6 +69,7 @@ namespace Database.Services
             try
             {
                 string sql = @"SELECT * FROM PublicationSchema.Publications";
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql);
                 List<DbPublication> result = publications.ToList();
                 return result;
@@ -80,8 +83,8 @@ namespace Database.Services
         {
             string sql = @"DELETE FROM PublicationSchema.Publications
             WHERE PublicationId = @id";
-
-            if(await _pubDbConnection.ExecuteAsync(sql, new { id }) > 0){ return; }
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
+            if (await _pubDbConnection.ExecuteAsync(sql, new { id }) > 0){ return; }
 
             throw new Exception("Failed to Delete Publication");
         }
@@ -99,9 +102,9 @@ namespace Database.Services
             "', [Title] = '" + publication.Title +
             "', [DOI] = '" + publication.DOI + 
             "' WHERE PublicationId = @PublicationId";
-    
 
-            if(await _pubDbConnection.ExecuteAsync(sql, new { publication.PublicationId }) > 0){ return; }
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
+            if (await _pubDbConnection.ExecuteAsync(sql, new { publication.PublicationId }) > 0){ return; }
 
             throw new Exception("Failed to Update Publication");
         }
@@ -111,7 +114,7 @@ namespace Database.Services
             {
                 string sql = @"SELECT * FROM PublicationSchema.Publications 
                 WHERE URL = @Url";
-
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 var test = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { publication.Url });
 
                 if (test.Count() > 0)
@@ -151,7 +154,7 @@ namespace Database.Services
             string sql = @"SELECT * FROM PublicationSchema.Publications
             WHERE (Title LIKE @query OR Description LIKE @query) AND (Language LIKE @language)
             AND (PublicationYear BETWEEN @year1 AND @year2)";
-
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%", language, year1 = year[0], year2 = year[1] });
             List<DbPublication> pubList = publications.ToList();
 
@@ -184,6 +187,7 @@ namespace Database.Services
             WHERE (Authors LIKE @query) AND (Language LIKE @language)
             AND (PublicationYear BETWEEN @year1 AND @year2)";
 
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%", language, year1 = year[0], year2 = year[1] });
             List<DbPublication> pubList = publications.ToList();
 
@@ -216,6 +220,7 @@ namespace Database.Services
             WHERE (Subjects LIKE @query) AND (Language LIKE @language)
             AND (PublicationYear BETWEEN @year1 AND @year2)";
 
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { query = "%" + query + "%", language, year1 = year[0], year2 = year[1] });
             List<DbPublication> pubList = publications.ToList();
 

@@ -19,7 +19,7 @@ namespace ScieenceAPI.Controllers
 
         //ApiPub
         [HttpGet("getByKeyword")]
-        public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query, [FromQuery(Name ="lang")] string language, [FromQuery(Name ="year")] int[] year)
+        public async Task<Response> GetPublicationsByKeyword([FromQuery(Name = "query")] string query, [FromQuery(Name = "lang")] string language, [FromQuery(Name = "year")] int[] year)
         {
             var result = new Response();
             var snpublications = await springerNatureClient.GetPublicationsByKeyword(query, language, year);
@@ -37,7 +37,7 @@ namespace ScieenceAPI.Controllers
 
             result = FilterListByDOI(result);
             result = FormKeywordCount(result);
-            
+
             return result;
         }
 
@@ -99,7 +99,7 @@ namespace ScieenceAPI.Controllers
             var allKeywords = new List<string>();
             foreach (Publication publication in response.Records)
             {
-                if(publication.Subjects != null)
+                if (publication.Subjects != null)
                 {
                     allKeywords.AddRange(publication.Subjects.Split("; "));
                 }

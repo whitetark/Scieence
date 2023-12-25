@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using Database.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,9 +11,8 @@ using System.Threading.Tasks;
 
 namespace Database.Services
 {
-    public class FavouriteServices(DbClient dbClient)
+    public class FavouriteServices(IOptions<DbConfig> dbConfig)
     {
-        private readonly IDbConnection _pubDbConnection = dbClient.GetPubDbConnection();
 
         //public async Task<IEnumerable<T>> LoadData<T>(string sql)
         //{
@@ -43,6 +44,7 @@ namespace Database.Services
                 INNER JOIN PublicationSchema.Publications AS P
                 ON F.PublicationId = P.PublicationId
                 WHERE A.Username = @username";
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 var publications = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { username });
                 if(publications.Count() == 0 )
                 {
@@ -63,7 +65,7 @@ namespace Database.Services
             {
                 string sql = @"SELECT * FROM PublicationSchema.Favourites
                 WHERE (AccountId = @accountId) AND (PublicationId = @publicationId)";
-
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 var test = await _pubDbConnection.QueryAsync<DbPublication>(sql, new { accountId, publicationId });
 
                 if (test.Count() > 0)
@@ -90,7 +92,7 @@ namespace Database.Services
         {
             string sql = @"DELETE FROM PublicationSchema.Favourites
             WHERE AccountId = @accountId AND PublicationId = @publicationId";
-
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             if (await _pubDbConnection.ExecuteAsync(sql, new { accountId, publicationId }) > 0) { return; }
 
             throw new Exception("Failed to Delete Favourite");

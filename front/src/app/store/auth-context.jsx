@@ -48,19 +48,6 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
-  // useEffect(() => {
-  //   const updateData = async (payload) => {
-  //     await api
-  //       .put('/Acc/update', payload, {
-  //         withCredentials: true,
-  //       })
-  //       .catch((error) => {
-  //         console.log('Update User Data error', error.message);
-  //       });
-  //   };
-  //   updateData(userData);
-  // }, [userData]);
-
   return (
     <AuthContext.Provider
       value={{

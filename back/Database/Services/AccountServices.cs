@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using Database.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using System;
@@ -13,9 +15,8 @@ using System.Threading.Tasks;
 
 namespace Database.Services
 {
-    public class AccountServices(DbClient dbClient, FavouriteServices favouriteServices)
+    public class AccountServices(IOptions<DbConfig> dbConfig, FavouriteServices favouriteServices)
     {
-        private readonly IDbConnection _pubDbConnection = dbClient.GetPubDbConnection();
 
         //public async Task<IEnumerable<T>> LoadData<T>(string sql)
         //{
@@ -42,6 +43,7 @@ namespace Database.Services
             {
                 string sql = @"SELECT * FROM PublicationSchema.Accounts
                 WHERE Username = @username";
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 var account = await _pubDbConnection.QuerySingleAsync<Account>(sql, new { username });
                 var publications = await favouriteServices.GetFavoritesByUsername(account.Username);
                 return new AccountResponse(account, publications);
@@ -57,7 +59,7 @@ namespace Database.Services
             {
                 string sql = @"SELECT * FROM PublicationSchema.Accounts
                 WHERE Username = @username";
-
+                var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
                 var test = await _pubDbConnection.QueryAsync<Account>(sql, new { username = account.Username });
                 
                 if(test.Count() > 0)
@@ -88,7 +90,7 @@ namespace Database.Services
         {
             string sql = @"DELETE FROM PublicationSchema.Accounts
             WHERE AccountId = @id";
-
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             if (await _pubDbConnection.ExecuteAsync(sql, new { id }) > 0) { return; }
 
             throw new Exception("Failed to Delete Account");
@@ -98,7 +100,7 @@ namespace Database.Services
             string sql = @"UPDATE PublicationSchema.Accounts 
             SET [PasswordHash] = @passwordHash, [RefreshToken] = @refreshToken, [TokenCreated] = @tokenCreated, [TokenExpires] = @tokenExpires
             WHERE Username = @username";
-
+            var _pubDbConnection = new SqlConnection(dbConfig.Value.Pub_Database_Connection);
             if (await _pubDbConnection.ExecuteAsync(sql, new { passwordHash = newAccount.PasswordHash, refreshToken = newAccount.RefreshToken, tokenCreated = newAccount.TokenCreated, tokenExpires = newAccount.TokenExpires, username = newAccount.Username }) > 0) { return ; }
 
             throw new Exception("Failed to Update Publication");
