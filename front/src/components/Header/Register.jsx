@@ -73,7 +73,7 @@ const Register = (props) => {
               <ProgressBar width='50' height='50' borderColor='#98A4DF' barColor='#747DAB' />
             ) : (
               <Button type='submit' disabled={!isValid}>
-                Login
+                Register
               </Button>
             )}
           </Form>
